@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Recording Studio</title>
+<style>
+  :root{
+    --cedar:#8B2D2D; --cedar-deep:#5A1A1A; --cedar-pale:#FBEEEE;
+    --olive:#6B7E4A; --olive-pale:#EDF0E2;
+    --cream:#FDF8F1; --paper:#F7EFE4; --ink:#2A1F18;
+    --gold:#C9A961; --gold-deep:#8C7438;
+    --green:#3B7A3A; --amber:#B45309; --grey:#7C7269; --grey-pale:#E8E1D5;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:Georgia,"Iowan Old Style","Apple Garamond",serif;
+    background:var(--cream);color:var(--ink);line-height:1.5;font-size:15px}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px}
+  .ar{font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;font-size:17px;direction:rtl}
+
+  /* HEADER */
+  header{background:var(--cedar);color:var(--cream);padding:1rem 1.5rem;
+    display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+    border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:50}
+  header h1{margin:0;font-size:1.3rem;font-weight:normal;letter-spacing:.5px}
+  header h1 em{font-style:italic;color:var(--gold);font-weight:normal}
+  .status-pill{padding:.3rem .7rem;border-radius:99px;font-size:.8rem;
+    background:rgba(255,255,255,.15);display:inline-flex;align-items:center;gap:.4rem}
+  .status-pill.ok{background:#3B7A3A}
+  .status-pill.warn{background:var(--amber)}
+  .status-pill.err{background:#C53030}
+  .status-pill .dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+  header .grow{flex:1}
+  header .stats{font-size:.85rem;color:rgba(255,255,255,.85);display:flex;gap:1rem}
+  header .stats b{color:var(--cream);font-weight:bold}
+
+  /* TABS */
+  nav.tabs{background:var(--paper);border-bottom:1px solid var(--grey-pale);
+    padding:0 1.5rem;display:flex;gap:0;position:sticky;top:65px;z-index:49}
+  nav.tabs button{background:none;border:none;padding:.85rem 1.2rem;font-family:inherit;
+    font-size:.95rem;cursor:pointer;color:var(--grey);border-bottom:3px solid transparent;
+    transition:.15s}
+  nav.tabs button.active{color:var(--cedar);border-bottom-color:var(--cedar);font-weight:bold}
+  nav.tabs button:hover{color:var(--cedar-deep)}
+  nav.tabs .count{font-size:.75rem;background:var(--grey-pale);padding:.1rem .4rem;
+    border-radius:99px;margin-left:.4rem;color:var(--ink)}
+  nav.tabs button.active .count{background:var(--cedar);color:var(--cream)}
+
+  /* CONTENT */
+  main{padding:1.5rem;max-width:1400px;margin:0 auto}
+  .panel{background:white;border:1px solid var(--grey-pale);border-radius:8px;
+    padding:1.5rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .panel h2{margin:0 0 .8rem;font-size:1.1rem;color:var(--cedar);font-weight:normal}
+  .panel h2 small{color:var(--grey);font-size:.85rem;margin-left:.5rem}
+
+  /* SETUP PANEL */
+  .setup-grid{display:grid;grid-template-columns:1fr 2fr;gap:1rem;align-items:start}
+  @media(max-width:760px){.setup-grid{grid-template-columns:1fr}}
+  .setup-grid label{font-weight:bold;color:var(--cedar-deep);font-size:.9rem}
+  .setup-grid label small{display:block;font-weight:normal;color:var(--grey);font-size:.8rem;margin-top:.2rem}
+  .setup-grid input,.setup-grid select,.setup-grid textarea{
+    width:100%;padding:.5rem .7rem;border:1px solid var(--grey-pale);
+    border-radius:5px;font-family:inherit;font-size:.9rem;background:var(--cream)}
+  .setup-grid input:focus,.setup-grid select:focus{outline:none;border-color:var(--cedar)}
+
+  /* CONTROLS */
+  .row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+  .row > input[type="search"]{flex:1;min-width:200px;padding:.55rem .8rem;
+    border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit;font-size:.95rem;
+    background:var(--cream)}
+  .row > select{padding:.55rem .8rem;border:1px solid var(--grey-pale);border-radius:5px;
+    font-family:inherit;font-size:.9rem;background:var(--cream)}
+  .btn{padding:.55rem 1rem;border:1px solid var(--cedar);background:var(--cedar);color:var(--cream);
+    border-radius:5px;font-family:inherit;font-size:.9rem;cursor:pointer;transition:.15s}
+  .btn:hover{background:var(--cedar-deep)}
+  .btn.ghost{background:var(--cream);color:var(--cedar);border-color:var(--grey-pale)}
+  .btn.ghost:hover{border-color:var(--cedar);background:var(--cedar-pale)}
+  .btn.gold{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+  .btn.gold:hover{background:var(--gold-deep);color:var(--cream)}
+  .btn.danger{background:white;color:#C53030;border-color:#C53030}
+  .btn.danger:hover{background:#C53030;color:white}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  table th{text-align:left;padding:.6rem .5rem;color:var(--cedar);
+    border-bottom:2px solid var(--cedar);font-weight:bold;font-size:.85rem}
+  table td{padding:.55rem .5rem;border-bottom:1px solid var(--grey-pale);vertical-align:top}
+  table tr:hover td{background:var(--cream)}
+  table tr.has-audio td{background:#F4F9F1}
+  table tr.no-trans td{background:#FDF6F0}
+  td.id{color:var(--grey);font-size:.8rem;width:50px}
+  td.eng{font-weight:600;color:var(--ink);min-width:160px}
+  td.fr{color:var(--olive);font-style:italic;min-width:140px}
+  td.leb{color:var(--cedar);font-family:"SF Mono",Menlo,monospace;font-size:.85rem;min-width:160px}
+  td.cat{font-size:.8rem;color:var(--grey);min-width:140px}
+  td.actions{white-space:nowrap;text-align:right}
+  td.actions button{padding:.25rem .55rem;font-size:.8rem;margin-left:.2rem}
+  .audio-badge{display:inline-block;padding:.1rem .4rem;background:var(--green);color:white;
+    border-radius:3px;font-size:.7rem;font-weight:bold;letter-spacing:.5px}
+  .pending-badge{background:var(--amber)}
+
+  /* INLINE EDIT */
+  .edit-cell input,.edit-cell textarea{width:100%;padding:.3rem .4rem;
+    border:1px solid var(--gold);border-radius:3px;font-family:inherit;font-size:.85rem;
+    background:#FFF9E8}
+  .edit-cell textarea{resize:vertical;min-height:30px}
+
+  /* RECORDING UI */
+  .rec-card{background:var(--cedar-pale);border:2px solid var(--cedar);border-radius:10px;
+    padding:1.5rem;margin-bottom:1rem;text-align:center}
+  .rec-card .word{font-size:1.8rem;color:var(--cedar);margin-bottom:.3rem;font-weight:normal}
+  .rec-card .meta{color:var(--grey);font-size:.9rem;margin-bottom:1rem}
+  .rec-card .rec-buttons{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+  .rec-btn{padding:.8rem 1.5rem;font-size:1rem;border-radius:99px;
+    border:2px solid var(--cedar);background:white;color:var(--cedar);
+    font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem}
+  .rec-btn.recording{background:#C53030;color:white;border-color:#C53030;
+    animation:pulse 1s infinite}
+  .rec-btn.recorded{background:var(--green);color:white;border-color:var(--green)}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(197,48,48,.4)}50%{box-shadow:0 0 0 12px rgba(197,48,48,0)}}
+  .rec-timer{font-family:"SF Mono",monospace;font-size:1.2rem;color:var(--cedar);
+    margin:.5rem 0;font-weight:bold}
+  .rec-status{font-size:.85rem;color:var(--grey);margin-top:.5rem;min-height:1.2em}
+
+  /* MODE TOGGLE */
+  .mode-toggle{display:inline-flex;gap:0;background:var(--cream);border:1px solid var(--grey-pale);
+    border-radius:5px;overflow:hidden}
+  .mode-toggle button{padding:.35rem .8rem;border:none;background:none;font-family:inherit;
+    font-size:.85rem;cursor:pointer;color:var(--grey)}
+  .mode-toggle button.active{background:var(--cedar);color:var(--cream)}
+
+  /* OUTBOX (pending uploads) */
+  .outbox{background:#FFF9E8;border:1px solid var(--amber);border-radius:6px;padding:.8rem;
+    margin-bottom:1rem;font-size:.85rem}
+  .outbox h3{margin:0 0 .4rem;color:var(--amber);font-size:.9rem}
+  .outbox ul{margin:0;padding-left:1.2rem}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:.8rem 1.2rem;background:var(--ink);
+    color:var(--cream);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.2);
+    opacity:0;transform:translateY(20px);transition:.25s;pointer-events:none;z-index:1000;
+    max-width:320px;font-size:.9rem}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .toast.ok{background:var(--green)}
+  .toast.err{background:#C53030}
+
+  /* EMPTY STATE */
+  .empty{text-align:center;padding:3rem 1rem;color:var(--grey)}
+  .empty h3{margin:0 0 .5rem;color:var(--cedar);font-weight:normal;font-style:italic}
+
+  /* FOOTER */
+  footer{margin-top:2rem;padding:1rem;text-align:center;color:var(--grey);font-size:.8rem;
+    border-top:1px solid var(--grey-pale)}
+
+  /* EDIT CARD (expandable word editor) */
+  .edit-card{background:var(--cream);border:2px solid var(--gold);border-radius:8px;padding:1.2rem;margin:.5rem 0 1rem;
+    box-shadow:0 2px 8px rgba(0,0,0,.06)}
+  .edit-card h3{margin:0 0 .8rem;color:var(--cedar);font-weight:normal;font-size:1.1rem;
+    display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+  .edit-card h3 .word-id{font-size:.8rem;color:var(--grey);background:var(--grey-pale);padding:.15rem .5rem;border-radius:99px;font-weight:normal}
+  .edit-card h3 .word-eng{font-weight:bold;color:var(--ink)}
+  .edit-card h3 .word-rec{background:var(--green);color:white;padding:.15rem .5rem;border-radius:3px;font-size:.7rem;font-weight:bold;letter-spacing:.5px}
+  .edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem 1rem}
+  .edit-grid.three{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:760px){.edit-grid,.edit-grid.three{grid-template-columns:1fr}}
+  .edit-field{display:flex;flex-direction:column;gap:.2rem}
+  .edit-field label{font-size:.75rem;font-weight:bold;color:var(--cedar-deep);text-transform:uppercase;letter-spacing:.5px}
+  .edit-field label .hint{font-weight:normal;color:var(--grey);text-transform:none;letter-spacing:0;font-size:.75rem;margin-left:.3rem}
+  .edit-field input,.edit-field textarea,.edit-field select{
+    padding:.45rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;
+    font-family:inherit;font-size:.9rem;background:white;width:100%}
+  .edit-field input:focus,.edit-field textarea:focus,.edit-field select:focus{outline:none;border-color:var(--gold)}
+  .edit-field textarea{resize:vertical;min-height:50px}
+  .edit-field input.mono{font-family:"SF Mono",Menlo,monospace;font-size:.85rem}
+  .edit-field input.ar{font-family:"Amiri","Noto Naskh Arabic",serif;font-size:1.05rem;direction:rtl}
+  .verb-section{grid-column:1/-1;border-top:1px dashed var(--gold);margin-top:.5rem;padding-top:.8rem}
+  .verb-section h4{margin:0 0 .6rem;color:var(--cedar);font-size:.9rem;font-weight:bold;
+    display:flex;align-items:center;gap:.5rem}
+  .verb-section h4 small{font-weight:normal;color:var(--grey);font-size:.8rem}
+  .edit-card-actions{display:flex;gap:.5rem;justify-content:space-between;margin-top:1rem;flex-wrap:wrap;
+    position:sticky;bottom:0;background:var(--cream);padding:.8rem 1rem;margin:1rem -1.2rem -1.2rem;
+    border-top:1px solid var(--gold);border-bottom-left-radius:8px;border-bottom-right-radius:8px;
+    box-shadow:0 -2px 6px rgba(0,0,0,.04);z-index:5}
+  .edit-card-actions .left{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+  .edit-card-actions .right{display:flex;gap:.5rem;flex-wrap:wrap}
+  .save-indicator{color:var(--green);font-size:.85rem;opacity:0;transition:.3s}
+  .save-indicator.show{opacity:1}
+
+  /* INLINE RECORDING (inside edit card) */
+  .inline-rec{background:white;border:1px solid var(--gold);border-radius:6px;padding:.7rem 1rem;margin-top:.8rem}
+  .inline-rec-label{font-size:.75rem;font-weight:bold;color:var(--cedar-deep);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+  .inline-rec-controls{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  .rec-btn-small{padding:.5rem 1rem;font-size:.9rem;border-radius:99px;
+    border:2px solid var(--cedar);background:white;color:var(--cedar);
+    font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem}
+  .rec-btn-small:hover{background:var(--cedar-pale)}
+  .rec-btn-small.recording{background:#C53030;color:white;border-color:#C53030;animation:pulse 1s infinite}
+  .rec-btn-small.playing{background:var(--green);color:white;border-color:var(--green)}
+  .rec-timer-small{font-family:"SF Mono",monospace;font-size:1rem;color:var(--cedar);font-weight:bold}
+  .rec-meta{font-size:.8rem;color:var(--grey);margin-left:auto}
+  .inline-rec-status{font-size:.85rem;color:var(--grey);margin-top:.4rem;min-height:1.1em}
+
+  /* CLICKABLE ROW */
+  tr.clickable{cursor:pointer}
+  tr.clickable:hover td{background:var(--cedar-pale) !important}
+  tr.expanded td{background:var(--cedar-pale) !important;border-bottom:none}
+  .expand-arrow{color:var(--grey);font-size:.8rem;transition:.2s;display:inline-block;width:12px}
+  tr.expanded .expand-arrow{transform:rotate(90deg);color:var(--cedar)}
+
+  /* TOP ACTION BAR */
+  .top-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.5rem}
+  .top-actions .grow{flex:1}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem}
+  .modal-bg.show{display:flex}
+  .modal{background:white;border-radius:10px;padding:1.5rem;max-width:560px;width:100%;
+    box-shadow:0 10px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
+  .modal h2{margin:0 0 .8rem;color:var(--cedar);font-weight:normal;font-size:1.2rem}
+  .modal p{color:var(--ink);margin:.5rem 0}
+  .modal-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Speaking Lebanese <em>— Recording Studio</em></h1>
+  <div class="grow"></div>
+  <div class="stats" id="stats">
+    <span><b id="stat-total">—</b> words</span>
+    <span><b id="stat-trans">—</b> translated</span>
+    <span><b id="stat-recs">—</b> recorded</span>
+  </div>
+  <div class="status-pill" id="conn-status"><span class="dot"></span><span id="conn-text">Setup needed</span></div>
+</header>
+
+<nav class="tabs">
+  <button class="active" data-tab="setup">Setup</button>
+  <button data-tab="browse">Browse <span class="count" id="cnt-browse">0</span></button>
+  <button data-tab="translate">Translate <span class="count" id="cnt-translate">0</span></button>
+  <button data-tab="record">Record <span class="count" id="cnt-record">0</span></button>
+</nav>
+
+<main>
+
+<!-- SETUP TAB -->
+<section id="tab-setup" class="tab-panel">
+  <div class="panel" id="bakedStatus" style="display:none">
+    <h2 style="color:var(--green)">✓ Connected and ready</h2>
+    <p style="color:var(--ink);margin:.5rem 0">Your Studio is configured and connected to your Google Sheet and Drive. There's nothing to set up — just go to the <b>Browse</b> or <b>Translate</b> tab to start working.</p>
+    <p style="color:var(--grey);font-size:.85rem;margin-top:.8rem">Sheet: <span id="bakedSheetDisplay" style="font-family:monospace;font-size:.8rem"></span></p>
+    <p style="color:var(--grey);font-size:.85rem">Backend: <span id="bakedScriptDisplay" style="font-family:monospace;font-size:.8rem"></span></p>
+  </div>
+
+  <div class="panel" id="manualSetup">
+    <h2>Connect to your Google Sheet & Drive <small>(one-time setup)</small></h2>
+    <p style="color:var(--grey);font-size:.9rem;margin-top:0">Paste the two URLs below. The Studio reads your word list from the Sheet and saves audio to Drive. Your data is saved automatically as you work.</p>
+
+    <div class="setup-grid" style="margin-top:1rem">
+      <label>Sheet CSV URL
+        <small>From Google Sheets: File → Share → Publish to web → CSV → copy the link</small>
+      </label>
+      <input type="url" id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv">
+
+      <label>Apps Script URL <span style="color:var(--olive);font-weight:normal">(optional but recommended)</span>
+        <small>For auto-saving audio and translations. Setup instructions are in the SETUP_GUIDE.md file you received. Leave blank to use manual download mode.</small>
+      </label>
+      <input type="url" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+
+    <div class="row" style="margin-top:1.2rem">
+      <button class="btn" onclick="saveSetup()">Save & Connect</button>
+      <button class="btn ghost" onclick="testConnection()">Test Connection</button>
+      <span id="setupMsg" style="color:var(--grey);font-size:.9rem"></span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>How it works</h2>
+    <ol style="color:var(--ink);line-height:1.8">
+      <li><b>Translate</b> tab — fill in French, Lebanese transliteration, Arabic, and gender/tense forms. Auto-saves every keystroke.</li>
+      <li><b>Record</b> tab — record audio one word at a time. Each recording is saved immediately.</li>
+      <li><b>Browse</b> tab — search and filter the whole vocabulary, edit any word, play any recording.</li>
+    </ol>
+    <p style="color:var(--grey);font-size:.85rem">If a save fails (e.g. no internet), it's queued locally and retried automatically when the connection returns. You will never lose work.</p>
+  </div>
+</section>
+
+<!-- BROWSE TAB -->
+<section id="tab-browse" class="tab-panel" style="display:none">
+  <div class="panel">
+    <div class="row">
+      <input type="search" id="searchBrowse" placeholder="Search English, French, Lebanese, Arabic, category…">
+      <select id="filterCatBrowse"><option value="">All categories</option></select>
+      <select id="filterRecBrowse">
+        <option value="">All words</option>
+        <option value="rec">Recorded only</option>
+        <option value="norec">Not recorded</option>
+        <option value="trans">Translated only</option>
+        <option value="notrans">Not translated</option>
+      </select>
+      <button class="btn ghost" onclick="exportCSV()">Export CSV</button>
+      <button class="btn gold" onclick="openAddWord()">+ Add word</button>
+    </div>
+    <div id="outboxBrowse"></div>
+    <div id="browseTable"></div>
+  </div>
+</section>
+
+<!-- TRANSLATE TAB -->
+<section id="tab-translate" class="tab-panel" style="display:none">
+  <div class="panel">
+    <div class="row">
+      <input type="search" id="searchTrans" placeholder="Search…">
+      <select id="filterCatTrans"><option value="">All categories</option></select>
+      <select id="filterPosTrans">
+        <option value="">All types</option>
+        <option value="verb">Verbs</option>
+        <option value="noun">Nouns</option>
+        <option value="adjective">Adjectives</option>
+        <option value="expression">Expressions</option>
+        <option value="other">Other</option>
+      </select>
+      <select id="filterDone">
+        <option value="todo">Untranslated only</option>
+        <option value="">All words</option>
+        <option value="done">Translated only</option>
+      </select>
+      <button class="btn gold" onclick="openAddWord()">+ Add word</button>
+    </div>
+    <div id="transTable"></div>
+  </div>
+</section>
+
+<!-- RECORD TAB -->
+<section id="tab-record" class="tab-panel" style="display:none">
+  <div class="panel">
+    <div class="row">
+      <input type="search" id="searchRec" placeholder="Search words to record…">
+      <select id="filterCatRec"><option value="">All categories</option></select>
+      <select id="filterRecMode">
+        <option value="todo">Unrecorded with translation</option>
+        <option value="all-todo">All unrecorded</option>
+        <option value="done">Already recorded (for review/re-record)</option>
+      </select>
+      <span style="margin-left:auto">Upload mode:</span>
+      <div class="mode-toggle">
+        <button id="modeAuto" class="active" onclick="setUploadMode('auto')">Auto (Apps Script)</button>
+        <button id="modeManual" onclick="setUploadMode('manual')">Manual (download)</button>
+      </div>
+    </div>
+    <div id="outboxRecord"></div>
+    <div id="recCard"></div>
+    <div id="recList"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-bg" id="deleteModal">
+  <div class="modal">
+    <h2>Delete this word?</h2>
+    <p id="deleteModalText">This will remove word #X from the dictionary.</p>
+    <p style="color:var(--grey);font-size:.85rem">The Google Sheet keeps version history, so you can restore it from there if needed (File → Version history).</p>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn danger" id="deleteConfirmBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<footer>Speaking Lebanese Recording Studio · Data lives in your Google Sheet · Audio lives in your Drive folder</footer>
+
+<script>
+'use strict';
+
+// ============================================================================
+// CONFIG & STATE
+// ============================================================================
+const STORAGE_KEY = 'sl_studio_config_v1';
+const PENDING_KEY = 'sl_studio_pending_v1';
+const CACHE_KEY = 'sl_studio_cache_v1';
+const RECS_CACHE_KEY = 'sl_studio_recs_cache_v1'; // local copies of recordings
+
+let CFG = { sheetUrl:'', scriptUrl:'', uploadMode:'auto' };
+let WORDS = []; // array of word objects from sheet
+let PENDING = []; // queue of unsynced changes { type, payload, ts, attempts }
+let RECS_LOCAL = {}; // {id: {blob_url, blob, filename}} for review playback
+let RecState = { stream:null, recorder:null, chunks:[], wordId:null, startTs:0, timerInt:null };
+let curTab = 'setup';
+let EXPANDED_ID = null; // currently expanded word ID in Browse/Translate
+let PENDING_DELETE_ID = null; // word ID awaiting delete confirmation
+
+// ============================================================================
+// LOAD CONFIG & CACHE FROM LOCALSTORAGE
+// ============================================================================
+// ============================================================================
+// STANDALONE VERSION — URLs hardcoded
+// ============================================================================
+// This is the standalone (GitHub Pages) version of the Studio.
+// The Sheet CSV URL is read by GET; the Apps Script URL handles all writes.
+// Both are fixed for this Studio — no Setup tab needed.
+window.BAKED_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT3NJqWQYLTohzcF_twD3rT2c2gHdONfUd4KgduSc8yLqLU7GEDC8VnA4bQX2tZcjRKIgi5kvkhppi7/pub?output=csv';
+window.BAKED_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkD_YZJp7HGoZgIEzvzvdT2pgvmxSVRQMstKjmxzyXxV1YGxtVW4UTzYwCqOuXbC8P/exec';
+
+function loadConfig(){
+  // 1. Check for URLs baked in by the Apps Script (highest priority — robust against storage issues)
+  if(window.BAKED_SHEET_URL){
+    CFG.sheetUrl = window.BAKED_SHEET_URL;
+    CFG.scriptUrl = window.BAKED_SCRIPT_URL || '';
+    CFG.uploadMode = 'auto';
+    return;
+  }
+  // 2. Fall back to localStorage for local-file usage
+  try {
+    const c = JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+    Object.assign(CFG, c);
+    const sEl = document.getElementById('sheetUrl');
+    const scEl = document.getElementById('scriptUrl');
+    if(sEl && CFG.sheetUrl) sEl.value = CFG.sheetUrl;
+    if(scEl && CFG.scriptUrl) scEl.value = CFG.scriptUrl;
+    if(CFG.uploadMode) setUploadMode(CFG.uploadMode, true);
+  } catch(e){}
+}
+function saveConfig(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(CFG)); } catch(e){}
+}
+function loadPending(){
+  try { PENDING = JSON.parse(localStorage.getItem(PENDING_KEY)||'[]'); } catch(e){ PENDING = []; }
+}
+function savePending(){
+  try { localStorage.setItem(PENDING_KEY, JSON.stringify(PENDING)); } catch(e){
+    // If quota exceeded, drop oldest audio uploads first
+    PENDING = PENDING.filter(p => p.type !== 'audio');
+    try { localStorage.setItem(PENDING_KEY, JSON.stringify(PENDING)); } catch(e2){}
+    toast('Local storage full — drop some queued audio if you can', 'err');
+  }
+}
+function loadCache(){
+  try {
+    const c = localStorage.getItem(CACHE_KEY);
+    if(c){ WORDS = JSON.parse(c); refreshAll(); }
+  } catch(e){}
+}
+function saveCache(){
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(WORDS)); } catch(e){
+    // word data is small (~300KB JSON), should fit; if not, clear and skip
+    try { localStorage.removeItem(CACHE_KEY); } catch(e2){}
+  }
+}
+
+// ============================================================================
+// SETUP & CONNECTION
+// ============================================================================
+function saveSetup(){
+  CFG.sheetUrl = document.getElementById('sheetUrl').value.trim();
+  CFG.scriptUrl = document.getElementById('scriptUrl').value.trim();
+  saveConfig();
+  if(CFG.sheetUrl){
+    fetchSheet().then(()=> {
+      toast('Connected! Loading words…', 'ok');
+      switchTab('browse');
+    });
+  } else {
+    toast('Add a Sheet URL to continue', 'err');
+  }
+}
+
+async function testConnection(){
+  const url = document.getElementById('sheetUrl').value.trim();
+  const msg = document.getElementById('setupMsg');
+  if(!url){ msg.textContent = 'Add a Sheet URL first'; return; }
+  msg.textContent = 'Testing…';
+  try {
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const text = await r.text();
+    const lines = text.split('\n').filter(l=>l.trim());
+    msg.textContent = '✓ Found '+lines.length+' rows in the sheet.';
+    msg.style.color = 'var(--green)';
+  } catch(e){
+    msg.textContent = '✗ Could not load sheet: '+e.message+' — check the URL is the "Publish to web" CSV link, not the regular sheet URL.';
+    msg.style.color = '#C53030';
+  }
+  // Test Apps Script if provided
+  const sUrl = document.getElementById('scriptUrl').value.trim();
+  if(sUrl){
+    try {
+      const r2 = await fetch(sUrl + '?action=ping');
+      if(r2.ok){ msg.textContent += '  Apps Script: ✓ reachable.'; }
+      else msg.textContent += '  Apps Script: ✗ HTTP '+r2.status;
+    } catch(e){ msg.textContent += '  Apps Script: ✗ '+e.message; }
+  }
+}
+
+function setConnStatus(state, text){
+  const pill = document.getElementById('conn-status');
+  const t = document.getElementById('conn-text');
+  pill.className = 'status-pill ' + state;
+  t.textContent = text;
+}
+
+// ============================================================================
+// FETCH FROM GOOGLE SHEET (CSV)
+// ============================================================================
+async function fetchSheet(opts){
+  opts = opts || {};
+  if(!CFG.sheetUrl){ setConnStatus('warn','No sheet configured'); return; }
+
+  // PROTECTION 1: don't overwrite local data while user is actively editing
+  if(EXPANDED_ID !== null && !opts.force){
+    // Skip this refetch — try again later
+    return;
+  }
+
+  setConnStatus('warn','Loading…');
+  try {
+    // PROTECTION 3: prefer the Apps Script live endpoint (no publish-cache delay)
+    // Fall back to the published CSV URL if Apps Script isn't configured
+    let url;
+    if(CFG.scriptUrl){
+      url = CFG.scriptUrl + '?action=sheet&_t=' + Date.now();
+    } else {
+      url = CFG.sheetUrl + '&_t=' + Date.now();
+    }
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const text = await r.text();
+    const fresh = parseCSV(text);
+
+    // PROTECTION 2: don't overwrite local words that have pending unsync'd changes.
+    // For any word with pending writes in the queue, keep the local version.
+    const pendingIds = new Set(PENDING.map(p => p.payload && p.payload.id).filter(Boolean));
+    if(pendingIds.size > 0 && WORDS.length > 0){
+      const byId = {};
+      WORDS.forEach(w => byId[w.id] = w);
+      WORDS = fresh.map(fw => pendingIds.has(fw.id) && byId[fw.id] ? byId[fw.id] : fw);
+      // Keep locally-added words that the server doesn't know about yet
+      const freshIds = new Set(fresh.map(f => f.id));
+      WORDS.forEach((w, idx) => {}); // already merged above
+      Object.values(byId).forEach(localW => {
+        if(!freshIds.has(localW.id) && pendingIds.has(localW.id)){
+          WORDS.unshift(localW);
+        }
+      });
+    } else {
+      WORDS = fresh;
+    }
+
+    saveCache();
+    setConnStatus('ok','Synced · '+WORDS.length+' words');
+    refreshAll();
+    syncPending();
+  } catch(e){
+    console.error('Fetch sheet error', e);
+    setConnStatus('err','Offline · using cached data');
+    if(WORDS.length===0) loadCache();
+  }
+}
+
+// Simple CSV parser handling quoted fields, embedded commas, and line breaks within quotes
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = '', inQ = false;
+  for(let i=0;i<text.length;i++){
+    const c = text[i];
+    if(inQ){
+      if(c==='"'){
+        if(text[i+1]==='"'){ field+='"'; i++; }
+        else { inQ=false; }
+      } else field+=c;
+    } else {
+      if(c==='"') inQ=true;
+      else if(c===','){ row.push(field); field=''; }
+      else if(c==='\n'||c==='\r'){
+        if(c==='\r'&&text[i+1]==='\n') i++;
+        row.push(field); field='';
+        if(row.length>1 || row[0]!=='') rows.push(row);
+        row=[];
+      } else field+=c;
+    }
+  }
+  if(field!==''||row.length>0){ row.push(field); rows.push(row); }
+  if(rows.length===0) return [];
+  const headers = rows[0].map(h=>h.trim());
+  return rows.slice(1).map(r=>{
+    const o={};
+    headers.forEach((h,i)=> o[h] = (r[i]||'').trim());
+    o.id = parseInt(o.id)||0;
+    o.recorded = (o.recorded||'').toUpperCase()==='TRUE';
+    return o;
+  }).filter(w=>w.id>0);
+}
+
+// ============================================================================
+// PENDING QUEUE & SYNC
+// ============================================================================
+function queueChange(type, payload){
+  PENDING.push({ type, payload, ts:Date.now(), attempts:0 });
+  savePending();
+  updateOutboxes();
+  syncPending();
+}
+
+async function syncPending(){
+  if(PENDING.length===0){ updateOutboxes(); return; }
+  if(!CFG.scriptUrl){ updateOutboxes(); return; }
+  const item = PENDING[0];
+  item.attempts++;
+  try {
+    const formData = new FormData();
+    formData.append('action', item.type);
+    formData.append('payload', JSON.stringify(item.payload));
+    const r = await fetch(CFG.scriptUrl, { method:'POST', body:formData });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const result = await r.text();
+    // Success: remove from queue and try next
+    PENDING.shift();
+    savePending();
+    updateOutboxes();
+    if(PENDING.length>0) setTimeout(syncPending, 200);
+    else setConnStatus('ok','All synced');
+  } catch(e){
+    // Fail: leave in queue, retry later
+    if(item.attempts > 5){
+      setConnStatus('err','Sync failed after 5 retries');
+    } else {
+      setConnStatus('warn','Sync retrying… ('+PENDING.length+' pending)');
+      setTimeout(syncPending, 3000 * item.attempts); // exponential backoff
+    }
+  }
+}
+
+function updateOutboxes(){
+  const html = PENDING.length === 0 ? '' :
+    '<div class="outbox"><h3>'+PENDING.length+' change'+(PENDING.length>1?'s':'')+' pending sync to your Sheet/Drive</h3>'+
+    '<ul>'+PENDING.slice(0,5).map(p=>{
+      const tag = p.type==='audio' ? '🎤 Audio'
+                : p.type==='translation' ? '✏ Edit'
+                : p.type==='add_word' ? '➕ New word'
+                : p.type==='delete_word' ? '🗑 Delete'
+                : p.type;
+      return '<li>'+tag+' for word #'+(p.payload.id||'?')+(p.attempts>0?' (attempt '+p.attempts+')':'')+'</li>';
+    }).join('')+(PENDING.length>5?'<li><i>… and '+(PENDING.length-5)+' more</i></li>':'')+'</ul>'+
+    (CFG.scriptUrl ? '<button class="btn ghost" onclick="syncPending()" style="margin-top:.5rem">Retry now</button>'
+                   : '<i style="color:var(--grey)">Add an Apps Script URL in Setup to auto-sync.</i>')+
+    '</div>';
+  document.getElementById('outboxBrowse').innerHTML = html;
+  document.getElementById('outboxRecord').innerHTML = html;
+}
+
+// ============================================================================
+// STATS
+// ============================================================================
+function refreshStats(){
+  const total = WORDS.length;
+  const trans = WORDS.filter(w => w.lebanese_headword && w.lebanese_headword.trim()).length;
+  const recs = WORDS.filter(w => w.recorded).length;
+  document.getElementById('stat-total').textContent = total.toLocaleString();
+  document.getElementById('stat-trans').textContent = trans.toLocaleString();
+  document.getElementById('stat-recs').textContent = recs.toLocaleString();
+}
+
+// ============================================================================
+// TABS
+// ============================================================================
+document.querySelectorAll('nav.tabs button').forEach(b=>{
+  b.onclick = () => switchTab(b.dataset.tab);
+});
+function switchTab(name){
+  curTab = name;
+  document.querySelectorAll('nav.tabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab===name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p=>{
+    p.style.display = (p.id==='tab-'+name) ? '' : 'none';
+  });
+  if(name==='browse') renderBrowse();
+  else if(name==='translate') renderTranslate();
+  else if(name==='record') renderRecord();
+}
+
+// ============================================================================
+// BROWSE TAB
+// ============================================================================
+let browseFilter = { q:'', cat:'', rec:'' };
+document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; renderBrowse(); };
+document.getElementById('filterCatBrowse').onchange = e => { browseFilter.cat = e.target.value; renderBrowse(); };
+document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; renderBrowse(); };
+
+function filteredFor(filter){
+  const q = filter.q.toLowerCase();
+  return WORDS.filter(w => {
+    if(filter.cat && w.category !== filter.cat) return false;
+    if(filter.rec === 'rec' && !w.recorded) return false;
+    if(filter.rec === 'norec' && w.recorded) return false;
+    if(filter.rec === 'trans' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
+    if(filter.rec === 'notrans' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
+    if(q){
+      const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category+' '+w.notes).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function renderBrowse(){
+  const data = filteredFor(browseFilter);
+  document.getElementById('cnt-browse').textContent = data.length;
+  if(data.length===0){
+    document.getElementById('browseTable').innerHTML =
+      '<div class="empty"><h3>No words match those filters</h3><p>Try clearing search or selecting a different category.</p></div>';
+    return;
+  }
+  const rows = data.slice(0, 200).map(w => browseRow(w)).join('');
+  const more = data.length > 200 ? '<p style="color:var(--grey);font-size:.85rem;text-align:center;margin-top:.5rem"><i>Showing first 200 of '+data.length+' — refine your search to see more</i></p>' : '';
+  document.getElementById('browseTable').innerHTML =
+    '<table><thead><tr><th>#</th><th>English</th><th>French</th><th>Lebanese</th><th>Arabic</th><th>Category</th><th></th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table>'+more;
+}
+
+function browseRow(w){
+  const expanded = EXPANDED_ID === w.id;
+  const cls = (w.recorded ? 'has-audio' : (w.lebanese_headword ? '' : 'no-trans')) + ' clickable' + (expanded ? ' expanded' : '');
+  const audio = w.recorded ? '<span class="audio-badge">REC</span>' : '';
+  const isPlaying = currentAudioId === w.id;
+  const dash = '<i style="color:var(--grey)">—</i>';
+  return '<tr class="'+cls+'" onclick="toggleExpand('+w.id+', event)">'+
+    '<td class="id"><span class="expand-arrow">▶</span> '+w.id+'</td>'+
+    '<td class="eng">'+esc(w.english)+'</td>'+
+    '<td class="fr">'+esc(w.french||'')+'</td>'+
+    '<td class="leb">'+(w.lebanese_headword ? esc(w.lebanese_headword) : dash)+'</td>'+
+    '<td class="ar">'+esc(w.arabic||'')+'</td>'+
+    '<td class="cat">'+esc(w.category||'')+' '+audio+'</td>'+
+    '<td class="actions" onclick="event.stopPropagation()">'+
+      (w.recorded
+        ? '<button class="btn ghost" onclick="playRec('+w.id+')">'+(isPlaying?'⏹ Stop':'▶ Play')+'</button>'
+        : '')+
+    '</td>'+
+  '</tr>'+
+  (expanded ? '<tr><td colspan="7" style="padding:0;background:var(--cedar-pale)">'+renderEditCard(w)+'</td></tr>' : '');
+}
+
+// ============================================================================
+// TRANSLATE TAB
+// ============================================================================
+let transFilter = { q:'', cat:'', pos:'', done:'todo' };
+document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; renderTranslate(); };
+document.getElementById('filterCatTrans').onchange = e => { transFilter.cat = e.target.value; renderTranslate(); };
+document.getElementById('filterPosTrans').onchange = e => { transFilter.pos = e.target.value; renderTranslate(); };
+document.getElementById('filterDone').onchange = e => { transFilter.done = e.target.value; renderTranslate(); };
+
+function renderTranslate(){
+  const q = transFilter.q.toLowerCase();
+  let data = WORDS.filter(w => {
+    if(transFilter.cat && w.category !== transFilter.cat) return false;
+    if(transFilter.pos){
+      const p = (w.pos||'').toLowerCase();
+      if(transFilter.pos === 'other'){
+        if(p==='verb'||p==='noun'||p==='adjective'||p==='expression') return false;
+      } else if(p !== transFilter.pos) return false;
+    }
+    const isDone = w.lebanese_headword && w.lebanese_headword.trim();
+    if(transFilter.done === 'todo' && isDone) return false;
+    if(transFilter.done === 'done' && !isDone) return false;
+    if(q){
+      const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  document.getElementById('cnt-translate').textContent = data.length;
+  if(data.length===0){
+    document.getElementById('transTable').innerHTML =
+      '<div class="empty"><h3>'+(transFilter.done==='todo'?'All caught up — no untranslated words match these filters 🎉':'No words match')+'</h3></div>';
+    return;
+  }
+  const rows = data.slice(0, 80).map(w => transRow(w)).join('');
+  const more = data.length > 80 ? '<p style="color:var(--grey);font-size:.85rem;text-align:center;margin-top:.5rem"><i>Showing first 80 of '+data.length+' — refine search to see more</i></p>' : '';
+  document.getElementById('transTable').innerHTML =
+    '<table><thead><tr><th>#</th><th>English</th><th>French</th><th>Lebanese (main)</th><th>Arabic</th><th>Notes</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table>'+more;
+}
+
+function transRow(w){
+  const expanded = EXPANDED_ID === w.id;
+  const isVerb = (w.pos||'').toLowerCase() === 'verb';
+  const dash = '<i style="color:var(--grey)">—</i>';
+  return '<tr class="clickable'+(expanded?' expanded':'')+'" onclick="toggleExpand('+w.id+')">'+
+    '<td class="id"><span class="expand-arrow">▶</span> '+w.id+'</td>'+
+    '<td class="eng">'+esc(w.english)+'<div style="color:var(--grey);font-size:.75rem">'+esc(w.category||'')+(w.pos?' · '+esc(w.pos):'')+(isVerb?' 🔤':'')+'</div></td>'+
+    '<td>'+(w.french ? esc(w.french) : dash)+'</td>'+
+    '<td class="leb">'+(w.lebanese_headword ? esc(w.lebanese_headword) : dash)+'</td>'+
+    '<td class="ar">'+esc(w.arabic||'')+'</td>'+
+    '<td style="font-size:.8rem;color:var(--grey)">'+esc((w.notes||'').substring(0,40))+(w.notes&&w.notes.length>40?'…':'')+'</td>'+
+  '</tr>'+
+  (expanded ? '<tr><td colspan="6" style="padding:0;background:var(--cedar-pale)">'+renderEditCard(w)+'</td></tr>' : '');
+}
+
+// Inline-edit auto-save on blur
+document.addEventListener('change', e => {
+  if(e.target.dataset && e.target.dataset.field){
+    const id = parseInt(e.target.dataset.id);
+    const field = e.target.dataset.field;
+    const val = e.target.value.trim();
+    const w = WORDS.find(x => x.id === id);
+    if(!w) return;
+    if(w[field] === val) return;
+    w[field] = val;
+    saveCache();
+    queueChange('translation', { id, field, value:val, ts:new Date().toISOString() });
+    refreshStats();
+    flashSaveIndicator(id);
+    // If POS changed to/from verb, re-render so verb section appears/disappears
+    if(field === 'pos' && EXPANDED_ID === id){
+      if(curTab==='browse') renderBrowse();
+      else if(curTab==='translate') renderTranslate();
+    }
+  }
+});
+
+function flashSaveIndicator(id){
+  const el = document.getElementById('save-ind-'+id);
+  if(!el) return;
+  el.textContent = '✓ Saved';
+  el.classList.add('show');
+  clearTimeout(el._tm);
+  el._tm = setTimeout(()=> el.classList.remove('show'), 1500);
+}
+
+// ============================================================================
+// EXPANDABLE EDIT CARD
+// ============================================================================
+function toggleExpand(id, event){
+  if(event && event.target.closest('.actions')) return; // don't expand when clicking action buttons
+  EXPANDED_ID = (EXPANDED_ID === id) ? null : id;
+  if(curTab==='browse') renderBrowse();
+  else if(curTab==='translate') renderTranslate();
+  // Scroll into view if expanded
+  if(EXPANDED_ID === id) setTimeout(()=> {
+    const card = document.getElementById('edit-card-'+id);
+    if(card) card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 50);
+}
+
+function renderEditCard(w){
+  const cats = [...new Set(WORDS.map(x => x.category).filter(Boolean))].sort();
+  const catOptions = cats.map(c => '<option value="'+esc(c)+'"'+(c===w.category?' selected':'')+'>'+esc(c)+'</option>').join('');
+  const posOptions = ['','verb','noun','adjective','expression','adverb','preposition','pronoun','other']
+    .map(p => '<option value="'+p+'"'+(p===(w.pos||'').toLowerCase()?' selected':'')+'>'+(p||'(none)')+'</option>').join('');
+  return '<div class="edit-card" id="edit-card-'+w.id+'" onclick="event.stopPropagation()">'+
+    '<h3>'+
+      '<span class="word-id">#'+w.id+'</span>'+
+      '<span class="word-eng">'+esc(w.english||'(new word)')+'</span>'+
+      (w.recorded?'<span class="word-rec">REC</span>':'')+
+      '<span class="save-indicator" id="save-ind-'+w.id+'">✓ Saved</span>'+
+    '</h3>'+
+    '<div class="edit-grid">'+
+      field(w,'english','English','',false,'text','required')+
+      field(w,'french','French','e.g. liberté')+
+      field(w,'lebanese_headword','Lebanese (main)','transliteration','mono')+
+      field(w,'arabic','Arabic','عربي','ar')+
+      '<div class="edit-field"><label>Category</label>'+
+        '<select data-field="category" data-id="'+w.id+'" onchange="handleCategoryChange(this, '+w.id+')">'+
+          '<option value="">(none)</option>'+
+          catOptions+
+          '<option value="__add_new__" style="font-style:italic;color:var(--olive)">+ Add new category…</option>'+
+        '</select></div>'+
+      '<div class="edit-field"><label>Type (part of speech)</label>'+
+        '<select data-field="pos" data-id="'+w.id+'">'+posOptions+'</select></div>'+
+      field(w,'example','Example sentence','use in a sentence')+
+      field(w,'notes','Notes','additional context, irregularities, etc.','','textarea')+
+      renderConjugationSection(w)+
+    '</div>'+
+    renderInlineRecording(w)+
+    '<div class="edit-card-actions">'+
+      '<div class="left">'+
+        '<span style="color:var(--grey);font-size:.85rem">All changes save automatically.</span>'+
+      '</div>'+
+      '<div class="right">'+
+        '<button class="btn danger" onclick="confirmDelete('+w.id+')">Delete word</button>'+
+        '<button class="btn ghost" onclick="EXPANDED_ID=null; (curTab===\'browse\'?renderBrowse():renderTranslate())">Close</button>'+
+        '<button class="btn" onclick="closeAndNext('+w.id+')">Close &amp; next →</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderInlineRecording(w){
+  const isRecording = RecState.wordId === w.id && RecState.recorder && RecState.recorder.state === 'recording';
+  const isPlaying = currentAudioId === w.id;
+  const wasRecorded = w.recorded;
+  return '<div class="inline-rec">'+
+    '<div class="inline-rec-label">Recording</div>'+
+    '<div class="inline-rec-controls">'+
+      (isRecording
+        ? '<button class="rec-btn-small recording" onclick="stopRec()">⏹ Stop &amp; save</button>'+
+          '<span class="rec-timer-small" id="rec-timer-'+w.id+'">00:00</span>'
+        : '<button class="rec-btn-small" onclick="startRec('+w.id+')">🎤 '+(wasRecorded?'Re-record':'Record')+'</button>'
+      )+
+      (wasRecorded && !isRecording
+        ? (isPlaying
+            ? '<button class="rec-btn-small playing" onclick="playRec('+w.id+')">⏹ Stop</button>'
+            : '<button class="rec-btn-small" onclick="playRec('+w.id+')">▶ Play current</button>')
+        : '')+
+      (wasRecorded ? '<span class="rec-meta">Saved as '+esc(w.audio_filename||'')+'</span>' : '')+
+    '</div>'+
+    '<div class="inline-rec-status" id="inline-rec-status-'+w.id+'"></div>'+
+  '</div>';
+}
+
+function field(w, name, label, hint, cls, type){
+  cls = cls || '';
+  type = type || 'text';
+  const v = esc(w[name]||'');
+  const lbl = '<label>'+esc(label)+(hint?'<span class="hint">'+esc(hint)+'</span>':'')+'</label>';
+  if(type === 'textarea'){
+    return '<div class="edit-field" style="grid-column:1/-1">'+lbl+
+      '<textarea data-field="'+name+'" data-id="'+w.id+'" placeholder="'+esc(hint||'')+'" class="'+cls+'">'+v+'</textarea></div>';
+  }
+  return '<div class="edit-field">'+lbl+
+    '<input data-field="'+name+'" data-id="'+w.id+'" value="'+v+'" placeholder="'+esc(hint||'')+'" class="'+cls+'"></div>';
+}
+
+function renderConjugationSection(w){
+  const pos = (w.pos||'').toLowerCase();
+  if(pos === 'verb'){
+    return '<div class="verb-section">'+
+      '<h4>Verb tenses <small>(leave blank if not applicable)</small></h4>'+
+      '<div class="edit-grid three">'+
+        field(w,'maadi','Maadi (past)','I did','mono')+
+        field(w,'moudaare3','Moudaare3 (present)','I am doing','mono')+
+        field(w,'amr','Amr (imperative)','do!','mono')+
+        field(w,'mousta2bal','Mousta2bal (future)','I will do','mono')+
+        field(w,'moustamerr','Moustamerr (continuous)','I keep doing','mono')+
+      '</div>'+
+    '</div>';
+  }
+  if(pos === 'noun' || pos === 'adjective'){
+    return '<div class="verb-section">'+
+      '<h4>Gender &amp; number forms <small>(leave blank if not applicable)</small></h4>'+
+      '<div class="edit-grid">'+
+        field(w,'mouzakkar','Mouzakkar (masculine)','هو','mono')+
+        field(w,'mou2annass','Mou2annass (feminine)','هي','mono')+
+        field(w,'mousanna','Mousanna (dual)','هما','mono')+
+        field(w,'jam3','Jam3 (plural)','هم','mono')+
+      '</div>'+
+    '</div>';
+  }
+  return ''; // other parts of speech: no conjugation section
+}
+
+// ============================================================================
+// ADD NEW WORD
+// ============================================================================
+function openAddWord(){
+  // Find next available ID (max existing + 1)
+  const maxId = WORDS.reduce((m,w) => Math.max(m, w.id), 0);
+  const newId = maxId + 1;
+  const newWord = {
+    id: newId, english:'', french:'', lebanese_headword:'', arabic:'',
+    category:'', pos:'', mouzakkar:'', mou2annass:'', mousanna:'', jam3:'',
+    maadi:'', moudaare3:'', amr:'', mousta2bal:'', moustamerr:'',
+    example:'', notes:'', audio_filename:'', recorded:false, last_edited:''
+  };
+  // Insert at start of WORDS so it shows up first
+  WORDS.unshift(newWord);
+  saveCache();
+  EXPANDED_ID = newId;
+  // Queue the row creation on the server
+  queueChange('add_word', { id:newId, ts:new Date().toISOString() });
+  refreshStats();
+  // Switch to Translate tab with filter clear so new word is visible
+  if(curTab !== 'translate' && curTab !== 'browse'){
+    switchTab('translate');
+  } else {
+    if(curTab==='browse') renderBrowse(); else renderTranslate();
+  }
+  toast('New word #'+newId+' added — fill in the fields below', 'ok');
+  setTimeout(()=> {
+    const card = document.getElementById('edit-card-'+newId);
+    if(card){
+      card.scrollIntoView({ behavior:'smooth', block:'center' });
+      // Focus English field
+      const englishInput = card.querySelector('[data-field="english"]');
+      if(englishInput) englishInput.focus();
+    }
+  }, 200);
+}
+
+// ============================================================================
+// DELETE WORD
+// ============================================================================
+function confirmDelete(id){
+  const w = WORDS.find(x => x.id === id);
+  if(!w) return;
+  PENDING_DELETE_ID = id;
+  document.getElementById('deleteModalText').innerHTML =
+    'This will remove <b>#'+id+' '+esc(w.english||'(no English label)')+'</b> from the dictionary.';
+  document.getElementById('deleteConfirmBtn').onclick = ()=> doDelete(id);
+  document.getElementById('deleteModal').classList.add('show');
+}
+function closeDeleteModal(){
+  document.getElementById('deleteModal').classList.remove('show');
+  PENDING_DELETE_ID = null;
+}
+function doDelete(id){
+  // Remove from local
+  WORDS = WORDS.filter(w => w.id !== id);
+  saveCache();
+  EXPANDED_ID = null;
+  closeDeleteModal();
+  queueChange('delete_word', { id, ts:new Date().toISOString() });
+  refreshStats();
+  refreshAll();
+  toast('Word #'+id+' deleted', 'ok');
+}
+
+function handleCategoryChange(selectEl, id){
+  if(selectEl.value === '__add_new__'){
+    const newCat = prompt('Enter a new category name:');
+    if(newCat && newCat.trim()){
+      const cleanCat = newCat.trim();
+      const w = WORDS.find(x => x.id === id);
+      if(w){
+        w.category = cleanCat;
+        saveCache();
+        queueChange('translation', { id, field:'category', value:cleanCat, ts:new Date().toISOString() });
+        flashSaveIndicator(id);
+        // Re-render the card so the new category appears in the list
+        if(curTab==='browse') renderBrowse();
+        else if(curTab==='translate') renderTranslate();
+      }
+    } else {
+      // User cancelled — restore previous selection
+      const w = WORDS.find(x => x.id === id);
+      selectEl.value = w ? (w.category || '') : '';
+    }
+  }
+  // Other category selections are handled by the regular onChange auto-save
+}
+
+function closeAndNext(currentId){
+  // Find next word in the current filtered list
+  let data;
+  if(curTab === 'translate'){
+    data = WORDS.filter(w => {
+      if(transFilter.cat && w.category !== transFilter.cat) return false;
+      if(transFilter.pos){
+        const p = (w.pos||'').toLowerCase();
+        if(transFilter.pos === 'other'){
+          if(p==='verb'||p==='noun'||p==='adjective'||p==='expression') return false;
+        } else if(p !== transFilter.pos) return false;
+      }
+      const isDone = w.lebanese_headword && w.lebanese_headword.trim();
+      if(transFilter.done === 'todo' && isDone) return false;
+      if(transFilter.done === 'done' && !isDone) return false;
+      if(transFilter.q){
+        const q = transFilter.q.toLowerCase();
+        const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category).toLowerCase();
+        if(!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  } else {
+    data = filteredFor(browseFilter);
+  }
+  const idx = data.findIndex(w => w.id === currentId);
+  const next = (idx >= 0 && idx < data.length - 1) ? data[idx + 1] : null;
+  if(next){
+    EXPANDED_ID = next.id;
+  } else {
+    EXPANDED_ID = null;
+    toast('No more words match your filters 🎉', 'ok');
+  }
+  if(curTab==='browse') renderBrowse();
+  else renderTranslate();
+  // Scroll the newly-opened card into view
+  if(next) setTimeout(()=> {
+    const card = document.getElementById('edit-card-'+next.id);
+    if(card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+  }, 100);
+}
+
+// ============================================================================
+// RECORD TAB
+// ============================================================================
+let recFilter = { q:'', cat:'', mode:'todo' };
+document.getElementById('searchRec').oninput = e => { recFilter.q = e.target.value; renderRecord(); };
+document.getElementById('filterCatRec').onchange = e => { recFilter.cat = e.target.value; renderRecord(); };
+document.getElementById('filterRecMode').onchange = e => { recFilter.mode = e.target.value; renderRecord(); };
+
+function setUploadMode(mode, silent){
+  CFG.uploadMode = mode;
+  saveConfig();
+  document.getElementById('modeAuto').classList.toggle('active', mode==='auto');
+  document.getElementById('modeManual').classList.toggle('active', mode==='manual');
+  if(!silent) toast(mode==='auto' ? 'Auto upload (via Apps Script)' : 'Manual mode — files will download to your computer');
+}
+
+function renderRecord(){
+  const q = recFilter.q.toLowerCase();
+  let data = WORDS.filter(w => {
+    if(recFilter.cat && w.category !== recFilter.cat) return false;
+    const hasTrans = w.lebanese_headword && w.lebanese_headword.trim();
+    if(recFilter.mode === 'todo' && (!hasTrans || w.recorded)) return false;
+    if(recFilter.mode === 'all-todo' && w.recorded) return false;
+    if(recFilter.mode === 'done' && !w.recorded) return false;
+    if(q){
+      const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  document.getElementById('cnt-record').textContent = data.length;
+  if(data.length===0){
+    document.getElementById('recList').innerHTML = '<div class="empty"><h3>Nothing to record with these filters</h3></div>';
+    document.getElementById('recCard').innerHTML = '';
+    return;
+  }
+  // Show the current/first word in the big card
+  const cur = data[0];
+  document.getElementById('recCard').innerHTML = renderRecCard(cur);
+  // Show next 30 in the list below
+  const next = data.slice(1, 31);
+  if(next.length){
+    document.getElementById('recList').innerHTML =
+      '<h3 style="color:var(--grey);font-weight:normal;font-size:.95rem;margin:1.5rem 0 .5rem">Up next</h3>'+
+      '<table><tbody>'+next.map(w=>recRow(w)).join('')+'</tbody></table>';
+  } else document.getElementById('recList').innerHTML = '';
+}
+
+function renderRecCard(w){
+  const isRec = RecState.wordId === w.id && RecState.recorder && RecState.recorder.state === 'recording';
+  const wasRec = w.recorded;
+  return '<div class="rec-card">'+
+    '<div style="color:var(--grey);font-size:.85rem">'+esc(w.category||'')+(w.pos?' · '+esc(w.pos):'')+'</div>'+
+    '<div class="word">'+esc(w.english)+'</div>'+
+    (w.french ? '<div style="color:var(--olive);font-style:italic;margin-bottom:.5rem">'+esc(w.french)+'</div>' : '')+
+    '<div class="meta">'+
+      '<span style="color:var(--cedar);font-family:monospace;font-size:1.1rem">'+esc(w.lebanese_headword||'—')+'</span>'+
+      (w.arabic ? '  ·  <span class="ar">'+esc(w.arabic)+'</span>' : '')+
+    '</div>'+
+    (w.notes ? '<div style="color:var(--grey);font-size:.85rem;font-style:italic;margin-bottom:.7rem">'+esc(w.notes)+'</div>' : '')+
+    '<div class="rec-timer" id="recTimer">'+(isRec?'00:00':'')+'</div>'+
+    '<div class="rec-buttons">'+
+      (isRec
+        ? '<button class="rec-btn recording" onclick="stopRec()">⏹ Stop & save</button>'
+        : '<button class="rec-btn" onclick="startRec('+w.id+')">'+(wasRec?'🎤 Re-record':'🎤 Record')+'</button>')+
+      (wasRec && !isRec ? '<button class="rec-btn recorded" onclick="playRec('+w.id+')">▶ Play current</button>' : '')+
+      (!isRec ? '<button class="btn ghost" onclick="skipWord('+w.id+')">Skip →</button>' : '')+
+    '</div>'+
+    '<div class="rec-status" id="recStatus"></div>'+
+  '</div>';
+}
+
+function recRow(w){
+  return '<tr>'+
+    '<td class="id">'+w.id+'</td>'+
+    '<td class="eng">'+esc(w.english)+'</td>'+
+    '<td class="leb">'+esc(w.lebanese_headword||'')+'</td>'+
+    '<td class="cat">'+esc(w.category||'')+'</td>'+
+    '<td class="actions"><button class="btn ghost" onclick="openRecord('+w.id+')">Record</button></td>'+
+  '</tr>';
+}
+
+function openRecord(id){
+  switchTab('record');
+  // Show this specific word
+  const w = WORDS.find(x => x.id === id);
+  if(w) document.getElementById('recCard').innerHTML = renderRecCard(w);
+}
+
+function skipWord(id){
+  // Temporarily exclude this word from the filter so the next one comes up
+  const data = WORDS.filter(w => w.id !== id);
+  const next = data.find(w => {
+    const hasTrans = w.lebanese_headword && w.lebanese_headword.trim();
+    if(recFilter.mode === 'todo' && (!hasTrans || w.recorded)) return false;
+    if(recFilter.mode === 'all-todo' && w.recorded) return false;
+    if(recFilter.mode === 'done' && !w.recorded) return false;
+    if(recFilter.cat && w.category !== recFilter.cat) return false;
+    return true;
+  });
+  if(next) document.getElementById('recCard').innerHTML = renderRecCard(next);
+  else toast('No more matching words');
+}
+
+// ============================================================================
+// AUDIO RECORDING
+// ============================================================================
+async function startRec(id){
+  try {
+    if(!RecState.stream){
+      RecState.stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    }
+    RecState.chunks = [];
+    RecState.wordId = id;
+    RecState.startTs = Date.now();
+    // Try webm/opus; fall back to default
+    let opts = {};
+    if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) opts.mimeType = 'audio/webm;codecs=opus';
+    else if(MediaRecorder.isTypeSupported('audio/webm')) opts.mimeType = 'audio/webm';
+    RecState.recorder = new MediaRecorder(RecState.stream, opts);
+    RecState.recorder.ondataavailable = e => { if(e.data.size>0) RecState.chunks.push(e.data); };
+    RecState.recorder.onstop = handleRecStop;
+    RecState.recorder.start();
+    RecState.timerInt = setInterval(updateTimer, 100);
+    const w = WORDS.find(x => x.id === id);
+    // Update Record-tab card if visible
+    const recCardEl = document.getElementById('recCard');
+    if(recCardEl) recCardEl.innerHTML = renderRecCard(w);
+    // Update inline edit card if open for this word
+    if(EXPANDED_ID === id){
+      if(curTab==='browse') renderBrowse();
+      else if(curTab==='translate') renderTranslate();
+    }
+  } catch(e){
+    showMicPermissionHelp(e);
+  }
+}
+
+function showMicPermissionHelp(err){
+  const msg = (err && err.message) || String(err);
+  const isPermDenied = /denied|not allowed/i.test(msg);
+  const modalBg = document.createElement('div');
+  modalBg.className = 'modal-bg show';
+  modalBg.innerHTML = '<div class="modal">'+
+    '<h2>🎤 Microphone access is blocked</h2>'+
+    (isPermDenied
+      ? '<p>Your browser is blocking microphone access for this page. To fix this:</p>'+
+        '<ol style="line-height:1.7;color:var(--ink);padding-left:1.2rem">'+
+          '<li>Look at the address bar at the top of Chrome.</li>'+
+          '<li>Click the <b>🔒 padlock</b> icon (left of the URL).</li>'+
+          '<li>Find <b>"Microphone"</b> in the menu and change it to <b>Allow</b>.</li>'+
+          '<li>Reload this page.</li>'+
+        '</ol>'+
+        '<p style="color:var(--grey);font-size:.85rem;margin-top:1rem">If you don\'t see a microphone option, your browser may not have requested permission yet. Click Try Again below to prompt it.</p>'
+      : '<p>Could not access the microphone: <code>'+esc(msg)+'</code></p>'+
+        '<p style="color:var(--grey);font-size:.85rem">Make sure no other app is using the microphone, and that your computer has a working microphone connected.</p>')+
+    '<div class="modal-actions">'+
+      '<button class="btn ghost" onclick="this.closest(\'.modal-bg\').remove()">Close</button>'+
+      '<button class="btn" onclick="this.closest(\'.modal-bg\').remove(); setTimeout(()=>startRec('+RecState.wordId+'),100)">Try again</button>'+
+    '</div>'+
+  '</div>';
+  modalBg.addEventListener('click', e=> { if(e.target === modalBg) modalBg.remove(); });
+  document.body.appendChild(modalBg);
+}
+
+function stopRec(){
+  if(RecState.recorder && RecState.recorder.state === 'recording'){
+    RecState.recorder.stop();
+  }
+}
+
+function updateTimer(){
+  const ms = Date.now() - RecState.startTs;
+  const s = Math.floor(ms/1000);
+  const txt = String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  const recTabEl = document.getElementById('recTimer');
+  if(recTabEl) recTabEl.textContent = txt;
+  const inlineEl = document.getElementById('rec-timer-'+RecState.wordId);
+  if(inlineEl) inlineEl.textContent = txt;
+}
+
+async function handleRecStop(){
+  clearInterval(RecState.timerInt);
+  const blob = new Blob(RecState.chunks, { type: RecState.recorder.mimeType || 'audio/webm' });
+  const id = RecState.wordId;
+  const ext = blob.type.includes('webm') ? 'webm' : (blob.type.includes('mp4')?'m4a':'webm');
+  const filename = String(id).padStart(4,'0')+'.'+ext;
+  // Keep a local copy for playback
+  if(RECS_LOCAL[id] && RECS_LOCAL[id].blobUrl) URL.revokeObjectURL(RECS_LOCAL[id].blobUrl);
+  RECS_LOCAL[id] = { blob, blobUrl: URL.createObjectURL(blob), filename };
+  // Mark recorded in WORDS and trigger sync
+  const w = WORDS.find(x => x.id === id);
+  if(w){ w.recorded = true; w.audio_filename = filename; saveCache(); refreshStats(); }
+  // Upload
+  let statusMsg = '';
+  if(CFG.uploadMode === 'auto' && CFG.scriptUrl){
+    const b64 = await blobToB64(blob);
+    queueChange('audio', { id, filename, mime:blob.type, data:b64, ts:new Date().toISOString() });
+    queueChange('translation', { id, field:'recorded', value:'TRUE', ts:new Date().toISOString() });
+    queueChange('translation', { id, field:'audio_filename', value:filename, ts:new Date().toISOString() });
+    statusMsg = '✓ Saved & queued for upload to Drive';
+  } else {
+    // Manual: download file
+    const a = document.createElement('a');
+    a.href = RECS_LOCAL[id].blobUrl;
+    a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    statusMsg = '✓ '+filename+' downloaded — drag it into the Audio folder in Drive';
+    if(CFG.scriptUrl){
+      queueChange('translation', { id, field:'recorded', value:'TRUE', ts:new Date().toISOString() });
+      queueChange('translation', { id, field:'audio_filename', value:filename, ts:new Date().toISOString() });
+    }
+  }
+  RecState.recorder = null;
+  // Update Record-tab card if it exists
+  const recCardEl = document.getElementById('recCard');
+  if(recCardEl && w) recCardEl.innerHTML = renderRecCard(w);
+  const recStatusEl = document.getElementById('recStatus');
+  if(recStatusEl) recStatusEl.textContent = statusMsg;
+  // Update inline edit card if open for this word
+  if(EXPANDED_ID === id){
+    if(curTab==='browse') renderBrowse();
+    else if(curTab==='translate') renderTranslate();
+    // Status in inline card
+    setTimeout(()=> {
+      const inlineStatus = document.getElementById('inline-rec-status-'+id);
+      if(inlineStatus) inlineStatus.textContent = statusMsg;
+    }, 50);
+  }
+  // Auto-advance only on Record tab, not in edit card (she may still be editing fields)
+  if(curTab==='record' && EXPANDED_ID === null){
+    setTimeout(()=> skipWord(id), 1500);
+  }
+}
+
+function blobToB64(blob){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = ()=> res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(blob);
+  });
+}
+
+// ============================================================================
+// PLAYBACK
+// ============================================================================
+let currentAudio = null, currentAudioId = null;
+async function playRec(id){
+  if(currentAudio && currentAudioId === id){
+    currentAudio.pause(); currentAudio = null; currentAudioId = null;
+    rerenderIfExpanded(id);
+    return;
+  }
+  if(currentAudio){ currentAudio.pause(); currentAudio = null; currentAudioId = null; }
+  let src = null;
+  // 1. Local copy from this session
+  if(RECS_LOCAL[id]){
+    src = RECS_LOCAL[id].blobUrl;
+  }
+  // 2. Fetch from Apps Script (which returns a data: URL as plain text)
+  else if(CFG.scriptUrl){
+    try {
+      const url = CFG.scriptUrl + '?action=audio&id=' + id + '&_t='+Date.now();
+      toast('Loading audio…', 'ok');
+      const resp = await fetch(url);
+      const text = await resp.text();
+      if(!text || !text.startsWith('data:')){
+        toast('Audio not found in Drive for word #'+id, 'err');
+        return;
+      }
+      src = text.trim();
+    } catch(e){
+      toast('Could not fetch audio: '+e.message, 'err');
+      return;
+    }
+  }
+  if(!src){
+    toast('Audio not available — set up Apps Script to play files from Drive', 'err');
+    return;
+  }
+  currentAudio = new Audio(src);
+  currentAudioId = id;
+  currentAudio.onended = ()=> { currentAudio = null; currentAudioId = null; rerenderIfExpanded(id); };
+  currentAudio.onerror = ()=> { toast('Could not play audio', 'err'); currentAudio = null; currentAudioId = null; rerenderIfExpanded(id); };
+  try {
+    await currentAudio.play();
+    rerenderIfExpanded(id);
+  } catch(e){
+    toast('Play failed: '+e.message, 'err');
+    currentAudio = null; currentAudioId = null;
+  }
+}
+
+function rerenderIfExpanded(id){
+  if(EXPANDED_ID === id){
+    if(curTab==='browse') renderBrowse();
+    else if(curTab==='translate') renderTranslate();
+  }
+}
+
+// ============================================================================
+// EXPORT
+// ============================================================================
+function exportCSV(){
+  const headers = ['id','english','french','lebanese_headword','arabic','category','pos','mouzakkar','mou2annass','mousanna','jam3','maadi','moudaare3','amr','mousta2bal','moustamerr','example','notes','audio_filename','recorded','last_edited'];
+  const csv = [headers.join(',')].concat(WORDS.map(w =>
+    headers.map(h => csvField(h==='recorded' ? (w[h]?'TRUE':'FALSE') : (w[h]||''))).join(',')
+  )).join('\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SpeakingLebanese_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function csvField(v){
+  v = String(v||'');
+  if(v.includes(',')||v.includes('"')||v.includes('\n'))
+    return '"'+v.replace(/"/g,'""')+'"';
+  return v;
+}
+function esc(s){
+  return String(s||'').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+}
+
+// ============================================================================
+// REFRESH
+// ============================================================================
+function refreshAll(){
+  // Build category dropdowns
+  const cats = [...new Set(WORDS.map(w => w.category).filter(Boolean))].sort();
+  ['filterCatBrowse','filterCatTrans','filterCatRec'].forEach(id => {
+    const el = document.getElementById(id);
+    const cur = el.value;
+    el.innerHTML = '<option value="">All categories</option>'+
+      cats.map(c => '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+'</option>').join('');
+  });
+  refreshStats();
+  if(curTab==='browse') renderBrowse();
+  else if(curTab==='translate') renderTranslate();
+  else if(curTab==='record') renderRecord();
+}
+
+function toast(msg, type){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show '+(type||'');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(()=> t.className = 'toast', 3000);
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+// INIT
+// ============================================================================
+loadConfig();
+loadPending();
+loadCache();
+updateOutboxes();
+
+// If URLs were baked in by the Apps Script, show the connected status,
+// hide the manual setup form, and start on the Browse tab automatically
+if(window.BAKED_SHEET_URL){
+  const bs = document.getElementById('bakedStatus');
+  const ms = document.getElementById('manualSetup');
+  if(bs) bs.style.display = '';
+  if(ms) ms.style.display = 'none';
+  const truncate = (u)=> u.length > 80 ? u.substring(0,77)+'…' : u;
+  const sd = document.getElementById('bakedSheetDisplay');
+  const scd = document.getElementById('bakedScriptDisplay');
+  if(sd) sd.textContent = truncate(window.BAKED_SHEET_URL);
+  if(scd) scd.textContent = truncate(window.BAKED_SCRIPT_URL || '(not configured)');
+  // Auto-switch to Browse on first load
+  switchTab('browse');
+}
+
+if(CFG.sheetUrl){
+  fetchSheet();
+  // Periodic background sync of pending writes every 60s
+  setInterval(syncPending, 60000);
+  // Refetch sheet every 15 min to pick up any external edits (Studio writes go via Apps Script directly,
+  // so this is just a safety net for changes made outside the Studio)
+  setInterval(fetchSheet, 15*60*1000);
+} else {
+  setConnStatus('warn','Setup needed');
+}
+
+// Refetch when window regains focus, BUT only if no card is being edited
+window.addEventListener('focus', () => {
+  if(CFG.sheetUrl && EXPANDED_ID === null) fetchSheet();
+});
+// Sync pending when network comes back
+window.addEventListener('online', () => { setConnStatus('warn','Back online — syncing…'); syncPending(); });
+window.addEventListener('offline', () => setConnStatus('err','Offline — changes queued locally'));
+
+// Modal: close on background click or Escape
+document.getElementById('deleteModal').addEventListener('click', e => {
+  if(e.target.id === 'deleteModal') closeDeleteModal();
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    closeDeleteModal();
+    if(EXPANDED_ID !== null){
+      EXPANDED_ID = null;
+      if(curTab==='browse') renderBrowse();
+      else if(curTab==='translate') renderTranslate();
+    }
+  }
+});
+
+</script>
+</body>
+</html>
