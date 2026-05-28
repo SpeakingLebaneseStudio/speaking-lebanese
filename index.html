@@ -302,6 +302,7 @@
         <option value="notrans">Not translated</option>
       </select>
       <button class="btn ghost" onclick="exportCSV()">Export CSV</button>
+      <button class="btn ghost" onclick="openManageCategories()">⚙ Categories</button>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
     <div id="outboxBrowse"></div>
@@ -369,6 +370,25 @@
       <button class="btn ghost" onclick="closeDeleteModal()">Cancel</button>
       <button class="btn danger" id="deleteConfirmBtn">Delete</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="manageCatModal">
+  <div class="modal" style="max-width:640px">
+    <h2>Manage categories</h2>
+    <p style="color:var(--grey);font-size:.85rem">Rename or delete categories. Renaming updates every word that uses it. Changes save to your Sheet automatically.</p>
+    <div id="manageCatList" style="margin-top:1rem"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeManageCategories()">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="catDeleteModal">
+  <div class="modal">
+    <h2>Delete category</h2>
+    <p id="catDeleteText"></p>
+    <div class="modal-actions" id="catDeleteActions"></div>
   </div>
 </div>
 
@@ -1088,6 +1108,89 @@ function handlePosChange(selectEl, id){
   }
 }
 
+// ============================================================================
+// MANAGE CATEGORIES (rename / delete across all words)
+// ============================================================================
+function openManageCategories(){
+  renderManageCatList();
+  document.getElementById('manageCatModal').classList.add('show');
+}
+function closeManageCategories(){
+  document.getElementById('manageCatModal').classList.remove('show');
+}
+function renderManageCatList(){
+  // Count words per category
+  const counts = {};
+  WORDS.forEach(w => { const c = w.category || ''; if(c) counts[c] = (counts[c]||0)+1; });
+  const cats = Object.keys(counts).sort();
+  const el = document.getElementById('manageCatList');
+  if(cats.length === 0){ el.innerHTML = '<p style="color:var(--grey)">No categories yet.</p>'; return; }
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse">'+
+    cats.map(c =>
+      '<tr style="border-bottom:1px solid var(--grey-pale)">'+
+        '<td style="padding:.5rem 0"><input value="'+esc(c)+'" id="catedit-'+encodeURIComponent(c)+'" style="padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;width:100%;font-family:inherit"></td>'+
+        '<td style="padding:.5rem .8rem;color:var(--grey);white-space:nowrap">'+counts[c]+' word'+(counts[c]>1?'s':'')+'</td>'+
+        '<td style="padding:.5rem 0;white-space:nowrap">'+
+          '<button class="btn ghost" onclick="renameCategory(\''+c.replace(/'/g,"\\'")+'\')">Rename</button> '+
+          '<button class="btn danger" onclick="deleteCategory(\''+c.replace(/'/g,"\\'")+'\')">Delete</button>'+
+        '</td>'+
+      '</tr>'
+    ).join('')+'</table>';
+}
+function renameCategory(oldCat){
+  const input = document.getElementById('catedit-'+encodeURIComponent(oldCat));
+  const newCat = input ? input.value.trim() : '';
+  if(!newCat){ toast('Category name cannot be empty', 'err'); return; }
+  if(newCat === oldCat){ toast('No change', 'ok'); return; }
+  const affected = WORDS.filter(w => w.category === oldCat);
+  affected.forEach(w => {
+    w.category = newCat;
+    queueChange('translation', { id:w.id, field:'category', value:newCat, ts:new Date().toISOString() });
+  });
+  saveCache();
+  renderManageCatList();
+  refreshAll();
+  toast('Renamed "'+oldCat+'" → "'+newCat+'" ('+affected.length+' words)', 'ok');
+}
+function deleteCategory(cat){
+  const affected = WORDS.filter(w => w.category === cat);
+  const text = document.getElementById('catDeleteText');
+  const actions = document.getElementById('catDeleteActions');
+  if(affected.length === 0){
+    // No words use it — it'll just disappear from the list; nothing to delete in data
+    toast('"'+cat+'" has no words — it will disappear on its own', 'ok');
+    return;
+  }
+  text.innerHTML = '<b>"'+esc(cat)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?';
+  actions.innerHTML =
+    '<button class="btn ghost" onclick="closeCatDelete()">Cancel</button>'+
+    '<button class="btn" onclick="doDeleteCategory(\''+cat.replace(/'/g,"\\'")+'\', \'none\')">Move to (no category)</button>'+
+    '<button class="btn danger" onclick="doDeleteCategory(\''+cat.replace(/'/g,"\\'")+'\', \'delete\')">Delete the words too</button>';
+  document.getElementById('catDeleteModal').classList.add('show');
+}
+function closeCatDelete(){
+  document.getElementById('catDeleteModal').classList.remove('show');
+}
+function doDeleteCategory(cat, mode){
+  const affected = WORDS.filter(w => w.category === cat);
+  if(mode === 'none'){
+    affected.forEach(w => {
+      w.category = '';
+      queueChange('translation', { id:w.id, field:'category', value:'', ts:new Date().toISOString() });
+    });
+    toast('"'+cat+'" removed — '+affected.length+' word(s) moved to no category', 'ok');
+  } else if(mode === 'delete'){
+    const ids = affected.map(w => w.id);
+    WORDS = WORDS.filter(w => w.category !== cat);
+    ids.forEach(id => queueChange('delete_word', { id, ts:new Date().toISOString() }));
+    toast('Deleted category "'+cat+'" and '+ids.length+' word(s)', 'ok');
+  }
+  saveCache();
+  closeCatDelete();
+  renderManageCatList();
+  refreshAll();
+}
+
 function closeAndNext(currentId){
   // Find next word in the current filtered list
   let data;
@@ -1531,9 +1634,17 @@ window.addEventListener('offline', () => setConnStatus('err','Offline — change
 document.getElementById('deleteModal').addEventListener('click', e => {
   if(e.target.id === 'deleteModal') closeDeleteModal();
 });
+document.getElementById('manageCatModal').addEventListener('click', e => {
+  if(e.target.id === 'manageCatModal') closeManageCategories();
+});
+document.getElementById('catDeleteModal').addEventListener('click', e => {
+  if(e.target.id === 'catDeleteModal') closeCatDelete();
+});
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
     closeDeleteModal();
+    closeCatDelete();
+    closeManageCategories();
     if(EXPANDED_ID !== null){
       EXPANDED_ID = null;
       if(curTab==='browse') renderBrowse();
