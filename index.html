@@ -394,6 +394,8 @@ let RecState = { stream:null, recorder:null, chunks:[], wordId:null, startTs:0, 
 let curTab = 'setup';
 let EXPANDED_ID = null; // currently expanded word ID in Browse/Translate
 let PENDING_DELETE_ID = null; // word ID awaiting delete confirmation
+let CUSTOM_POS = []; // custom parts-of-speech the user has added
+try { CUSTOM_POS = JSON.parse(localStorage.getItem('sl_custom_pos')||'[]'); } catch(e){ CUSTOM_POS = []; }
 
 // ============================================================================
 // LOAD CONFIG & CACHE FROM LOCALSTORAGE
@@ -617,8 +619,14 @@ async function syncPending(){
     formData.append('payload', JSON.stringify(item.payload));
     const r = await fetch(CFG.scriptUrl, { method:'POST', body:formData });
     if(!r.ok) throw new Error('HTTP '+r.status);
-    const result = await r.text();
-    // Success: remove from queue and try next
+    const resultText = await r.text();
+    // Apps Script returns HTTP 200 even on logical failure — check the ok flag
+    let result;
+    try { result = JSON.parse(resultText); } catch(e){ result = null; }
+    if(result && result.ok === false){
+      throw new Error(result.error || 'Server reported failure');
+    }
+    // Confirmed success: remove from queue and try next
     PENDING.shift();
     savePending();
     updateOutboxes();
@@ -850,8 +858,14 @@ function toggleExpand(id, event){
 function renderEditCard(w){
   const cats = [...new Set(WORDS.map(x => x.category).filter(Boolean))].sort();
   const catOptions = cats.map(c => '<option value="'+esc(c)+'"'+(c===w.category?' selected':'')+'>'+esc(c)+'</option>').join('');
-  const posOptions = ['','verb','noun','adjective','expression','adverb','preposition','pronoun','other']
-    .map(p => '<option value="'+p+'"'+(p===(w.pos||'').toLowerCase()?' selected':'')+'>'+(p||'(none)')+'</option>').join('');
+  // POS list = defaults + any custom types ever added + any value already on a word
+  const defaultPos = ['verb','noun','adjective','expression','adverb','preposition','pronoun','other'];
+  const existingPos = [...new Set(WORDS.map(x => (x.pos||'').toLowerCase()).filter(Boolean))];
+  const allPos = [...new Set([...defaultPos, ...CUSTOM_POS, ...existingPos])];
+  const curPos = (w.pos||'').toLowerCase();
+  const posOptions = '<option value="">(none)</option>' +
+    allPos.map(p => '<option value="'+esc(p)+'"'+(p===curPos?' selected':'')+'>'+esc(p)+'</option>').join('') +
+    '<option value="__add_new_pos__" style="font-style:italic;color:var(--olive)">+ Add new type…</option>';
   return '<div class="edit-card" id="edit-card-'+w.id+'" onclick="event.stopPropagation()">'+
     '<h3>'+
       '<span class="word-id">#'+w.id+'</span>'+
@@ -871,7 +885,7 @@ function renderEditCard(w){
           '<option value="__add_new__" style="font-style:italic;color:var(--olive)">+ Add new category…</option>'+
         '</select></div>'+
       '<div class="edit-field"><label>Type (part of speech)</label>'+
-        '<select data-field="pos" data-id="'+w.id+'">'+posOptions+'</select></div>'+
+        '<select data-field="pos" data-id="'+w.id+'" onchange="handlePosChange(this, '+w.id+')">'+posOptions+'</select></div>'+
       field(w,'example','Example sentence','use in a sentence')+
       field(w,'notes','Notes','additional context, irregularities, etc.','','textarea')+
       renderConjugationSection(w)+
@@ -1023,25 +1037,55 @@ function doDelete(id){
 function handleCategoryChange(selectEl, id){
   if(selectEl.value === '__add_new__'){
     const newCat = prompt('Enter a new category name:');
+    const w = WORDS.find(x => x.id === id);
     if(newCat && newCat.trim()){
       const cleanCat = newCat.trim();
-      const w = WORDS.find(x => x.id === id);
       if(w){
         w.category = cleanCat;
         saveCache();
         queueChange('translation', { id, field:'category', value:cleanCat, ts:new Date().toISOString() });
         flashSaveIndicator(id);
-        // Re-render the card so the new category appears in the list
-        if(curTab==='browse') renderBrowse();
-        else if(curTab==='translate') renderTranslate();
+        // Add the new option to THIS select directly and select it (no full re-render = no race)
+        const opt = document.createElement('option');
+        opt.value = cleanCat; opt.textContent = cleanCat;
+        selectEl.insertBefore(opt, selectEl.querySelector('option[value="__add_new__"]'));
+        selectEl.value = cleanCat;
       }
     } else {
-      // User cancelled — restore previous selection
-      const w = WORDS.find(x => x.id === id);
+      // Cancelled — restore previous selection
       selectEl.value = w ? (w.category || '') : '';
     }
   }
-  // Other category selections are handled by the regular onChange auto-save
+  // Other selections auto-save via the global change handler
+}
+
+function handlePosChange(selectEl, id){
+  if(selectEl.value === '__add_new_pos__'){
+    const newPos = prompt('Enter a new word type (e.g. particle, interjection):');
+    const w = WORDS.find(x => x.id === id);
+    if(newPos && newPos.trim()){
+      const cleanPos = newPos.trim().toLowerCase();
+      // Remember this custom type for future words
+      if(!CUSTOM_POS.includes(cleanPos)){
+        CUSTOM_POS.push(cleanPos);
+        try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+      }
+      if(w){
+        w.pos = cleanPos;
+        saveCache();
+        queueChange('translation', { id, field:'pos', value:cleanPos, ts:new Date().toISOString() });
+        flashSaveIndicator(id);
+        const opt = document.createElement('option');
+        opt.value = cleanPos; opt.textContent = cleanPos;
+        selectEl.insertBefore(opt, selectEl.querySelector('option[value="__add_new_pos__"]'));
+        selectEl.value = cleanPos;
+        // Re-render so the conjugation section updates (verb vs noun/adj vs other)
+        if(curTab==='browse') renderBrowse(); else renderTranslate();
+      }
+    } else {
+      selectEl.value = w ? (w.pos||'').toLowerCase() : '';
+    }
+  }
 }
 
 function closeAndNext(currentId){
