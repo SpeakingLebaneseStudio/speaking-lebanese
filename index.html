@@ -303,6 +303,7 @@
       </select>
       <button class="btn ghost" onclick="exportCSV()">Export CSV</button>
       <button class="btn ghost" onclick="openManageCategories()">⚙ Categories</button>
+      <button class="btn ghost" onclick="openManageTypes()">⚙ Types</button>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
     <div id="outboxBrowse"></div>
@@ -389,6 +390,32 @@
     <h2>Delete category</h2>
     <p id="catDeleteText"></p>
     <div class="modal-actions" id="catDeleteActions"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="manageTypeModal">
+  <div class="modal" style="max-width:640px">
+    <h2>Manage word types</h2>
+    <p style="color:var(--grey);font-size:.85rem">Rename or delete word types (parts of speech). Renaming updates every word that uses it. Changes save to your Sheet automatically.</p>
+    <div id="manageTypeList" style="margin-top:1rem"></div>
+    <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--grey-pale)">
+      <label style="font-size:.85rem;color:var(--cedar);font-weight:bold">Add a new type</label>
+      <div style="display:flex;gap:.5rem;margin-top:.4rem">
+        <input id="newTypeInput" placeholder="e.g. particle, interjection" style="flex:1;padding:.45rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit">
+        <button class="btn" onclick="addNewType()">Add</button>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeManageTypes()">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="typeDeleteModal">
+  <div class="modal">
+    <h2>Delete word type</h2>
+    <p id="typeDeleteText"></p>
+    <div class="modal-actions" id="typeDeleteActions"></div>
   </div>
 </div>
 
@@ -1191,6 +1218,132 @@ function doDeleteCategory(cat, mode){
   refreshAll();
 }
 
+// ============================================================================
+// MANAGE WORD TYPES (parts of speech) — rename / delete / add
+// ============================================================================
+function openManageTypes(){
+  renderManageTypeList();
+  document.getElementById('manageTypeModal').classList.add('show');
+}
+function closeManageTypes(){
+  document.getElementById('manageTypeModal').classList.remove('show');
+}
+function renderManageTypeList(){
+  // Count words per type. Include types that exist on words OR in CUSTOM_POS even if unused yet.
+  const counts = {};
+  WORDS.forEach(w => { const p = (w.pos||'').toLowerCase(); if(p) counts[p] = (counts[p]||0)+1; });
+  CUSTOM_POS.forEach(p => { if(!(p in counts)) counts[p] = 0; });
+  // Defaults always shown so she can see + remove them if desired
+  ['verb','noun','adjective','expression','adverb','preposition','pronoun','other'].forEach(p => {
+    if(!(p in counts)) counts[p] = 0;
+  });
+  const types = Object.keys(counts).sort();
+  const el = document.getElementById('manageTypeList');
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse">'+
+    types.map(p =>
+      '<tr style="border-bottom:1px solid var(--grey-pale)">'+
+        '<td style="padding:.5rem 0"><input value="'+esc(p)+'" id="typeedit-'+encodeURIComponent(p)+'" style="padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;width:100%;font-family:inherit"></td>'+
+        '<td style="padding:.5rem .8rem;color:var(--grey);white-space:nowrap">'+(counts[p]>0 ? counts[p]+' word'+(counts[p]>1?'s':'') : 'unused')+'</td>'+
+        '<td style="padding:.5rem 0;white-space:nowrap">'+
+          '<button class="btn ghost" onclick="renameType(\''+p.replace(/'/g,"\\'")+'\')">Rename</button> '+
+          '<button class="btn danger" onclick="deleteType(\''+p.replace(/'/g,"\\'")+'\')">Delete</button>'+
+        '</td>'+
+      '</tr>'
+    ).join('')+'</table>';
+}
+function addNewType(){
+  const input = document.getElementById('newTypeInput');
+  const raw = input.value.trim().toLowerCase();
+  if(!raw){ toast('Type name cannot be empty', 'err'); return; }
+  if(CUSTOM_POS.includes(raw)){ toast('"'+raw+'" already exists', 'warn'); return; }
+  // Check if it already exists as a default or in WORDS
+  const allKnown = new Set([
+    ...['verb','noun','adjective','expression','adverb','preposition','pronoun','other'],
+    ...CUSTOM_POS,
+    ...WORDS.map(w => (w.pos||'').toLowerCase()).filter(Boolean)
+  ]);
+  if(allKnown.has(raw)){ toast('"'+raw+'" already exists', 'warn'); return; }
+  CUSTOM_POS.push(raw);
+  try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+  input.value = '';
+  renderManageTypeList();
+  toast('Added type "'+raw+'"', 'ok');
+}
+function renameType(oldType){
+  const input = document.getElementById('typeedit-'+encodeURIComponent(oldType));
+  const newType = input ? input.value.trim().toLowerCase() : '';
+  if(!newType){ toast('Type name cannot be empty', 'err'); return; }
+  if(newType === oldType){ toast('No change', 'ok'); return; }
+  const affected = WORDS.filter(w => (w.pos||'').toLowerCase() === oldType);
+  affected.forEach(w => {
+    w.pos = newType;
+    queueChange('translation', { id:w.id, field:'pos', value:newType, ts:new Date().toISOString() });
+  });
+  // Update CUSTOM_POS too
+  const idx = CUSTOM_POS.indexOf(oldType);
+  if(idx >= 0) CUSTOM_POS[idx] = newType;
+  if(!CUSTOM_POS.includes(newType) && !['verb','noun','adjective','expression','adverb','preposition','pronoun','other'].includes(newType)){
+    CUSTOM_POS.push(newType);
+  }
+  try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+  saveCache();
+  renderManageTypeList();
+  refreshAll();
+  toast('Renamed "'+oldType+'" → "'+newType+'" ('+affected.length+' word'+(affected.length===1?'':'s')+')', 'ok');
+}
+function deleteType(type){
+  const affected = WORDS.filter(w => (w.pos||'').toLowerCase() === type);
+  const text = document.getElementById('typeDeleteText');
+  const actions = document.getElementById('typeDeleteActions');
+  if(affected.length === 0){
+    // Just remove from custom list if it's there
+    const idx = CUSTOM_POS.indexOf(type);
+    if(idx >= 0){
+      CUSTOM_POS.splice(idx, 1);
+      try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+      renderManageTypeList();
+      toast('Removed unused type "'+type+'"', 'ok');
+    } else {
+      toast('"'+type+'" is a default type — can\'t remove (but you can rename it)', 'warn');
+    }
+    return;
+  }
+  text.innerHTML = '<b>"'+esc(type)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?';
+  actions.innerHTML =
+    '<button class="btn ghost" onclick="closeTypeDelete()">Cancel</button>'+
+    '<button class="btn" onclick="doDeleteType(\''+type.replace(/'/g,"\\'")+'\', \'none\')">Move to (no type)</button>'+
+    '<button class="btn danger" onclick="doDeleteType(\''+type.replace(/'/g,"\\'")+'\', \'delete\')">Delete the words too</button>';
+  document.getElementById('typeDeleteModal').classList.add('show');
+}
+function closeTypeDelete(){
+  document.getElementById('typeDeleteModal').classList.remove('show');
+}
+function doDeleteType(type, mode){
+  const affected = WORDS.filter(w => (w.pos||'').toLowerCase() === type);
+  if(mode === 'none'){
+    affected.forEach(w => {
+      w.pos = '';
+      queueChange('translation', { id:w.id, field:'pos', value:'', ts:new Date().toISOString() });
+    });
+    toast('"'+type+'" removed — '+affected.length+' word(s) moved to no type', 'ok');
+  } else if(mode === 'delete'){
+    const ids = affected.map(w => w.id);
+    WORDS = WORDS.filter(w => (w.pos||'').toLowerCase() !== type);
+    ids.forEach(id => queueChange('delete_word', { id, ts:new Date().toISOString() }));
+    toast('Deleted type "'+type+'" and '+ids.length+' word(s)', 'ok');
+  }
+  // Remove from CUSTOM_POS as well if present
+  const idx = CUSTOM_POS.indexOf(type);
+  if(idx >= 0){
+    CUSTOM_POS.splice(idx, 1);
+    try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+  }
+  saveCache();
+  closeTypeDelete();
+  renderManageTypeList();
+  refreshAll();
+}
+
 function closeAndNext(currentId){
   // Find next word in the current filtered list
   let data;
@@ -1640,11 +1793,19 @@ document.getElementById('manageCatModal').addEventListener('click', e => {
 document.getElementById('catDeleteModal').addEventListener('click', e => {
   if(e.target.id === 'catDeleteModal') closeCatDelete();
 });
+document.getElementById('manageTypeModal').addEventListener('click', e => {
+  if(e.target.id === 'manageTypeModal') closeManageTypes();
+});
+document.getElementById('typeDeleteModal').addEventListener('click', e => {
+  if(e.target.id === 'typeDeleteModal') closeTypeDelete();
+});
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
     closeDeleteModal();
     closeCatDelete();
     closeManageCategories();
+    closeTypeDelete();
+    closeManageTypes();
     if(EXPANDED_ID !== null){
       EXPANDED_ID = null;
       if(curTab==='browse') renderBrowse();
