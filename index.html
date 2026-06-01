@@ -294,6 +294,7 @@
     <div class="row">
       <input type="search" id="searchBrowse" placeholder="Search English, French, Lebanese, Arabic, category…">
       <select id="filterCatBrowse"><option value="">All categories</option></select>
+      <select id="filterPosBrowse"><option value="">All types</option></select>
       <select id="filterRecBrowse">
         <option value="">All words</option>
         <option value="rec">Recorded only</option>
@@ -317,14 +318,7 @@
     <div class="row">
       <input type="search" id="searchTrans" placeholder="Search…">
       <select id="filterCatTrans"><option value="">All categories</option></select>
-      <select id="filterPosTrans">
-        <option value="">All types</option>
-        <option value="verb">Verbs</option>
-        <option value="noun">Nouns</option>
-        <option value="adjective">Adjectives</option>
-        <option value="expression">Expressions</option>
-        <option value="other">Other</option>
-      </select>
+      <select id="filterPosTrans"><option value="">All types</option></select>
       <select id="filterDone">
         <option value="todo">Untranslated only</option>
         <option value="">All words</option>
@@ -742,15 +736,21 @@ function switchTab(name){
 // ============================================================================
 // BROWSE TAB
 // ============================================================================
-let browseFilter = { q:'', cat:'', rec:'' };
+let browseFilter = { q:'', cat:'', pos:'', rec:'' };
 document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; renderBrowse(); };
 document.getElementById('filterCatBrowse').onchange = e => { browseFilter.cat = e.target.value; renderBrowse(); };
+document.getElementById('filterPosBrowse').onchange = e => { browseFilter.pos = e.target.value; renderBrowse(); };
 document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; renderBrowse(); };
 
 function filteredFor(filter){
   const q = filter.q.toLowerCase();
   return WORDS.filter(w => {
-    if(filter.cat && w.category !== filter.cat) return false;
+    // Category: '__none__' = no category set
+    if(filter.cat === '__none__'){ if(w.category && w.category.trim()) return false; }
+    else if(filter.cat && w.category !== filter.cat) return false;
+    // POS: '__none__' = no type set
+    if(filter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
+    else if(filter.pos && (w.pos||'').toLowerCase() !== filter.pos) return false;
     if(filter.rec === 'rec' && !w.recorded) return false;
     if(filter.rec === 'norec' && w.recorded) return false;
     if(filter.rec === 'trans' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
@@ -812,13 +812,10 @@ document.getElementById('filterDone').onchange = e => { transFilter.done = e.tar
 function renderTranslate(){
   const q = transFilter.q.toLowerCase();
   let data = WORDS.filter(w => {
-    if(transFilter.cat && w.category !== transFilter.cat) return false;
-    if(transFilter.pos){
-      const p = (w.pos||'').toLowerCase();
-      if(transFilter.pos === 'other'){
-        if(p==='verb'||p==='noun'||p==='adjective'||p==='expression') return false;
-      } else if(p !== transFilter.pos) return false;
-    }
+    if(transFilter.cat === '__none__'){ if(w.category && w.category.trim()) return false; }
+    else if(transFilter.cat && w.category !== transFilter.cat) return false;
+    if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
+    else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
     const isDone = w.lebanese_headword && w.lebanese_headword.trim();
     if(transFilter.done === 'todo' && isDone) return false;
     if(transFilter.done === 'done' && !isDone) return false;
@@ -1349,13 +1346,10 @@ function closeAndNext(currentId){
   let data;
   if(curTab === 'translate'){
     data = WORDS.filter(w => {
-      if(transFilter.cat && w.category !== transFilter.cat) return false;
-      if(transFilter.pos){
-        const p = (w.pos||'').toLowerCase();
-        if(transFilter.pos === 'other'){
-          if(p==='verb'||p==='noun'||p==='adjective'||p==='expression') return false;
-        } else if(p !== transFilter.pos) return false;
-      }
+      if(transFilter.cat === '__none__'){ if(w.category && w.category.trim()) return false; }
+      else if(transFilter.cat && w.category !== transFilter.cat) return false;
+      if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
+      else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
       const isDone = w.lebanese_headword && w.lebanese_headword.trim();
       if(transFilter.done === 'todo' && isDone) return false;
       if(transFilter.done === 'done' && !isDone) return false;
@@ -1716,13 +1710,37 @@ function esc(s){
 // REFRESH
 // ============================================================================
 function refreshAll(){
+  // Count words with/without each category and POS
+  const catCounts = {};
+  const posCounts = {};
+  let noCat = 0, noPos = 0;
+  WORDS.forEach(w => {
+    const c = (w.category||'').trim();
+    if(c){ catCounts[c] = (catCounts[c]||0) + 1; } else { noCat++; }
+    const p = (w.pos||'').trim().toLowerCase();
+    if(p){ posCounts[p] = (posCounts[p]||0) + 1; } else { noPos++; }
+  });
+  const cats = Object.keys(catCounts).sort();
+  const types = Object.keys(posCounts).sort();
   // Build category dropdowns
-  const cats = [...new Set(WORDS.map(w => w.category).filter(Boolean))].sort();
   ['filterCatBrowse','filterCatTrans','filterCatRec'].forEach(id => {
     const el = document.getElementById(id);
+    if(!el) return;
     const cur = el.value;
-    el.innerHTML = '<option value="">All categories</option>'+
-      cats.map(c => '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+'</option>').join('');
+    let html = '<option value="">All categories</option>';
+    if(noCat > 0) html += '<option value="__none__"'+(cur==='__none__'?' selected':'')+'>(no category) — '+noCat+'</option>';
+    html += cats.map(c => '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+' ('+catCounts[c]+')</option>').join('');
+    el.innerHTML = html;
+  });
+  // Build POS dropdowns
+  ['filterPosBrowse','filterPosTrans'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const cur = el.value;
+    let html = '<option value="">All types</option>';
+    if(noPos > 0) html += '<option value="__none__"'+(cur==='__none__'?' selected':'')+'>(no type) — '+noPos+'</option>';
+    html += types.map(p => '<option value="'+esc(p)+'"'+(p===cur?' selected':'')+'>'+esc(p)+' ('+posCounts[p]+')</option>').join('');
+    el.innerHTML = html;
   });
   refreshStats();
   if(curTab==='browse') renderBrowse();
