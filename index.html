@@ -1465,13 +1465,20 @@ function updateCatSelection(){
   try { removedC = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
   const removedLC = new Set(removedC.map(c=>c.toLowerCase()));
   const mergeM = new Map();
-  Object.keys(counts).forEach(c => mergeM.set(c.toLowerCase(),c));
+  // Pick highest-count name per lowercase key, skip removed
+  Object.keys(counts).forEach(c => {
+    const k=c.toLowerCase(); if(removedLC.has(k)) return;
+    if(!mergeM.has(k)||(counts[c]||0)>(counts[mergeM.get(k)]||0)) mergeM.set(k,c);
+  });
   DEFAULT_CATS.forEach(c=>{ const k=c.toLowerCase(); if(!removedLC.has(k)&&!mergeM.has(k)) mergeM.set(k,c); });
   CUSTOM_CATS.forEach(c=>{ const k=c.toLowerCase(); if(!removedLC.has(k)&&!mergeM.has(k)) mergeM.set(k,c); });
+  // Aggregate counts
+  const aggMulti = {};
+  Object.keys(counts).forEach(c => { const k=c.toLowerCase(); const can=mergeM.get(k); if(can) aggMulti[can]=(aggMulti[can]||0)+(counts[c]||0); });
   const checkedLower = new Set(checked.map(c=>c.toLowerCase()));
   const opts = [...mergeM.values()].filter(c=>!checkedLower.has(c.toLowerCase())).sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
   targetSel.innerHTML = '<option value="">— merge selected into… —</option>'+
-    opts.map(c=>'<option value="'+esc(c)+'">'+esc(c)+' ('+(counts[c]||0)+')</option>').join('');
+    opts.map(c=>'<option value="'+esc(c)+'">'+esc(c)+' ('+(aggMulti[c]||0)+')</option>').join('');
 }
 function clearCatSelection(){
   document.querySelectorAll('.cat-check:checked').forEach(el => el.checked = false);
@@ -1535,13 +1542,21 @@ function openRenameCategory(oldCat){
   try { removedCats2 = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
   const removedLower2 = new Set(removedCats2.map(c=>c.toLowerCase()));
   const mergeMap = new Map();
-  Object.keys(counts).forEach(c => mergeMap.set(c.toLowerCase(), c));
+  // Use same logic as renderManageCatList: pick highest-count name, skip removed
+  Object.keys(counts).forEach(c => {
+    const k = c.toLowerCase();
+    if(removedLower2.has(k)) return;
+    if(!mergeMap.has(k) || (counts[c]||0) > (counts[mergeMap.get(k)]||0)) mergeMap.set(k, c);
+  });
   DEFAULT_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower2.has(k)&&!mergeMap.has(k)) mergeMap.set(k,c); });
   CUSTOM_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower2.has(k)&&!mergeMap.has(k)) mergeMap.set(k,c); });
+  // Aggregate counts across case variants
+  const aggM = {};
+  Object.keys(counts).forEach(c => { const k=c.toLowerCase(); const can=mergeMap.get(k); if(can) aggM[can]=(aggM[can]||0)+(counts[c]||0); });
   const allCats = [...mergeMap.values()].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
   const mergeSel = document.getElementById('mergeSelect');
   mergeSel.innerHTML = '<option value="">— select to merge —</option>' +
-    allCats.filter(c => c.toLowerCase() !== oldCat.toLowerCase()).map(c => '<option value="'+esc(c)+'">'+esc(c)+' ('+(counts[c]||0)+')</option>').join('');
+    allCats.filter(c => c.toLowerCase() !== oldCat.toLowerCase()).map(c => '<option value="'+esc(c)+'">'+esc(c)+' ('+(aggM[c]||0)+')</option>').join('');
   document.getElementById('renameApplyBtn').onclick = ()=> applyRenameOrMergeCat(oldCat);
   document.getElementById('renameModal').classList.add('show');
 }
@@ -1603,9 +1618,20 @@ function deleteCategory(cat){
     toast('Removed unused category "'+cat+'"', 'ok');
     return;
   }
-  // Build move-into target list
-  const allCats = [...new Set([...WORDS.map(w => (w.category||'').trim()).filter(Boolean), ...DEFAULT_CATS, ...CUSTOM_CATS])]
-    .filter(c => c !== cat).sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
+  // Build move-into target list — deduplicated, removed-aware
+  const counts = {};
+  WORDS.forEach(w => { const c=(w.category||'').trim(); if(c) counts[c]=(counts[c]||0)+1; });
+  let removedCatsDel = [];
+  try { removedCatsDel = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+  const removedLowerDel = new Set(removedCatsDel.map(c=>c.toLowerCase()));
+  const delMap = new Map();
+  Object.keys(counts).forEach(c => {
+    const k=c.toLowerCase(); if(removedLowerDel.has(k)||k===cat.toLowerCase()) return;
+    if(!delMap.has(k)||(counts[c]||0)>(counts[delMap.get(k)]||0)) delMap.set(k,c);
+  });
+  DEFAULT_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLowerDel.has(k)&&k!==cat.toLowerCase()&&!delMap.has(k)) delMap.set(k,c); });
+  CUSTOM_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLowerDel.has(k)&&k!==cat.toLowerCase()&&!delMap.has(k)) delMap.set(k,c); });
+  const allCats = [...delMap.values()].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
   text.innerHTML = '<b>"'+esc(cat)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?'+
     '<div style="margin-top:.8rem"><label style="font-size:.85rem;color:var(--grey)">Move to another category (optional):</label>'+
     '<select id="catDeleteMoveSelect" style="width:100%;padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit;margin-top:.3rem">'+
