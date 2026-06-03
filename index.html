@@ -324,17 +324,17 @@
       <button class="btn ghost" id="filterPosTransBtn" onclick="openManageTypes('translate')">⚙ All types</button>
       <select id="filterTransField" title="Filter by language field">
         <option value="">All languages (show all)</option>
-        <option value="lebanese">Missing Lebanese</option>
-        <option value="french">Missing French</option>
-        <option value="arabic">Missing Arabic</option>
-        <option value="english">Missing English</option>
-        <option value="done_leb">Has Lebanese (completed)</option>
-        <option value="done_fr">Has French (completed)</option>
-        <option value="done_ar">Has Arabic (completed)</option>
+        <option value="lebanese" id="opt-missing-leb">Missing Lebanese</option>
+        <option value="french" id="opt-missing-fr">Missing French</option>
+        <option value="arabic" id="opt-missing-ar">Missing Arabic</option>
+        <option value="english" id="opt-missing-en">Missing English</option>
+        <option value="done_leb" id="opt-has-leb">Has Lebanese</option>
+        <option value="done_fr" id="opt-has-fr">Has French</option>
+        <option value="done_ar" id="opt-has-ar">Has Arabic</option>
       </select>
-      <span id="transFieldCount" style="color:var(--grey);font-size:.85rem;white-space:nowrap"></span>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
+    <div id="transLangStats" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem;align-items:center"></div>
     <div id="transTable"></div>
   </div>
 </section>
@@ -905,11 +905,77 @@ function browseRow(w){
 // TRANSLATE TAB
 // ============================================================================
 let transFilter = { q:'', cat:'', pos:'', field:'', _page:0 };
+
+function refreshTransLangStats(){
+  // Compute counts for all language fields
+  const total = WORDS.length;
+  const missingLeb  = WORDS.filter(w => !(w.lebanese_headword && w.lebanese_headword.trim())).length;
+  const missingFr   = WORDS.filter(w => !(w.french && w.french.trim())).length;
+  const missingAr   = WORDS.filter(w => !(w.arabic && w.arabic.trim())).length;
+  const missingEn   = WORDS.filter(w => !(w.english && w.english.trim())).length;
+  const hasLeb      = total - missingLeb;
+  const hasFr       = total - missingFr;
+  const hasAr       = total - missingAr;
+
+  // Update dropdown option labels with live counts
+  const optMisLeb = document.getElementById('opt-missing-leb');
+  const optMisFr  = document.getElementById('opt-missing-fr');
+  const optMisAr  = document.getElementById('opt-missing-ar');
+  const optMisEn  = document.getElementById('opt-missing-en');
+  const optHasLeb = document.getElementById('opt-has-leb');
+  const optHasFr  = document.getElementById('opt-has-fr');
+  const optHasAr  = document.getElementById('opt-has-ar');
+  if(optMisLeb) optMisLeb.textContent = 'Missing Lebanese (' + missingLeb.toLocaleString() + ')';
+  if(optMisFr)  optMisFr.textContent  = 'Missing French ('   + missingFr.toLocaleString()  + ')';
+  if(optMisAr)  optMisAr.textContent  = 'Missing Arabic ('   + missingAr.toLocaleString()  + ')';
+  if(optMisEn)  optMisEn.textContent  = 'Missing English ('  + missingEn.toLocaleString()  + ')';
+  if(optHasLeb) optHasLeb.textContent = 'Has Lebanese ('     + hasLeb.toLocaleString()     + ')';
+  if(optHasFr)  optHasFr.textContent  = 'Has French ('       + hasFr.toLocaleString()      + ')';
+  if(optHasAr)  optHasAr.textContent  = 'Has Arabic ('       + hasAr.toLocaleString()      + ')';
+
+  // Render pill stats bar below the controls
+  const bar = document.getElementById('transLangStats');
+  if(!bar) return;
+  const cur = transFilter.field;
+  const pill = (val, label, count, color) => {
+    const active = cur === val;
+    const bg = active ? color : 'var(--grey-pale)';
+    const fg = active ? 'white' : 'var(--ink)';
+    return '<button onclick="setTransField(\''+val+'\')" style="'+
+      'padding:.3rem .75rem;border-radius:99px;border:2px solid '+color+';background:'+bg+';color:'+fg+';'+
+      'font-family:inherit;font-size:.82rem;cursor:pointer;font-weight:'+(active?'bold':'normal')+';white-space:nowrap">'+
+      label+' <b style="font-size:.95em">'+count.toLocaleString()+'</b></button>';
+  };
+  bar.innerHTML =
+    '<span style="color:var(--grey);font-size:.82rem;padding:.3rem 0">Missing:</span>'+
+    pill('lebanese', '🇱🇧 Lebanese', missingLeb, '#D20014')+
+    pill('french',   '🇫🇷 French',   missingFr,  '#0055A4')+
+    pill('arabic',   'ع Arabic',     missingAr,  '#2E7D32')+
+    pill('english',  '🇬🇧 English',  missingEn,  '#5A1A1A')+
+    '<span style="color:var(--grey);font-size:.82rem;padding:.3rem 0 .3rem .5rem">Completed:</span>'+
+    pill('done_leb', '🇱🇧 Lebanese', hasLeb, '#7B9C3A')+
+    pill('done_fr',  '🇫🇷 French',  hasFr,  '#6B7E4A')+
+    pill('done_ar',  'ع Arabic',    hasAr,  '#4A6741')+
+    '<button onclick="setTransField(\'\')" style="'+
+      'padding:.3rem .75rem;border-radius:99px;border:2px solid var(--grey);background:'+(cur===''?'var(--grey)':'transparent')+
+      ';color:'+(cur===''?'white':'var(--grey)')+';font-family:inherit;font-size:.82rem;cursor:pointer;white-space:nowrap">'+
+      'All ('+total.toLocaleString()+')</button>';
+}
+function setTransField(val){
+  transFilter.field = val;
+  transFilter._page = 0;
+  // Sync the dropdown
+  const sel = document.getElementById('filterTransField');
+  if(sel) sel.value = val;
+  renderTranslate();
+}
 document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; transFilter._page=0; renderTranslate(); };
 document.getElementById('filterTransField').onchange = e => { transFilter.field = e.target.value; transFilter._page=0; renderTranslate(); };
 function transPage(dir){ transFilter._page = (transFilter._page||0) + dir; renderTranslate(); }
 
 function renderTranslate(){
+  // Always refresh language stat pills first
+  refreshTransLangStats();
   const q = normalizeSearch(transFilter.q);
   let data = WORDS.filter(w => {
     if(transFilter.cat === '__none__'){ if(w.category && w.category.trim()) return false; }
@@ -931,16 +997,6 @@ function renderTranslate(){
     }
     return true;
   });
-  // Update count label
-  const countEl = document.getElementById('transFieldCount');
-  if(countEl){
-    const f = transFilter.field;
-    const label = f === 'lebanese' ? 'missing Lebanese' : f === 'french' ? 'missing French' :
-                  f === 'arabic' ? 'missing Arabic' : f === 'english' ? 'missing English' :
-                  f === 'done_leb' ? 'with Lebanese' : f === 'done_fr' ? 'with French' :
-                  f === 'done_ar' ? 'with Arabic' : 'total';
-    countEl.textContent = data.length.toLocaleString() + ' words ' + label;
-  }
   if(data.length===0){
     document.getElementById('transTable').innerHTML =
       '<div class="empty"><h3>No words match these filters</h3></div>';
@@ -2179,6 +2235,7 @@ function refreshAll(){
   document.getElementById('cnt-record').textContent = totalUnrecorded;
   document.getElementById('cnt-browse').textContent = WORDS.length;
   refreshStats();
+  refreshTransLangStats();
   if(curTab==='browse') renderBrowse();
   else if(curTab==='translate') renderTranslate();
   else if(curTab==='record') renderRecord();
