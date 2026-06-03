@@ -245,7 +245,7 @@
   <button class="active" data-tab="setup">Setup</button>
   <button data-tab="browse">Browse <span class="count" id="cnt-browse">0</span></button>
   <button data-tab="translate" title="Words missing Lebanese transliteration">Translate <span class="count" id="cnt-translate">0</span></button>
-  <button data-tab="record" title="Words with Lebanese but no recording yet">Record <span class="count" id="cnt-record">0</span></button>
+  <button data-tab="record" title="Total words minus already recorded">Record <span class="count" id="cnt-record">0</span></button>
 </nav>
 
 <main>
@@ -322,18 +322,17 @@
       <input type="search" id="searchTrans" placeholder="Search…">
       <button class="btn ghost" id="filterCatTransBtn" onclick="openManageCategories('translate')">⚙ All categories</button>
       <button class="btn ghost" id="filterPosTransBtn" onclick="openManageTypes('translate')">⚙ All types</button>
-      <select id="filterDone">
-        <option value="todo">Missing Lebanese</option>
-        <option value="">All words</option>
-        <option value="done">Has Lebanese</option>
-      </select>
-      <select id="filterTransField" title="Filter by missing field">
-        <option value="">Any field</option>
+      <select id="filterTransField" title="Filter by language field">
+        <option value="">All languages (show all)</option>
         <option value="lebanese">Missing Lebanese</option>
         <option value="french">Missing French</option>
         <option value="arabic">Missing Arabic</option>
         <option value="english">Missing English</option>
+        <option value="done_leb">Has Lebanese (completed)</option>
+        <option value="done_fr">Has French (completed)</option>
+        <option value="done_ar">Has Arabic (completed)</option>
       </select>
+      <span id="transFieldCount" style="color:var(--grey);font-size:.85rem;white-space:nowrap"></span>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
     <div id="transTable"></div>
@@ -394,6 +393,14 @@
       <button class="btn ghost" onclick="clearCatFilter()">Show all words</button>
     </div>
     <div id="manageCatList" style="max-height:50vh;overflow-y:auto;border:1px solid var(--grey-pale);border-radius:5px"></div>
+    <div id="catMultiActions" style="display:none;padding:.6rem .5rem;background:var(--olive-pale);border:1px solid var(--olive);border-radius:5px;margin-top:.5rem;align-items:center;gap:.6rem;flex-wrap:wrap">
+      <span id="catMultiCount" style="color:var(--olive);font-weight:bold;font-size:.9rem"></span>
+      <select id="catMergeTarget" style="flex:1;min-width:160px;padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit;font-size:.9rem">
+        <option value="">— merge selected into… —</option>
+      </select>
+      <button class="btn" onclick="doMergeSelected()" style="background:var(--olive);border-color:var(--olive)">Merge selected</button>
+      <button class="btn ghost" onclick="clearCatSelection()">Clear</button>
+    </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeManageCategories()">Done</button>
     </div>
@@ -897,9 +904,8 @@ function browseRow(w){
 // ============================================================================
 // TRANSLATE TAB
 // ============================================================================
-let transFilter = { q:'', cat:'', pos:'', done:'todo', field:'', _page:0 };
+let transFilter = { q:'', cat:'', pos:'', field:'', _page:0 };
 document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; transFilter._page=0; renderTranslate(); };
-document.getElementById('filterDone').onchange = e => { transFilter.done = e.target.value; transFilter._page=0; renderTranslate(); };
 document.getElementById('filterTransField').onchange = e => { transFilter.field = e.target.value; transFilter._page=0; renderTranslate(); };
 function transPage(dir){ transFilter._page = (transFilter._page||0) + dir; renderTranslate(); }
 
@@ -910,27 +916,34 @@ function renderTranslate(){
     else if(transFilter.cat && w.category !== transFilter.cat) return false;
     if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
     else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
-    // Field-specific missing filter
-    if(transFilter.field === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
-    if(transFilter.field === 'french' && (w.french && w.french.trim())) return false;
-    if(transFilter.field === 'arabic' && (w.arabic && w.arabic.trim())) return false;
-    if(transFilter.field === 'english' && (w.english && w.english.trim())) return false;
-    // Legacy done/todo (when no field filter active)
-    if(!transFilter.field){
-      const isDone = w.lebanese_headword && w.lebanese_headword.trim();
-      if(transFilter.done === 'todo' && isDone) return false;
-      if(transFilter.done === 'done' && !isDone) return false;
-    }
+    // Language field filter
+    const f = transFilter.field;
+    if(f === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
+    if(f === 'french'   && (w.french && w.french.trim())) return false;
+    if(f === 'arabic'   && (w.arabic && w.arabic.trim())) return false;
+    if(f === 'english'  && (w.english && w.english.trim())) return false;
+    if(f === 'done_leb' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
+    if(f === 'done_fr'  && !(w.french && w.french.trim())) return false;
+    if(f === 'done_ar'  && !(w.arabic && w.arabic.trim())) return false;
     if(q){
       const hay = normalizeSearch(w.english+' '+w.french+' '+(w.lebanese_headword||'')+' '+(w.arabic||'')+' '+(w.category||''));
       if(!hay.includes(q)) return false;
     }
     return true;
   });
-  // tab badge managed by refreshAll (fixed totals)
+  // Update count label
+  const countEl = document.getElementById('transFieldCount');
+  if(countEl){
+    const f = transFilter.field;
+    const label = f === 'lebanese' ? 'missing Lebanese' : f === 'french' ? 'missing French' :
+                  f === 'arabic' ? 'missing Arabic' : f === 'english' ? 'missing English' :
+                  f === 'done_leb' ? 'with Lebanese' : f === 'done_fr' ? 'with French' :
+                  f === 'done_ar' ? 'with Arabic' : 'total';
+    countEl.textContent = data.length.toLocaleString() + ' words ' + label;
+  }
   if(data.length===0){
     document.getElementById('transTable').innerHTML =
-      '<div class="empty"><h3>'+(transFilter.done==='todo'&&!transFilter.field?'All caught up — no untranslated words match these filters 🎉':'No words match')+'</h3></div>';
+      '<div class="empty"><h3>No words match these filters</h3></div>';
     return;
   }
   const TPAGE = 100;
@@ -1269,6 +1282,7 @@ function openManageCategories(context){
   document.getElementById('manageCatModal').classList.add('show');
 }
 function closeManageCategories(){
+  clearCatSelection();
   document.getElementById('manageCatModal').classList.remove('show');
 }
 function getActiveCatFilter(){
@@ -1328,21 +1342,92 @@ function renderManageCatList(){
 function renderCatRow(label, count, isActive, filterVal, isNoCat){
   const safeVal = filterVal.replace(/'/g,"\\'");
   const safeLabel = label.replace(/'/g,"\\'");
+  const noCatActions = isNoCat && count > 0
+    ? '<button class="btn ghost" onclick="mergeNoCatToGeneral()">Merge all \u2192 General</button>'
+    : '';
   return '<div class="cat-row'+(isActive?' active':'')+'" style="display:flex;align-items:center;gap:.5rem;padding:.5rem .7rem;border-bottom:1px solid var(--grey-pale)">'+
-    '<button class="btn ghost" style="flex:1;text-align:left;justify-content:flex-start" onclick="filterToCategory(\''+safeVal+'\')">'+
+    '<input type="checkbox" class="cat-check" data-cat="'+esc(filterVal)+'" '+(isNoCat?'style="display:none"':'')+ ' onchange="updateCatSelection()" style="margin-right:.4rem;cursor:pointer">'+
+
+    '<button class="btn ghost" style="flex:1;text-align:left;justify-content:flex-start" onclick="filterToCategory(\''+safeVal+'\')">'+ 
       esc(label)+' <span style="color:var(--grey);margin-left:auto;font-size:.8rem">'+(count>0?count+(count===1?' word':' words'):'unused')+'</span>'+
     '</button>'+
-    (isNoCat ? '' :
-      '<button class="btn ghost" onclick="openRenameCategory(\''+safeLabel+'\')">Rename / Merge</button>'+
-      '<button class="btn danger" onclick="deleteCategory(\''+safeLabel+'\')">Delete</button>'
+    (isNoCat ? noCatActions :
+      '<button class="btn ghost" onclick="openRenameCategory(\''+safeLabel+'\')">'+'Rename / Merge</button>'+
+      '<button class="btn danger" onclick="deleteCategory(\''+safeLabel+'\')">'+'Delete</button>'
     )+
   '</div>';
+}
+function mergeNoCatToGeneral(){
+  const affected = WORDS.filter(w => !(w.category||'').trim());
+  if(affected.length === 0){ toast('No uncategorized words', 'ok'); return; }
+  const target = 'General';
+  affected.forEach(w => { w.category = target; });
+  queueBulkUpdate(affected.map(w => ({ id:w.id, field:'category', value:target })));
+  saveCache();
+  renderManageCatList();
+  refreshAll();
+  toast('Moved '+affected.length+' uncategorized word(s) \u2192 General', 'ok');
 }
 function filterToCategory(val){
   setActiveCatFilter(val);
   renderManageCatList();
   // Auto-close so she can see filtered results
   setTimeout(closeManageCategories, 200);
+}
+function updateCatSelection(){
+  const checked = [...document.querySelectorAll('.cat-check:checked')].map(el => el.dataset.cat).filter(Boolean);
+  const bar = document.getElementById('catMultiActions');
+  const countEl = document.getElementById('catMultiCount');
+  const targetSel = document.getElementById('catMergeTarget');
+  if(!bar) return;
+  if(checked.length < 2){ bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  if(countEl) countEl.textContent = checked.length + ' categories selected';
+  // Build merge-target list (all cats except the selected ones)
+  const counts = {};
+  WORDS.forEach(w => { const c=(w.category||'').trim(); if(c) counts[c]=(counts[c]||0)+1; });
+  let removedC = [];
+  try { removedC = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+  const removedLC = new Set(removedC.map(c=>c.toLowerCase()));
+  const mergeM = new Map();
+  Object.keys(counts).forEach(c => mergeM.set(c.toLowerCase(),c));
+  DEFAULT_CATS.forEach(c=>{ const k=c.toLowerCase(); if(!removedLC.has(k)&&!mergeM.has(k)) mergeM.set(k,c); });
+  CUSTOM_CATS.forEach(c=>{ const k=c.toLowerCase(); if(!removedLC.has(k)&&!mergeM.has(k)) mergeM.set(k,c); });
+  const checkedLower = new Set(checked.map(c=>c.toLowerCase()));
+  const opts = [...mergeM.values()].filter(c=>!checkedLower.has(c.toLowerCase())).sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
+  targetSel.innerHTML = '<option value="">— merge selected into… —</option>'+
+    opts.map(c=>'<option value="'+esc(c)+'">'+esc(c)+' ('+(counts[c]||0)+')</option>').join('');
+}
+function clearCatSelection(){
+  document.querySelectorAll('.cat-check:checked').forEach(el => el.checked = false);
+  const bar = document.getElementById('catMultiActions');
+  if(bar) bar.style.display = 'none';
+}
+function doMergeSelected(){
+  const checked = [...document.querySelectorAll('.cat-check:checked')].map(el => el.dataset.cat).filter(Boolean);
+  const target = document.getElementById('catMergeTarget').value;
+  if(!target){ toast('Pick a category to merge into', 'err'); return; }
+  if(checked.length < 2){ toast('Select at least 2 categories to merge', 'err'); return; }
+  let totalAffected = 0;
+  const ops = [];
+  checked.forEach(cat => {
+    const affected = WORDS.filter(w => w.category === cat);
+    affected.forEach(w => { w.category = target; ops.push({ id:w.id, field:'category', value:target }); });
+    totalAffected += affected.length;
+    // Mark old as removed
+    let removed = [];
+    try { removed = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+    if(!removed.includes(cat)) removed.push(cat);
+    try { localStorage.setItem('sl_removed_cats', JSON.stringify(removed)); } catch(e){}
+    const idx = CUSTOM_CATS.indexOf(cat);
+    if(idx >= 0){ CUSTOM_CATS.splice(idx,1); try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){} }
+  });
+  if(ops.length > 0) queueBulkUpdate(ops);
+  saveCache();
+  clearCatSelection();
+  renderManageCatList();
+  refreshAll();
+  toast('Merged '+checked.length+' categories → "'+target+'" ('+totalAffected+' words moved)', 'ok');
 }
 function addNewCategory(){
   const input = document.getElementById('newCatInput');
@@ -1368,13 +1453,20 @@ function openRenameCategory(oldCat){
     'Currently used by <b>'+WORDS.filter(w => w.category === oldCat).length+'</b> word(s). '+
     'Either rename it (which keeps the old name available afterward only as a label change), or merge it into another category.';
   document.getElementById('renameInput').value = oldCat;
-  // Populate merge-into options (exclude self)
+  // Populate merge-into options — deduplicated, case-insensitive
   const counts = {};
   WORDS.forEach(w => { const c = (w.category||'').trim(); if(c) counts[c] = (counts[c]||0)+1; });
-  const allCats = [...new Set([...Object.keys(counts), ...DEFAULT_CATS, ...CUSTOM_CATS])].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
+  let removedCats2 = [];
+  try { removedCats2 = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+  const removedLower2 = new Set(removedCats2.map(c=>c.toLowerCase()));
+  const mergeMap = new Map();
+  Object.keys(counts).forEach(c => mergeMap.set(c.toLowerCase(), c));
+  DEFAULT_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower2.has(k)&&!mergeMap.has(k)) mergeMap.set(k,c); });
+  CUSTOM_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower2.has(k)&&!mergeMap.has(k)) mergeMap.set(k,c); });
+  const allCats = [...mergeMap.values()].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
   const mergeSel = document.getElementById('mergeSelect');
   mergeSel.innerHTML = '<option value="">— select to merge —</option>' +
-    allCats.filter(c => c !== oldCat).map(c => '<option value="'+esc(c)+'">'+esc(c)+' ('+(counts[c]||0)+')</option>').join('');
+    allCats.filter(c => c.toLowerCase() !== oldCat.toLowerCase()).map(c => '<option value="'+esc(c)+'">'+esc(c)+' ('+(counts[c]||0)+')</option>').join('');
   document.getElementById('renameApplyBtn').onclick = ()=> applyRenameOrMergeCat(oldCat);
   document.getElementById('renameModal').classList.add('show');
 }
@@ -1574,7 +1666,14 @@ function openRenameType(oldType){
   document.getElementById('renameInput').value = oldType;
   const counts = {};
   WORDS.forEach(w => { const p = (w.pos||'').toLowerCase().trim(); if(p) counts[p] = (counts[p]||0)+1; });
-  const allTypes = [...new Set([...Object.keys(counts), ...DEFAULT_POS, ...CUSTOM_POS])].sort();
+  let removedPos2 = [];
+  try { removedPos2 = JSON.parse(localStorage.getItem('sl_removed_pos')||'[]'); } catch(e){}
+  const removedPosSet2 = new Set(removedPos2.map(p=>p.toLowerCase()));
+  const typeMergeMap = new Map();
+  Object.keys(counts).forEach(p => typeMergeMap.set(p, p));
+  DEFAULT_POS.forEach(p => { if(!removedPosSet2.has(p)&&!typeMergeMap.has(p)) typeMergeMap.set(p,p); });
+  CUSTOM_POS.forEach(p => { if(!removedPosSet2.has(p)&&!typeMergeMap.has(p)) typeMergeMap.set(p,p); });
+  const allTypes = [...typeMergeMap.values()].sort();
   const mergeSel = document.getElementById('mergeSelect');
   mergeSel.innerHTML = '<option value="">— select to merge —</option>' +
     allTypes.filter(t => t !== oldType).map(t => '<option value="'+esc(t)+'">'+esc(t)+' ('+(counts[t]||0)+')</option>').join('');
@@ -1685,15 +1784,14 @@ function closeAndNext(currentId){
       else if(transFilter.cat && w.category !== transFilter.cat) return false;
       if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
       else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
-      if(transFilter.field === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
-      if(transFilter.field === 'french' && (w.french && w.french.trim())) return false;
-      if(transFilter.field === 'arabic' && (w.arabic && w.arabic.trim())) return false;
-      if(transFilter.field === 'english' && (w.english && w.english.trim())) return false;
-      if(!transFilter.field){
-        const isDone = w.lebanese_headword && w.lebanese_headword.trim();
-        if(transFilter.done === 'todo' && isDone) return false;
-        if(transFilter.done === 'done' && !isDone) return false;
-      }
+      const f = transFilter.field;
+      if(f === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
+      if(f === 'french'   && (w.french && w.french.trim())) return false;
+      if(f === 'arabic'   && (w.arabic && w.arabic.trim())) return false;
+      if(f === 'english'  && (w.english && w.english.trim())) return false;
+      if(f === 'done_leb' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
+      if(f === 'done_fr'  && !(w.french && w.french.trim())) return false;
+      if(f === 'done_ar'  && !(w.arabic && w.arabic.trim())) return false;
       if(transFilter.q){
         const q = normalizeSearch(transFilter.q);
         const hay = normalizeSearch(w.english+' '+w.french+' '+(w.lebanese_headword||'')+' '+(w.arabic||'')+' '+(w.category||''));
@@ -1793,12 +1891,16 @@ function renderRecCard(w){
 }
 
 function recRow(w){
+  const isPlaying = currentAudioId === w.id;
+  const playBtn = w.recorded
+    ? '<button class="btn ghost" style="margin-left:.3rem" onclick="event.stopPropagation();playRec('+w.id+')">'+(isPlaying?'⏹ Stop':'▶ Play')+'</button>'
+    : '';
   return '<tr>'+
     '<td class="id">'+w.id+'</td>'+
     '<td class="eng">'+esc(w.english)+'</td>'+
     '<td class="leb">'+esc(w.lebanese_headword||'')+'</td>'+
-    '<td class="cat">'+esc(w.category||'')+'</td>'+
-    '<td class="actions"><button class="btn ghost" onclick="openRecord('+w.id+')">Record</button></td>'+
+    '<td class="cat">'+esc(w.category||'')+(w.recorded?'<span class="audio-badge" style="margin-left:.4rem">REC</span>':'')+'</td>'+
+    '<td class="actions">'+playBtn+'<button class="btn ghost" onclick="openRecord('+w.id+')">Record</button></td>'+
   '</tr>';
 }
 
@@ -2069,10 +2171,11 @@ function refreshAll(){
   // Update type filter button labels (browse / translate)
   updatePosBtnLabel('filterPosBrowseBtn', browseFilter.pos, posCounts, noPos);
   updatePosBtnLabel('filterPosTransBtn', transFilter.pos, posCounts, noPos);
-  // Tab badge counts: fixed totals (not filtered)
-  const totalUntranslated = WORDS.filter(w => !(w.lebanese_headword && w.lebanese_headword.trim())).length;
-  const totalUnrecorded = WORDS.filter(w => w.lebanese_headword && w.lebanese_headword.trim() && !w.recorded).length;
-  document.getElementById('cnt-translate').textContent = totalUntranslated;
+  // Tab badge counts: meaningful fixed totals
+  const totalMissingLeb = WORDS.filter(w => !(w.lebanese_headword && w.lebanese_headword.trim())).length;
+  const totalRecorded = WORDS.filter(w => w.recorded).length;
+  const totalUnrecorded = WORDS.length - totalRecorded;
+  document.getElementById('cnt-translate').textContent = totalMissingLeb;
   document.getElementById('cnt-record').textContent = totalUnrecorded;
   document.getElementById('cnt-browse').textContent = WORDS.length;
   refreshStats();
