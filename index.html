@@ -81,6 +81,11 @@
   .btn.danger{background:white;color:#C53030;border-color:#C53030}
   .btn.danger:hover{background:#C53030;color:white}
   .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.filter-active{background:var(--olive-pale);border-color:var(--olive);color:var(--olive)}
+  .btn.filter-active:hover{background:var(--olive);color:white}
+  .cat-row:hover{background:var(--cream)}
+  .cat-row.active{background:var(--olive-pale)}
+  .cat-row.active > button:first-child{color:var(--olive);font-weight:bold}
 
   /* TABLE */
   table{width:100%;border-collapse:collapse;font-size:.9rem}
@@ -293,8 +298,8 @@
   <div class="panel">
     <div class="row">
       <input type="search" id="searchBrowse" placeholder="Search English, French, Lebanese, Arabic, category…">
-      <select id="filterCatBrowse"><option value="">All categories</option></select>
-      <select id="filterPosBrowse"><option value="">All types</option></select>
+      <button class="btn ghost" id="filterCatBrowseBtn" onclick="openManageCategories('browse')">⚙ All categories</button>
+      <button class="btn ghost" id="filterPosBrowseBtn" onclick="openManageTypes('browse')">⚙ All types</button>
       <select id="filterRecBrowse">
         <option value="">All words</option>
         <option value="rec">Recorded only</option>
@@ -303,8 +308,6 @@
         <option value="notrans">Not translated</option>
       </select>
       <button class="btn ghost" onclick="exportCSV()">Export CSV</button>
-      <button class="btn ghost" onclick="openManageCategories()">⚙ Categories</button>
-      <button class="btn ghost" onclick="openManageTypes()">⚙ Types</button>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
     <div id="outboxBrowse"></div>
@@ -317,8 +320,8 @@
   <div class="panel">
     <div class="row">
       <input type="search" id="searchTrans" placeholder="Search…">
-      <select id="filterCatTrans"><option value="">All categories</option></select>
-      <select id="filterPosTrans"><option value="">All types</option></select>
+      <button class="btn ghost" id="filterCatTransBtn" onclick="openManageCategories('translate')">⚙ All categories</button>
+      <button class="btn ghost" id="filterPosTransBtn" onclick="openManageTypes('translate')">⚙ All types</button>
       <select id="filterDone">
         <option value="todo">Untranslated only</option>
         <option value="">All words</option>
@@ -335,7 +338,7 @@
   <div class="panel">
     <div class="row">
       <input type="search" id="searchRec" placeholder="Search words to record…">
-      <select id="filterCatRec"><option value="">All categories</option></select>
+      <button class="btn ghost" id="filterCatRecBtn" onclick="openManageCategories('record')">⚙ All categories</button>
       <select id="filterRecMode">
         <option value="todo">Unrecorded with translation</option>
         <option value="all-todo">All unrecorded</option>
@@ -369,10 +372,18 @@
 </div>
 
 <div class="modal-bg" id="manageCatModal">
-  <div class="modal" style="max-width:640px">
-    <h2>Manage categories</h2>
-    <p style="color:var(--grey);font-size:.85rem">Rename or delete categories. Renaming updates every word that uses it. Changes save to your Sheet automatically.</p>
-    <div id="manageCatList" style="margin-top:1rem"></div>
+  <div class="modal" style="max-width:720px">
+    <h2>Categories</h2>
+    <p style="color:var(--grey);font-size:.85rem">Click a category name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically.</p>
+    <div style="display:flex;gap:.5rem;margin:.8rem 0">
+      <input id="newCatInput" placeholder="+ Add a new category…" style="flex:1;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit">
+      <button class="btn" onclick="addNewCategory()">Add</button>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-bottom:.6rem">
+      <input id="catSearch" placeholder="Search categories…" oninput="renderManageCatList()" style="flex:1;padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit;font-size:.9rem">
+      <button class="btn ghost" onclick="clearCatFilter()">Show all words</button>
+    </div>
+    <div id="manageCatList" style="max-height:50vh;overflow-y:auto;border:1px solid var(--grey-pale);border-radius:5px"></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeManageCategories()">Done</button>
     </div>
@@ -388,17 +399,18 @@
 </div>
 
 <div class="modal-bg" id="manageTypeModal">
-  <div class="modal" style="max-width:640px">
-    <h2>Manage word types</h2>
-    <p style="color:var(--grey);font-size:.85rem">Rename or delete word types (parts of speech). Renaming updates every word that uses it. Changes save to your Sheet automatically.</p>
-    <div id="manageTypeList" style="margin-top:1rem"></div>
-    <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--grey-pale)">
-      <label style="font-size:.85rem;color:var(--cedar);font-weight:bold">Add a new type</label>
-      <div style="display:flex;gap:.5rem;margin-top:.4rem">
-        <input id="newTypeInput" placeholder="e.g. particle, interjection" style="flex:1;padding:.45rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit">
-        <button class="btn" onclick="addNewType()">Add</button>
-      </div>
+  <div class="modal" style="max-width:720px">
+    <h2>Word types (parts of speech)</h2>
+    <p style="color:var(--grey);font-size:.85rem">Click a type name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically.</p>
+    <div style="display:flex;gap:.5rem;margin:.8rem 0">
+      <input id="newTypeInput" placeholder="+ Add a new word type…" style="flex:1;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit">
+      <button class="btn" onclick="addNewType()">Add</button>
     </div>
+    <div style="display:flex;gap:.5rem;margin-bottom:.6rem">
+      <input id="typeSearch" placeholder="Search types…" oninput="renderManageTypeList()" style="flex:1;padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit;font-size:.9rem">
+      <button class="btn ghost" onclick="clearPosFilter()">Show all words</button>
+    </div>
+    <div id="manageTypeList" style="max-height:50vh;overflow-y:auto;border:1px solid var(--grey-pale);border-radius:5px"></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeManageTypes()">Done</button>
     </div>
@@ -410,6 +422,25 @@
     <h2>Delete word type</h2>
     <p id="typeDeleteText"></p>
     <div class="modal-actions" id="typeDeleteActions"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="renameModal">
+  <div class="modal" style="max-width:520px">
+    <h2 id="renameTitle">Rename or merge</h2>
+    <p id="renameSubtitle" style="color:var(--grey);font-size:.9rem"></p>
+    <div style="margin:1rem 0">
+      <label style="font-size:.85rem;font-weight:bold;color:var(--cedar-deep)">Rename to a new name:</label>
+      <input id="renameInput" style="width:100%;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit;margin-top:.3rem">
+    </div>
+    <div style="margin:1rem 0">
+      <label style="font-size:.85rem;font-weight:bold;color:var(--cedar-deep)">…or merge into an existing one:</label>
+      <select id="mergeSelect" style="width:100%;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit;margin-top:.3rem"></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeRenameModal()">Cancel</button>
+      <button class="btn" id="renameApplyBtn">Apply</button>
+    </div>
   </div>
 </div>
 
@@ -437,6 +468,21 @@ let EXPANDED_ID = null; // currently expanded word ID in Browse/Translate
 let PENDING_DELETE_ID = null; // word ID awaiting delete confirmation
 let CUSTOM_POS = []; // custom parts-of-speech the user has added
 try { CUSTOM_POS = JSON.parse(localStorage.getItem('sl_custom_pos')||'[]'); } catch(e){ CUSTOM_POS = []; }
+let CUSTOM_CATS = []; // custom categories the user has added (before any word is tagged)
+try { CUSTOM_CATS = JSON.parse(localStorage.getItem('sl_custom_cats')||'[]'); } catch(e){ CUSTOM_CATS = []; }
+// The canonical 11-type POS list (Nidale's spec)
+const DEFAULT_POS = ['noun','verb','adjective','pronoun','adverb','preposition','conjunction','determiner','interjection','numeral','participle'];
+// Nidale's canonical category list (44 categories — 38 from her message + Animals, Colors, Health & Body, Modal verbs, State verbs, Negation, Exclamation & interjection)
+const DEFAULT_CATS = [
+  'Weather','Nature','Directions','Family & relationships','People & character','Society & culture',
+  'Greetings','Expressions & phrases','Media & arts','Home & objects','Food & drink','Shopping & money',
+  'Transport & travel','Clothing','Accessories & jewelry','Hair & beauty','Body parts','Health & illness',
+  'Health & Body','Emotions & feelings','Work & business','Education','Legal','Celebrations & holidays',
+  'Religion','Time & days & months','Sports & fitness','Technology','Core verbs','Descriptive words',
+  'Connectors','Exclamation & interjection','Interrogative & question words','Tense & time markers',
+  'Numbers & size & quantity','Negation','Comparison','Idioms & Expressions','Animals','Colors',
+  'Modal verbs','State verbs'
+];
 
 // ============================================================================
 // LOAD CONFIG & CACHE FROM LOCALSTORAGE
@@ -649,6 +695,16 @@ function queueChange(type, payload){
   syncPending();
 }
 
+// Bulk version: send N {id, field, value} ops as a single Apps Script call.
+// Much faster than N individual writes and eliminates the merge race during long renames.
+function queueBulkUpdate(operations){
+  if(!operations || operations.length === 0) return;
+  PENDING.push({ type:'bulk_update', payload:{ operations, ts:new Date().toISOString() }, ts:Date.now(), attempts:0 });
+  savePending();
+  updateOutboxes();
+  syncPending();
+}
+
 async function syncPending(){
   if(PENDING.length===0){ updateOutboxes(); return; }
   if(!CFG.scriptUrl){ updateOutboxes(); return; }
@@ -688,6 +744,10 @@ function updateOutboxes(){
   const html = PENDING.length === 0 ? '' :
     '<div class="outbox"><h3>'+PENDING.length+' change'+(PENDING.length>1?'s':'')+' pending sync to your Sheet/Drive</h3>'+
     '<ul>'+PENDING.slice(0,5).map(p=>{
+      if(p.type === 'bulk_update'){
+        const opCount = (p.payload.operations||[]).length;
+        return '<li>📦 Bulk update ('+opCount+' word'+(opCount===1?'':'s')+')'+(p.attempts>0?' (attempt '+p.attempts+')':'')+'</li>';
+      }
       const tag = p.type==='audio' ? '🎤 Audio'
                 : p.type==='translation' ? '✏ Edit'
                 : p.type==='add_word' ? '➕ New word'
@@ -738,8 +798,6 @@ function switchTab(name){
 // ============================================================================
 let browseFilter = { q:'', cat:'', pos:'', rec:'' };
 document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; renderBrowse(); };
-document.getElementById('filterCatBrowse').onchange = e => { browseFilter.cat = e.target.value; renderBrowse(); };
-document.getElementById('filterPosBrowse').onchange = e => { browseFilter.pos = e.target.value; renderBrowse(); };
 document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; renderBrowse(); };
 
 function filteredFor(filter){
@@ -805,8 +863,6 @@ function browseRow(w){
 // ============================================================================
 let transFilter = { q:'', cat:'', pos:'', done:'todo' };
 document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; renderTranslate(); };
-document.getElementById('filterCatTrans').onchange = e => { transFilter.cat = e.target.value; renderTranslate(); };
-document.getElementById('filterPosTrans').onchange = e => { transFilter.pos = e.target.value; renderTranslate(); };
 document.getElementById('filterDone').onchange = e => { transFilter.done = e.target.value; renderTranslate(); };
 
 function renderTranslate(){
@@ -903,7 +959,7 @@ function renderEditCard(w){
   const cats = [...new Set(WORDS.map(x => x.category).filter(Boolean))].sort();
   const catOptions = cats.map(c => '<option value="'+esc(c)+'"'+(c===w.category?' selected':'')+'>'+esc(c)+'</option>').join('');
   // POS list = defaults + any custom types ever added + any value already on a word
-  const defaultPos = ['verb','noun','adjective','expression','adverb','preposition','pronoun','other'];
+  const defaultPos = DEFAULT_POS;
   const existingPos = [...new Set(WORDS.map(x => (x.pos||'').toLowerCase()).filter(Boolean))];
   const allPos = [...new Set([...defaultPos, ...CUSTOM_POS, ...existingPos])];
   const curPos = (w.pos||'').toLowerCase();
@@ -1133,62 +1189,168 @@ function handlePosChange(selectEl, id){
 }
 
 // ============================================================================
-// MANAGE CATEGORIES (rename / delete across all words)
+// UNIFIED CATEGORIES PANEL (filter + manage)
 // ============================================================================
-function openManageCategories(){
+let _manageCatContext = 'browse'; // which tab's filter we're modifying
+function openManageCategories(context){
+  _manageCatContext = context || curTab || 'browse';
+  document.getElementById('catSearch').value = '';
   renderManageCatList();
   document.getElementById('manageCatModal').classList.add('show');
 }
 function closeManageCategories(){
   document.getElementById('manageCatModal').classList.remove('show');
 }
-function renderManageCatList(){
-  // Count words per category
-  const counts = {};
-  WORDS.forEach(w => { const c = w.category || ''; if(c) counts[c] = (counts[c]||0)+1; });
-  const cats = Object.keys(counts).sort();
-  const el = document.getElementById('manageCatList');
-  if(cats.length === 0){ el.innerHTML = '<p style="color:var(--grey)">No categories yet.</p>'; return; }
-  el.innerHTML = '<table style="width:100%;border-collapse:collapse">'+
-    cats.map(c =>
-      '<tr style="border-bottom:1px solid var(--grey-pale)">'+
-        '<td style="padding:.5rem 0"><input value="'+esc(c)+'" id="catedit-'+encodeURIComponent(c)+'" style="padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;width:100%;font-family:inherit"></td>'+
-        '<td style="padding:.5rem .8rem;color:var(--grey);white-space:nowrap">'+counts[c]+' word'+(counts[c]>1?'s':'')+'</td>'+
-        '<td style="padding:.5rem 0;white-space:nowrap">'+
-          '<button class="btn ghost" onclick="renameCategory(\''+c.replace(/'/g,"\\'")+'\')">Rename</button> '+
-          '<button class="btn danger" onclick="deleteCategory(\''+c.replace(/'/g,"\\'")+'\')">Delete</button>'+
-        '</td>'+
-      '</tr>'
-    ).join('')+'</table>';
+function getActiveCatFilter(){
+  if(_manageCatContext === 'translate') return transFilter.cat;
+  if(_manageCatContext === 'record') return recFilter.cat;
+  return browseFilter.cat;
 }
-function renameCategory(oldCat){
-  const input = document.getElementById('catedit-'+encodeURIComponent(oldCat));
-  const newCat = input ? input.value.trim() : '';
-  if(!newCat){ toast('Category name cannot be empty', 'err'); return; }
-  if(newCat === oldCat){ toast('No change', 'ok'); return; }
-  const affected = WORDS.filter(w => w.category === oldCat);
-  affected.forEach(w => {
-    w.category = newCat;
-    queueChange('translation', { id:w.id, field:'category', value:newCat, ts:new Date().toISOString() });
+function setActiveCatFilter(val){
+  if(_manageCatContext === 'translate'){ transFilter.cat = val; renderTranslate(); }
+  else if(_manageCatContext === 'record'){ recFilter.cat = val; renderRecord(); }
+  else { browseFilter.cat = val; renderBrowse(); }
+  refreshAll(); // updates button labels
+}
+function clearCatFilter(){
+  setActiveCatFilter('');
+  renderManageCatList();
+}
+function renderManageCatList(){
+  const counts = {};
+  WORDS.forEach(w => { const c = (w.category||'').trim(); if(c) counts[c] = (counts[c]||0)+1; });
+  // Union of: actually-used + defaults + custom added (none unused get filtered later)
+  const allKeys = new Set([...Object.keys(counts), ...DEFAULT_CATS, ...CUSTOM_CATS]);
+  const cats = [...allKeys].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
+  const search = (document.getElementById('catSearch')?.value || '').toLowerCase();
+  const filtered = search ? cats.filter(c => c.toLowerCase().includes(search)) : cats;
+  const active = getActiveCatFilter();
+  // No-category count
+  const noCat = WORDS.filter(w => !(w.category||'').trim()).length;
+  const el = document.getElementById('manageCatList');
+  let html = '';
+  // No-category pseudo-row
+  html += renderCatRow('(no category)', noCat, active === '__none__', '__none__', true);
+  filtered.forEach(c => {
+    html += renderCatRow(c, counts[c]||0, active === c, c, false);
   });
+  el.innerHTML = html || '<p style="padding:1rem;color:var(--grey)">No matches.</p>';
+}
+function renderCatRow(label, count, isActive, filterVal, isNoCat){
+  const safeVal = filterVal.replace(/'/g,"\\'");
+  const safeLabel = label.replace(/'/g,"\\'");
+  return '<div class="cat-row'+(isActive?' active':'')+'" style="display:flex;align-items:center;gap:.5rem;padding:.5rem .7rem;border-bottom:1px solid var(--grey-pale)">'+
+    '<button class="btn ghost" style="flex:1;text-align:left;justify-content:flex-start" onclick="filterToCategory(\''+safeVal+'\')">'+
+      esc(label)+' <span style="color:var(--grey);margin-left:auto;font-size:.8rem">'+(count>0?count+(count===1?' word':' words'):'unused')+'</span>'+
+    '</button>'+
+    (isNoCat ? '' :
+      '<button class="btn ghost" onclick="openRenameCategory(\''+safeLabel+'\')">Rename / Merge</button>'+
+      '<button class="btn danger" onclick="deleteCategory(\''+safeLabel+'\')">Delete</button>'
+    )+
+  '</div>';
+}
+function filterToCategory(val){
+  setActiveCatFilter(val);
+  renderManageCatList();
+  // Auto-close so she can see filtered results
+  setTimeout(closeManageCategories, 200);
+}
+function addNewCategory(){
+  const input = document.getElementById('newCatInput');
+  const raw = input.value.trim();
+  if(!raw){ toast('Category name cannot be empty', 'err'); return; }
+  // Compare case-insensitively against existing
+  const allExisting = new Set([
+    ...WORDS.map(w => (w.category||'').trim()).filter(Boolean).map(c=>c.toLowerCase()),
+    ...DEFAULT_CATS.map(c=>c.toLowerCase()),
+    ...CUSTOM_CATS.map(c=>c.toLowerCase())
+  ]);
+  if(allExisting.has(raw.toLowerCase())){ toast('"'+raw+'" already exists', 'warn'); return; }
+  CUSTOM_CATS.push(raw);
+  try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
+  input.value = '';
+  renderManageCatList();
+  toast('Added category "'+raw+'"', 'ok');
+}
+
+function openRenameCategory(oldCat){
+  document.getElementById('renameTitle').textContent = 'Rename or merge "'+oldCat+'"';
+  document.getElementById('renameSubtitle').innerHTML =
+    'Currently used by <b>'+WORDS.filter(w => w.category === oldCat).length+'</b> word(s). '+
+    'Either rename it (which keeps the old name available afterward only as a label change), or merge it into another category.';
+  document.getElementById('renameInput').value = oldCat;
+  // Populate merge-into options (exclude self)
+  const counts = {};
+  WORDS.forEach(w => { const c = (w.category||'').trim(); if(c) counts[c] = (counts[c]||0)+1; });
+  const allCats = [...new Set([...Object.keys(counts), ...DEFAULT_CATS, ...CUSTOM_CATS])].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
+  const mergeSel = document.getElementById('mergeSelect');
+  mergeSel.innerHTML = '<option value="">— select to merge —</option>' +
+    allCats.filter(c => c !== oldCat).map(c => '<option value="'+esc(c)+'">'+esc(c)+' ('+(counts[c]||0)+')</option>').join('');
+  document.getElementById('renameApplyBtn').onclick = ()=> applyRenameOrMergeCat(oldCat);
+  document.getElementById('renameModal').classList.add('show');
+}
+function closeRenameModal(){
+  document.getElementById('renameModal').classList.remove('show');
+}
+function applyRenameOrMergeCat(oldCat){
+  const newName = document.getElementById('renameInput').value.trim();
+  const mergeInto = document.getElementById('mergeSelect').value.trim();
+  // Determine target
+  const target = mergeInto || newName;
+  if(!target){ toast('Pick a new name or a merge target', 'err'); return; }
+  if(target === oldCat){ toast('No change', 'ok'); closeRenameModal(); return; }
+  const affected = WORDS.filter(w => w.category === oldCat);
+  // Update locally
+  affected.forEach(w => { w.category = target; });
+  // Single bulk operation
+  if(affected.length > 0){
+    queueBulkUpdate(affected.map(w => ({ id:w.id, field:'category', value:target })));
+  }
+  // If renaming (not merging), and the old name was a CUSTOM_CAT, update it there
+  if(!mergeInto){
+    const idx = CUSTOM_CATS.indexOf(oldCat);
+    if(idx >= 0){ CUSTOM_CATS[idx] = target; try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){} }
+    else if(!DEFAULT_CATS.includes(target) && !CUSTOM_CATS.includes(target)){
+      CUSTOM_CATS.push(target);
+      try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
+    }
+  }
   saveCache();
+  closeRenameModal();
   renderManageCatList();
   refreshAll();
-  toast('Renamed "'+oldCat+'" → "'+newCat+'" ('+affected.length+' words)', 'ok');
+  toast((mergeInto ? 'Merged "' : 'Renamed "')+oldCat+'" → "'+target+'" ('+affected.length+' word'+(affected.length===1?'':'s')+')', 'ok');
 }
 function deleteCategory(cat){
   const affected = WORDS.filter(w => w.category === cat);
   const text = document.getElementById('catDeleteText');
   const actions = document.getElementById('catDeleteActions');
   if(affected.length === 0){
-    // No words use it — it'll just disappear from the list; nothing to delete in data
-    toast('"'+cat+'" has no words — it will disappear on its own', 'ok');
+    // Just remove from custom list if present
+    const idx = CUSTOM_CATS.indexOf(cat);
+    if(idx >= 0){
+      CUSTOM_CATS.splice(idx, 1);
+      try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
+      renderManageCatList();
+      toast('Removed unused category "'+cat+'"', 'ok');
+    } else {
+      toast('"'+cat+'" is a built-in category — can\'t fully remove (no words use it anyway)', 'warn');
+    }
     return;
   }
-  text.innerHTML = '<b>"'+esc(cat)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?';
+  // Build move-into target list
+  const allCats = [...new Set([...WORDS.map(w => (w.category||'').trim()).filter(Boolean), ...DEFAULT_CATS, ...CUSTOM_CATS])]
+    .filter(c => c !== cat).sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
+  text.innerHTML = '<b>"'+esc(cat)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?'+
+    '<div style="margin-top:.8rem"><label style="font-size:.85rem;color:var(--grey)">Move to another category (optional):</label>'+
+    '<select id="catDeleteMoveSelect" style="width:100%;padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit;margin-top:.3rem">'+
+      '<option value="">— pick one —</option>'+
+      allCats.map(c => '<option value="'+esc(c)+'">'+esc(c)+'</option>').join('')+
+    '</select></div>';
   actions.innerHTML =
     '<button class="btn ghost" onclick="closeCatDelete()">Cancel</button>'+
-    '<button class="btn" onclick="doDeleteCategory(\''+cat.replace(/'/g,"\\'")+'\', \'none\')">Move to (no category)</button>'+
+    '<button class="btn" onclick="doDeleteCategory(\''+cat.replace(/'/g,"\\'")+'\', \'move\')">Move to selected</button>'+
+    '<button class="btn ghost" onclick="doDeleteCategory(\''+cat.replace(/'/g,"\\'")+'\', \'none\')">Move to (no category)</button>'+
     '<button class="btn danger" onclick="doDeleteCategory(\''+cat.replace(/'/g,"\\'")+'\', \'delete\')">Delete the words too</button>';
   document.getElementById('catDeleteModal').classList.add('show');
 }
@@ -1197,17 +1359,27 @@ function closeCatDelete(){
 }
 function doDeleteCategory(cat, mode){
   const affected = WORDS.filter(w => w.category === cat);
-  if(mode === 'none'){
-    affected.forEach(w => {
-      w.category = '';
-      queueChange('translation', { id:w.id, field:'category', value:'', ts:new Date().toISOString() });
-    });
+  if(mode === 'move'){
+    const target = document.getElementById('catDeleteMoveSelect').value;
+    if(!target){ toast('Pick a category to move to first', 'err'); return; }
+    affected.forEach(w => { w.category = target; });
+    queueBulkUpdate(affected.map(w => ({ id:w.id, field:'category', value:target })));
+    toast('Moved '+affected.length+' word(s) from "'+cat+'" to "'+target+'"', 'ok');
+  } else if(mode === 'none'){
+    affected.forEach(w => { w.category = ''; });
+    queueBulkUpdate(affected.map(w => ({ id:w.id, field:'category', value:'' })));
     toast('"'+cat+'" removed — '+affected.length+' word(s) moved to no category', 'ok');
   } else if(mode === 'delete'){
     const ids = affected.map(w => w.id);
     WORDS = WORDS.filter(w => w.category !== cat);
     ids.forEach(id => queueChange('delete_word', { id, ts:new Date().toISOString() }));
     toast('Deleted category "'+cat+'" and '+ids.length+' word(s)', 'ok');
+  }
+  // Also remove from custom list
+  const idx = CUSTOM_CATS.indexOf(cat);
+  if(idx >= 0){
+    CUSTOM_CATS.splice(idx, 1);
+    try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
   }
   saveCache();
   closeCatDelete();
@@ -1216,49 +1388,69 @@ function doDeleteCategory(cat, mode){
 }
 
 // ============================================================================
-// MANAGE WORD TYPES (parts of speech) — rename / delete / add
+// UNIFIED TYPES PANEL (filter + manage)
 // ============================================================================
-function openManageTypes(){
+let _manageTypeContext = 'browse';
+function openManageTypes(context){
+  _manageTypeContext = context || curTab || 'browse';
+  const s = document.getElementById('typeSearch'); if(s) s.value = '';
   renderManageTypeList();
   document.getElementById('manageTypeModal').classList.add('show');
 }
 function closeManageTypes(){
   document.getElementById('manageTypeModal').classList.remove('show');
 }
+function getActivePosFilter(){
+  return _manageTypeContext === 'translate' ? transFilter.pos : browseFilter.pos;
+}
+function setActivePosFilter(val){
+  if(_manageTypeContext === 'translate'){ transFilter.pos = val; renderTranslate(); }
+  else { browseFilter.pos = val; renderBrowse(); }
+  refreshAll();
+}
+function clearPosFilter(){
+  setActivePosFilter('');
+  renderManageTypeList();
+}
 function renderManageTypeList(){
-  // Count words per type. Include types that exist on words OR in CUSTOM_POS even if unused yet.
   const counts = {};
-  WORDS.forEach(w => { const p = (w.pos||'').toLowerCase(); if(p) counts[p] = (counts[p]||0)+1; });
-  CUSTOM_POS.forEach(p => { if(!(p in counts)) counts[p] = 0; });
-  // Defaults always shown so she can see + remove them if desired
-  ['verb','noun','adjective','expression','adverb','preposition','pronoun','other'].forEach(p => {
-    if(!(p in counts)) counts[p] = 0;
-  });
-  const types = Object.keys(counts).sort();
+  WORDS.forEach(w => { const p = (w.pos||'').toLowerCase().trim(); if(p) counts[p] = (counts[p]||0)+1; });
+  const allKeys = new Set([...Object.keys(counts), ...DEFAULT_POS, ...CUSTOM_POS]);
+  const types = [...allKeys].sort();
+  const search = (document.getElementById('typeSearch')?.value || '').toLowerCase();
+  const filtered = search ? types.filter(t => t.toLowerCase().includes(search)) : types;
+  const active = getActivePosFilter();
+  const noPos = WORDS.filter(w => !(w.pos||'').trim()).length;
   const el = document.getElementById('manageTypeList');
-  el.innerHTML = '<table style="width:100%;border-collapse:collapse">'+
-    types.map(p =>
-      '<tr style="border-bottom:1px solid var(--grey-pale)">'+
-        '<td style="padding:.5rem 0"><input value="'+esc(p)+'" id="typeedit-'+encodeURIComponent(p)+'" style="padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;width:100%;font-family:inherit"></td>'+
-        '<td style="padding:.5rem .8rem;color:var(--grey);white-space:nowrap">'+(counts[p]>0 ? counts[p]+' word'+(counts[p]>1?'s':'') : 'unused')+'</td>'+
-        '<td style="padding:.5rem 0;white-space:nowrap">'+
-          '<button class="btn ghost" onclick="renameType(\''+p.replace(/'/g,"\\'")+'\')">Rename</button> '+
-          '<button class="btn danger" onclick="deleteType(\''+p.replace(/'/g,"\\'")+'\')">Delete</button>'+
-        '</td>'+
-      '</tr>'
-    ).join('')+'</table>';
+  let html = renderTypeRow('(no type)', noPos, active === '__none__', '__none__', true);
+  filtered.forEach(p => {
+    html += renderTypeRow(p, counts[p]||0, active === p, p, false);
+  });
+  el.innerHTML = html || '<p style="padding:1rem;color:var(--grey)">No matches.</p>';
+}
+function renderTypeRow(label, count, isActive, filterVal, isNoPos){
+  const safeVal = filterVal.replace(/'/g,"\\'");
+  const safeLabel = label.replace(/'/g,"\\'");
+  return '<div class="cat-row'+(isActive?' active':'')+'" style="display:flex;align-items:center;gap:.5rem;padding:.5rem .7rem;border-bottom:1px solid var(--grey-pale)">'+
+    '<button class="btn ghost" style="flex:1;text-align:left;justify-content:flex-start" onclick="filterToType(\''+safeVal+'\')">'+
+      esc(label)+' <span style="color:var(--grey);margin-left:auto;font-size:.8rem">'+(count>0?count+(count===1?' word':' words'):'unused')+'</span>'+
+    '</button>'+
+    (isNoPos ? '' :
+      '<button class="btn ghost" onclick="openRenameType(\''+safeLabel+'\')">Rename / Merge</button>'+
+      '<button class="btn danger" onclick="deleteType(\''+safeLabel+'\')">Delete</button>'
+    )+
+  '</div>';
+}
+function filterToType(val){
+  setActivePosFilter(val);
+  renderManageTypeList();
+  setTimeout(closeManageTypes, 200);
 }
 function addNewType(){
   const input = document.getElementById('newTypeInput');
   const raw = input.value.trim().toLowerCase();
   if(!raw){ toast('Type name cannot be empty', 'err'); return; }
-  if(CUSTOM_POS.includes(raw)){ toast('"'+raw+'" already exists', 'warn'); return; }
-  // Check if it already exists as a default or in WORDS
-  const allKnown = new Set([
-    ...['verb','noun','adjective','expression','adverb','preposition','pronoun','other'],
-    ...CUSTOM_POS,
-    ...WORDS.map(w => (w.pos||'').toLowerCase()).filter(Boolean)
-  ]);
+  const allKnown = new Set([...DEFAULT_POS, ...CUSTOM_POS, ...WORDS.map(w => (w.pos||'').toLowerCase()).filter(Boolean)]);
   if(allKnown.has(raw)){ toast('"'+raw+'" already exists', 'warn'); return; }
   CUSTOM_POS.push(raw);
   try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
@@ -1266,34 +1458,51 @@ function addNewType(){
   renderManageTypeList();
   toast('Added type "'+raw+'"', 'ok');
 }
-function renameType(oldType){
-  const input = document.getElementById('typeedit-'+encodeURIComponent(oldType));
-  const newType = input ? input.value.trim().toLowerCase() : '';
-  if(!newType){ toast('Type name cannot be empty', 'err'); return; }
-  if(newType === oldType){ toast('No change', 'ok'); return; }
+function openRenameType(oldType){
+  document.getElementById('renameTitle').textContent = 'Rename or merge "'+oldType+'"';
+  const cnt = WORDS.filter(w => (w.pos||'').toLowerCase() === oldType).length;
+  document.getElementById('renameSubtitle').innerHTML =
+    'Currently used by <b>'+cnt+'</b> word(s). Rename it, or merge into another type.';
+  document.getElementById('renameInput').value = oldType;
+  const counts = {};
+  WORDS.forEach(w => { const p = (w.pos||'').toLowerCase().trim(); if(p) counts[p] = (counts[p]||0)+1; });
+  const allTypes = [...new Set([...Object.keys(counts), ...DEFAULT_POS, ...CUSTOM_POS])].sort();
+  const mergeSel = document.getElementById('mergeSelect');
+  mergeSel.innerHTML = '<option value="">— select to merge —</option>' +
+    allTypes.filter(t => t !== oldType).map(t => '<option value="'+esc(t)+'">'+esc(t)+' ('+(counts[t]||0)+')</option>').join('');
+  document.getElementById('renameApplyBtn').onclick = ()=> applyRenameOrMergeType(oldType);
+  document.getElementById('renameModal').classList.add('show');
+}
+function applyRenameOrMergeType(oldType){
+  const newName = document.getElementById('renameInput').value.trim().toLowerCase();
+  const mergeInto = document.getElementById('mergeSelect').value.trim().toLowerCase();
+  const target = mergeInto || newName;
+  if(!target){ toast('Pick a new name or a merge target', 'err'); return; }
+  if(target === oldType){ toast('No change', 'ok'); closeRenameModal(); return; }
   const affected = WORDS.filter(w => (w.pos||'').toLowerCase() === oldType);
-  affected.forEach(w => {
-    w.pos = newType;
-    queueChange('translation', { id:w.id, field:'pos', value:newType, ts:new Date().toISOString() });
-  });
-  // Update CUSTOM_POS too
-  const idx = CUSTOM_POS.indexOf(oldType);
-  if(idx >= 0) CUSTOM_POS[idx] = newType;
-  if(!CUSTOM_POS.includes(newType) && !['verb','noun','adjective','expression','adverb','preposition','pronoun','other'].includes(newType)){
-    CUSTOM_POS.push(newType);
+  affected.forEach(w => { w.pos = target; });
+  if(affected.length > 0){
+    queueBulkUpdate(affected.map(w => ({ id:w.id, field:'pos', value:target })));
   }
-  try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+  if(!mergeInto){
+    const idx = CUSTOM_POS.indexOf(oldType);
+    if(idx >= 0){ CUSTOM_POS[idx] = target; try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){} }
+    else if(!DEFAULT_POS.includes(target) && !CUSTOM_POS.includes(target)){
+      CUSTOM_POS.push(target);
+      try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+    }
+  }
   saveCache();
+  closeRenameModal();
   renderManageTypeList();
   refreshAll();
-  toast('Renamed "'+oldType+'" → "'+newType+'" ('+affected.length+' word'+(affected.length===1?'':'s')+')', 'ok');
+  toast((mergeInto ? 'Merged "' : 'Renamed "')+oldType+'" → "'+target+'" ('+affected.length+' word'+(affected.length===1?'':'s')+')', 'ok');
 }
 function deleteType(type){
   const affected = WORDS.filter(w => (w.pos||'').toLowerCase() === type);
   const text = document.getElementById('typeDeleteText');
   const actions = document.getElementById('typeDeleteActions');
   if(affected.length === 0){
-    // Just remove from custom list if it's there
     const idx = CUSTOM_POS.indexOf(type);
     if(idx >= 0){
       CUSTOM_POS.splice(idx, 1);
@@ -1301,14 +1510,22 @@ function deleteType(type){
       renderManageTypeList();
       toast('Removed unused type "'+type+'"', 'ok');
     } else {
-      toast('"'+type+'" is a default type — can\'t remove (but you can rename it)', 'warn');
+      toast('"'+type+'" is built-in — can\'t remove (no words use it anyway)', 'warn');
     }
     return;
   }
-  text.innerHTML = '<b>"'+esc(type)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?';
+  const allTypes = [...new Set([...WORDS.map(w => (w.pos||'').toLowerCase()).filter(Boolean), ...DEFAULT_POS, ...CUSTOM_POS])]
+    .filter(t => t !== type).sort();
+  text.innerHTML = '<b>"'+esc(type)+'"</b> is used by <b>'+affected.length+' word'+(affected.length>1?'s':'')+'</b>. What should happen to '+(affected.length>1?'them':'it')+'?'+
+    '<div style="margin-top:.8rem"><label style="font-size:.85rem;color:var(--grey)">Move to another type (optional):</label>'+
+    '<select id="typeDeleteMoveSelect" style="width:100%;padding:.4rem .6rem;border:1px solid var(--grey-pale);border-radius:4px;font-family:inherit;margin-top:.3rem">'+
+      '<option value="">— pick one —</option>'+
+      allTypes.map(t => '<option value="'+esc(t)+'">'+esc(t)+'</option>').join('')+
+    '</select></div>';
   actions.innerHTML =
     '<button class="btn ghost" onclick="closeTypeDelete()">Cancel</button>'+
-    '<button class="btn" onclick="doDeleteType(\''+type.replace(/'/g,"\\'")+'\', \'none\')">Move to (no type)</button>'+
+    '<button class="btn" onclick="doDeleteType(\''+type.replace(/'/g,"\\'")+'\', \'move\')">Move to selected</button>'+
+    '<button class="btn ghost" onclick="doDeleteType(\''+type.replace(/'/g,"\\'")+'\', \'none\')">Move to (no type)</button>'+
     '<button class="btn danger" onclick="doDeleteType(\''+type.replace(/'/g,"\\'")+'\', \'delete\')">Delete the words too</button>';
   document.getElementById('typeDeleteModal').classList.add('show');
 }
@@ -1317,11 +1534,15 @@ function closeTypeDelete(){
 }
 function doDeleteType(type, mode){
   const affected = WORDS.filter(w => (w.pos||'').toLowerCase() === type);
-  if(mode === 'none'){
-    affected.forEach(w => {
-      w.pos = '';
-      queueChange('translation', { id:w.id, field:'pos', value:'', ts:new Date().toISOString() });
-    });
+  if(mode === 'move'){
+    const target = document.getElementById('typeDeleteMoveSelect').value;
+    if(!target){ toast('Pick a type to move to first', 'err'); return; }
+    affected.forEach(w => { w.pos = target; });
+    queueBulkUpdate(affected.map(w => ({ id:w.id, field:'pos', value:target })));
+    toast('Moved '+affected.length+' word(s) from "'+type+'" to "'+target+'"', 'ok');
+  } else if(mode === 'none'){
+    affected.forEach(w => { w.pos = ''; });
+    queueBulkUpdate(affected.map(w => ({ id:w.id, field:'pos', value:'' })));
     toast('"'+type+'" removed — '+affected.length+' word(s) moved to no type', 'ok');
   } else if(mode === 'delete'){
     const ids = affected.map(w => w.id);
@@ -1329,7 +1550,6 @@ function doDeleteType(type, mode){
     ids.forEach(id => queueChange('delete_word', { id, ts:new Date().toISOString() }));
     toast('Deleted type "'+type+'" and '+ids.length+' word(s)', 'ok');
   }
-  // Remove from CUSTOM_POS as well if present
   const idx = CUSTOM_POS.indexOf(type);
   if(idx >= 0){
     CUSTOM_POS.splice(idx, 1);
@@ -1385,7 +1605,6 @@ function closeAndNext(currentId){
 // ============================================================================
 let recFilter = { q:'', cat:'', mode:'todo' };
 document.getElementById('searchRec').oninput = e => { recFilter.q = e.target.value; renderRecord(); };
-document.getElementById('filterCatRec').onchange = e => { recFilter.cat = e.target.value; renderRecord(); };
 document.getElementById('filterRecMode').onchange = e => { recFilter.mode = e.target.value; renderRecord(); };
 
 function setUploadMode(mode, silent){
@@ -1722,30 +1941,32 @@ function refreshAll(){
   });
   const cats = Object.keys(catCounts).sort();
   const types = Object.keys(posCounts).sort();
-  // Build category dropdowns
-  ['filterCatBrowse','filterCatTrans','filterCatRec'].forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    const cur = el.value;
-    let html = '<option value="">All categories</option>';
-    if(noCat > 0) html += '<option value="__none__"'+(cur==='__none__'?' selected':'')+'>(no category) — '+noCat+'</option>';
-    html += cats.map(c => '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+esc(c)+' ('+catCounts[c]+')</option>').join('');
-    el.innerHTML = html;
-  });
-  // Build POS dropdowns
-  ['filterPosBrowse','filterPosTrans'].forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    const cur = el.value;
-    let html = '<option value="">All types</option>';
-    if(noPos > 0) html += '<option value="__none__"'+(cur==='__none__'?' selected':'')+'>(no type) — '+noPos+'</option>';
-    html += types.map(p => '<option value="'+esc(p)+'"'+(p===cur?' selected':'')+'>'+esc(p)+' ('+posCounts[p]+')</option>').join('');
-    el.innerHTML = html;
-  });
+  // Update category filter button labels (browse / translate / record)
+  updateCatBtnLabel('filterCatBrowseBtn', browseFilter.cat, catCounts, noCat);
+  updateCatBtnLabel('filterCatTransBtn', transFilter.cat, catCounts, noCat);
+  updateCatBtnLabel('filterCatRecBtn', recFilter.cat, catCounts, noCat);
+  // Update type filter button labels (browse / translate)
+  updatePosBtnLabel('filterPosBrowseBtn', browseFilter.pos, posCounts, noPos);
+  updatePosBtnLabel('filterPosTransBtn', transFilter.pos, posCounts, noPos);
   refreshStats();
   if(curTab==='browse') renderBrowse();
   else if(curTab==='translate') renderTranslate();
   else if(curTab==='record') renderRecord();
+}
+
+function updateCatBtnLabel(btnId, filterVal, catCounts, noCat){
+  const el = document.getElementById(btnId);
+  if(!el) return;
+  if(!filterVal){ el.innerHTML = '⚙ All categories'; el.classList.remove('filter-active'); }
+  else if(filterVal === '__none__'){ el.innerHTML = '⚙ (no category) — '+noCat; el.classList.add('filter-active'); }
+  else { el.innerHTML = '⚙ '+esc(filterVal)+' ('+(catCounts[filterVal]||0)+')'; el.classList.add('filter-active'); }
+}
+function updatePosBtnLabel(btnId, filterVal, posCounts, noPos){
+  const el = document.getElementById(btnId);
+  if(!el) return;
+  if(!filterVal){ el.innerHTML = '⚙ All types'; el.classList.remove('filter-active'); }
+  else if(filterVal === '__none__'){ el.innerHTML = '⚙ (no type) — '+noPos; el.classList.add('filter-active'); }
+  else { el.innerHTML = '⚙ '+esc(filterVal)+' ('+(posCounts[filterVal]||0)+')'; el.classList.add('filter-active'); }
 }
 
 function toast(msg, type){
@@ -1783,7 +2004,20 @@ if(window.BAKED_SHEET_URL){
 }
 
 if(CFG.sheetUrl){
-  fetchSheet();
+  fetchSheet().then(()=> {
+    // One-time POS migration: move all `expression` words to (no type) per Nidale's instruction
+    if(!localStorage.getItem('sl_migrated_expression_pos')){
+      const exprWords = WORDS.filter(w => (w.pos||'').toLowerCase().trim() === 'expression');
+      if(exprWords.length > 0){
+        exprWords.forEach(w => { w.pos = ''; });
+        queueBulkUpdate(exprWords.map(w => ({ id:w.id, field:'pos', value:'' })));
+        saveCache();
+        refreshAll();
+        toast('Moved '+exprWords.length+' "expression" words to (no type) — they\'re findable under the Types filter', 'ok');
+      }
+      try { localStorage.setItem('sl_migrated_expression_pos', '1'); } catch(e){}
+    }
+  });
   // Periodic background sync of pending writes every 60s
   setInterval(syncPending, 60000);
   // Refetch sheet every 15 min to pick up any external edits (Studio writes go via Apps Script directly,
@@ -1817,6 +2051,9 @@ document.getElementById('manageTypeModal').addEventListener('click', e => {
 document.getElementById('typeDeleteModal').addEventListener('click', e => {
   if(e.target.id === 'typeDeleteModal') closeTypeDelete();
 });
+document.getElementById('renameModal').addEventListener('click', e => {
+  if(e.target.id === 'renameModal') closeRenameModal();
+});
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
     closeDeleteModal();
@@ -1824,6 +2061,7 @@ document.addEventListener('keydown', e => {
     closeManageCategories();
     closeTypeDelete();
     closeManageTypes();
+    closeRenameModal();
     if(EXPANDED_ID !== null){
       EXPANDED_ID = null;
       if(curTab==='browse') renderBrowse();
