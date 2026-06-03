@@ -244,8 +244,8 @@
 <nav class="tabs">
   <button class="active" data-tab="setup">Setup</button>
   <button data-tab="browse">Browse <span class="count" id="cnt-browse">0</span></button>
-  <button data-tab="translate">Translate <span class="count" id="cnt-translate">0</span></button>
-  <button data-tab="record">Record <span class="count" id="cnt-record">0</span></button>
+  <button data-tab="translate" title="Words missing Lebanese transliteration">Translate <span class="count" id="cnt-translate">0</span></button>
+  <button data-tab="record" title="Words with Lebanese but no recording yet">Record <span class="count" id="cnt-record">0</span></button>
 </nav>
 
 <main>
@@ -323,9 +323,16 @@
       <button class="btn ghost" id="filterCatTransBtn" onclick="openManageCategories('translate')">⚙ All categories</button>
       <button class="btn ghost" id="filterPosTransBtn" onclick="openManageTypes('translate')">⚙ All types</button>
       <select id="filterDone">
-        <option value="todo">Untranslated only</option>
+        <option value="todo">Missing Lebanese</option>
         <option value="">All words</option>
-        <option value="done">Translated only</option>
+        <option value="done">Has Lebanese</option>
+      </select>
+      <select id="filterTransField" title="Filter by missing field">
+        <option value="">Any field</option>
+        <option value="lebanese">Missing Lebanese</option>
+        <option value="french">Missing French</option>
+        <option value="arabic">Missing Arabic</option>
+        <option value="english">Missing English</option>
       </select>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
@@ -377,7 +384,7 @@
       <h2 style="margin:0">Categories</h2>
       <span style="color:var(--grey);font-size:.8rem;user-select:none">⠿ drag to move</span>
     </div>
-    <p style="color:var(--grey);font-size:.85rem">Click a category name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically.</p>
+    <p style="color:var(--grey);font-size:.85rem">Click a category name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically. <span id="catPanelCount" style="font-weight:600;color:var(--red)"></span></p>
     <div style="display:flex;gap:.5rem;margin:.8rem 0">
       <input id="newCatInput" placeholder="+ Add a new category…" style="flex:1;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit">
       <button class="btn" onclick="addNewCategory()">Add</button>
@@ -407,7 +414,7 @@
       <h2 style="margin:0">Word types (parts of speech)</h2>
       <span style="color:var(--grey);font-size:.8rem;user-select:none">⠿ drag to move</span>
     </div>
-    <p style="color:var(--grey);font-size:.85rem">Click a type name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically.</p>
+    <p style="color:var(--grey);font-size:.85rem">Click a type name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically. <span id="typePanelCount" style="font-weight:600;color:var(--red)"></span></p>
     <div style="display:flex;gap:.5rem;margin:.8rem 0">
       <input id="newTypeInput" placeholder="+ Add a new word type…" style="flex:1;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit">
       <button class="btn" onclick="addNewType()">Add</button>
@@ -856,7 +863,7 @@ function renderBrowse(){
     const prevBtn = browseFilter._page > 0 ? '<button class="btn ghost" onclick="browsePage(-1)">← Prev</button>' : '';
     const nextBtn = browseFilter._page < totalPages - 1 ? '<button class="btn ghost" onclick="browsePage(1)">Next →</button>' : '';
     pager = '<div style="display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.7rem;color:var(--grey);font-size:.85rem">'+
-      prevBtn+'Showing '+start+'–'+end+' of '+data.length+' words'+nextBtn+'</div>';
+      prevBtn+"Showing "+start+"–"+end+" of "+data.length+" words (IDs may not be consecutive — gaps are deleted words)"+nextBtn+'</div>';
   }
   document.getElementById('browseTable').innerHTML =
     pager+
@@ -890,9 +897,11 @@ function browseRow(w){
 // ============================================================================
 // TRANSLATE TAB
 // ============================================================================
-let transFilter = { q:'', cat:'', pos:'', done:'todo' };
-document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; renderTranslate(); };
-document.getElementById('filterDone').onchange = e => { transFilter.done = e.target.value; renderTranslate(); };
+let transFilter = { q:'', cat:'', pos:'', done:'todo', field:'', _page:0 };
+document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; transFilter._page=0; renderTranslate(); };
+document.getElementById('filterDone').onchange = e => { transFilter.done = e.target.value; transFilter._page=0; renderTranslate(); };
+document.getElementById('filterTransField').onchange = e => { transFilter.field = e.target.value; transFilter._page=0; renderTranslate(); };
+function transPage(dir){ transFilter._page = (transFilter._page||0) + dir; renderTranslate(); }
 
 function renderTranslate(){
   const q = normalizeSearch(transFilter.q);
@@ -901,11 +910,19 @@ function renderTranslate(){
     else if(transFilter.cat && w.category !== transFilter.cat) return false;
     if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
     else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
-    const isDone = w.lebanese_headword && w.lebanese_headword.trim();
-    if(transFilter.done === 'todo' && isDone) return false;
-    if(transFilter.done === 'done' && !isDone) return false;
+    // Field-specific missing filter
+    if(transFilter.field === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
+    if(transFilter.field === 'french' && (w.french && w.french.trim())) return false;
+    if(transFilter.field === 'arabic' && (w.arabic && w.arabic.trim())) return false;
+    if(transFilter.field === 'english' && (w.english && w.english.trim())) return false;
+    // Legacy done/todo (when no field filter active)
+    if(!transFilter.field){
+      const isDone = w.lebanese_headword && w.lebanese_headword.trim();
+      if(transFilter.done === 'todo' && isDone) return false;
+      if(transFilter.done === 'done' && !isDone) return false;
+    }
     if(q){
-      const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category).toLowerCase();
+      const hay = normalizeSearch(w.english+' '+w.french+' '+(w.lebanese_headword||'')+' '+(w.arabic||'')+' '+(w.category||''));
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -913,16 +930,30 @@ function renderTranslate(){
   // tab badge managed by refreshAll (fixed totals)
   if(data.length===0){
     document.getElementById('transTable').innerHTML =
-      '<div class="empty"><h3>'+(transFilter.done==='todo'?'All caught up — no untranslated words match these filters 🎉':'No words match')+'</h3></div>';
+      '<div class="empty"><h3>'+(transFilter.done==='todo'&&!transFilter.field?'All caught up — no untranslated words match these filters 🎉':'No words match')+'</h3></div>';
     return;
   }
-  const rows = data.slice(0, 80).map(w => transRow(w)).join('');
-  const more = data.length > 80 ? '<p style="color:var(--grey);font-size:.85rem;text-align:center;margin-top:.5rem"><i>Showing first 80 of '+data.length+' — refine search to see more</i></p>' : '';
+  const TPAGE = 100;
+  if(typeof transFilter._page === 'undefined') transFilter._page = 0;
+  const totalPages = Math.ceil(data.length / TPAGE);
+  if(transFilter._page >= totalPages) transFilter._page = 0;
+  const pageData = data.slice(transFilter._page * TPAGE, (transFilter._page + 1) * TPAGE);
+  const rows = pageData.map(w => transRow(w)).join('');
+  let pager = '';
+  if(totalPages > 1){
+    const start = transFilter._page * TPAGE + 1;
+    const end = Math.min((transFilter._page + 1) * TPAGE, data.length);
+    const prevBtn = transFilter._page > 0 ? '<button class="btn ghost" onclick="transPage(-1)">← Prev</button>' : '';
+    const nextBtn = transFilter._page < totalPages - 1 ? '<button class="btn ghost" onclick="transPage(1)">Next →</button>' : '';
+    pager = '<div style="display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.7rem;color:var(--grey);font-size:.85rem">'+
+      prevBtn+'Showing '+start+'–'+end+' of '+data.length+' words'+nextBtn+'</div>';
+  }
   document.getElementById('transTable').innerHTML =
+    pager+
     '<table><thead><tr><th>#</th><th>English</th><th>French</th><th>Lebanese (main)</th><th>Arabic</th><th>Notes</th></tr></thead>'+
-    '<tbody>'+rows+'</tbody></table>'+more;
+    '<tbody>'+rows+'</tbody></table>'+
+    (totalPages > 1 ? pager : '');
 }
-
 function transRow(w){
   const expanded = EXPANDED_ID === w.id;
   const isVerb = (w.pos||'').toLowerCase() === 'verb';
@@ -985,7 +1016,17 @@ function toggleExpand(id, event){
 }
 
 function renderEditCard(w){
-  const cats = [...new Set(WORDS.map(x => x.category).filter(Boolean))].sort();
+  // Build deduplicated category list (same logic as renderManageCatList)
+  let removedCats = [];
+  try { removedCats = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+  const removedLower = new Set(removedCats.map(c=>c.toLowerCase()));
+  const catCounts = {};
+  WORDS.forEach(x => { const c=(x.category||'').trim(); if(c) catCounts[c]=(catCounts[c]||0)+1; });
+  const seenCat = new Map();
+  Object.keys(catCounts).forEach(c => seenCat.set(c.toLowerCase(), c));
+  DEFAULT_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower.has(k)&&!seenCat.has(k)) seenCat.set(k,c); });
+  CUSTOM_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower.has(k)&&!seenCat.has(k)) seenCat.set(k,c); });
+  const cats = [...seenCat.values()].sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
   const catOptions = cats.map(c => '<option value="'+esc(c)+'"'+(c===w.category?' selected':'')+'>'+esc(c)+'</option>').join('');
   // POS list = defaults + any custom types ever added + any value already on a word
   const defaultPos = DEFAULT_POS;
@@ -1272,6 +1313,9 @@ function renderManageCatList(){
   const active = getActiveCatFilter();
   // No-category count
   const noCat = WORDS.filter(w => !(w.category||'').trim()).length;
+  // Update count in panel header
+  const countEl = document.getElementById('catPanelCount');
+  if(countEl) countEl.textContent = cats.length + ' categories · ' + WORDS.length + ' total words';
   const el = document.getElementById('manageCatList');
   let html = '';
   // No-category pseudo-row
@@ -1482,6 +1526,9 @@ function renderManageTypeList(){
   const filtered = search ? types.filter(t => t.toLowerCase().includes(search)) : types;
   const active = getActivePosFilter();
   const noPos = WORDS.filter(w => !(w.pos||'').trim()).length;
+  // Update count in panel header
+  const typeCountEl = document.getElementById('typePanelCount');
+  if(typeCountEl) typeCountEl.textContent = types.length + ' types · ' + WORDS.length + ' total words';
   const el = document.getElementById('manageTypeList');
   let html = renderTypeRow('(no type)', noPos, active === '__none__', '__none__', true);
   filtered.forEach(p => {
@@ -1638,12 +1685,18 @@ function closeAndNext(currentId){
       else if(transFilter.cat && w.category !== transFilter.cat) return false;
       if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
       else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
-      const isDone = w.lebanese_headword && w.lebanese_headword.trim();
-      if(transFilter.done === 'todo' && isDone) return false;
-      if(transFilter.done === 'done' && !isDone) return false;
+      if(transFilter.field === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
+      if(transFilter.field === 'french' && (w.french && w.french.trim())) return false;
+      if(transFilter.field === 'arabic' && (w.arabic && w.arabic.trim())) return false;
+      if(transFilter.field === 'english' && (w.english && w.english.trim())) return false;
+      if(!transFilter.field){
+        const isDone = w.lebanese_headword && w.lebanese_headword.trim();
+        if(transFilter.done === 'todo' && isDone) return false;
+        if(transFilter.done === 'done' && !isDone) return false;
+      }
       if(transFilter.q){
-        const q = transFilter.q.toLowerCase();
-        const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category).toLowerCase();
+        const q = normalizeSearch(transFilter.q);
+        const hay = normalizeSearch(w.english+' '+w.french+' '+(w.lebanese_headword||'')+' '+(w.arabic||'')+' '+(w.category||''));
         if(!hay.includes(q)) return false;
       }
       return true;
