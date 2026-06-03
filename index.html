@@ -1092,7 +1092,12 @@ function renderEditCard(w){
   const catCounts = {};
   WORDS.forEach(x => { const c=(x.category||'').trim(); if(c) catCounts[c]=(catCounts[c]||0)+1; });
   const seenCat = new Map();
-  Object.keys(catCounts).forEach(c => seenCat.set(c.toLowerCase(), c));
+  // Pick highest-count name per lowercase key, skip removed
+  Object.keys(catCounts).forEach(c => {
+    const k = c.toLowerCase();
+    if(removedLower.has(k)) return;
+    if(!seenCat.has(k) || (catCounts[c]||0) > (catCounts[seenCat.get(k)]||0)) seenCat.set(k, c);
+  });
   DEFAULT_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower.has(k)&&!seenCat.has(k)) seenCat.set(k,c); });
   CUSTOM_CATS.forEach(c => { const k=c.toLowerCase(); if(!removedLower.has(k)&&!seenCat.has(k)) seenCat.set(k,c); });
   const cats = [...seenCat.values()].sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
@@ -1348,7 +1353,7 @@ function getActiveCatFilter(){
 }
 function setActiveCatFilter(val){
   if(_manageCatContext === 'translate'){ transFilter.cat = val; renderTranslate(); }
-  else if(_manageCatContext === 'record'){ recFilter.cat = val; renderRecord(); }
+  else if(_manageCatContext === 'record'){ recFilter.cat = val; recFilter._page = 0; renderRecord(); }
   else { browseFilter.cat = val; browseFilter._page = 0; renderBrowse(); }
   refreshAll(); // updates button labels
 }
@@ -1364,19 +1369,33 @@ function renderManageCatList(){
   try { removedCats = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
   const removedLower = new Set(removedCats.map(c=>c.toLowerCase()));
 
-  // Union of: actually-used + defaults + custom added, DEDUPLICATED case-insensitively
-  // Prefer: used name > DEFAULT name > CUSTOM name
-  const seenLower = new Map(); // lowercase -> canonical name
-  const addCat = (name) => {
-    const key = name.toLowerCase();
-    if(!removedLower.has(key) && !seenLower.has(key)) seenLower.set(key, name);
-  };
+  // Build deduplicated list — case-insensitive, prefer the name that has the most words
+  // Words in sheet with a "removed" category are folded under the canonical surviving name
+  const seenLower = new Map(); // lowercase -> canonical name (the one with most words)
+  // First pass: build from actual word data, picking highest-count name per lowercase key
   Object.keys(counts).forEach(c => {
     const key = c.toLowerCase();
-    if(!removedLower.has(key)) seenLower.set(key, c); // always show used cats even if removed from list
+    if(removedLower.has(key)) return; // skip removed
+    if(!seenLower.has(key) || (counts[c]||0) > (counts[seenLower.get(key)]||0)){
+      seenLower.set(key, c);
+    }
   });
-  DEFAULT_CATS.forEach(addCat);
-  CUSTOM_CATS.forEach(addCat);
+  // Second pass: add defaults and custom (only if not already seen and not removed)
+  DEFAULT_CATS.forEach(c => {
+    const key = c.toLowerCase();
+    if(!removedLower.has(key) && !seenLower.has(key)) seenLower.set(key, c);
+  });
+  CUSTOM_CATS.forEach(c => {
+    const key = c.toLowerCase();
+    if(!removedLower.has(key) && !seenLower.has(key)) seenLower.set(key, c);
+  });
+  // Build aggregated counts (sum all case-variants into canonical name)
+  const aggCounts = {};
+  Object.keys(counts).forEach(c => {
+    const key = c.toLowerCase();
+    const canonical = seenLower.get(key);
+    if(canonical){ aggCounts[canonical] = (aggCounts[canonical]||0) + (counts[c]||0); }
+  });
   const cats = [...seenLower.values()].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
   const search = (document.getElementById('catSearch')?.value || '').toLowerCase();
   const filtered = search ? cats.filter(c => c.toLowerCase().includes(search)) : cats;
@@ -1391,7 +1410,7 @@ function renderManageCatList(){
   // No-category pseudo-row
   html += renderCatRow('(no category)', noCat, active === '__none__', '__none__', true);
   filtered.forEach(c => {
-    html += renderCatRow(c, counts[c]||0, active === c, c, false);
+    html += renderCatRow(c, aggCounts[c]||0, active === c, c, false);
   });
   el.innerHTML = html || '<p style="padding:1rem;color:var(--grey)">No matches.</p>';
 }
@@ -1878,9 +1897,10 @@ function closeAndNext(currentId){
 // ============================================================================
 // RECORD TAB
 // ============================================================================
-let recFilter = { q:'', cat:'', mode:'todo' };
-document.getElementById('searchRec').oninput = e => { recFilter.q = e.target.value; renderRecord(); };
-document.getElementById('filterRecMode').onchange = e => { recFilter.mode = e.target.value; renderRecord(); };
+let recFilter = { q:'', cat:'', mode:'todo', _page:0 };
+document.getElementById('searchRec').oninput = e => { recFilter.q = e.target.value; recFilter._page=0; renderRecord(); };
+document.getElementById('filterRecMode').onchange = e => { recFilter.mode = e.target.value; recFilter._page=0; renderRecord(); };
+function recPage(dir){ recFilter._page = (recFilter._page||0) + dir; renderRecord(); }
 
 function setUploadMode(mode, silent){
   CFG.uploadMode = mode;
@@ -1899,27 +1919,41 @@ function renderRecord(){
     if(recFilter.mode === 'all-todo' && w.recorded) return false;
     if(recFilter.mode === 'done' && !w.recorded) return false;
     if(q){
-      const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category).toLowerCase();
+      const hay = normalizeSearch(w.english+' '+w.french+' '+(w.lebanese_headword||'')+' '+(w.arabic||'')+' '+(w.category||''));
       if(!hay.includes(q)) return false;
     }
     return true;
   });
-  // tab badge managed by refreshAll (fixed totals)
   if(data.length===0){
     document.getElementById('recList').innerHTML = '<div class="empty"><h3>Nothing to record with these filters</h3></div>';
     document.getElementById('recCard').innerHTML = '';
     return;
   }
-  // Show the current/first word in the big card
   const cur = data[0];
   document.getElementById('recCard').innerHTML = renderRecCard(cur);
-  // Show next 30 in the list below
-  const next = data.slice(1, 31);
-  if(next.length){
+  const RPAGE = 50;
+  const listData = data.slice(1);
+  const totalPages = Math.ceil(listData.length / RPAGE);
+  if(recFilter._page >= totalPages) recFilter._page = 0;
+  const pageRows = listData.slice(recFilter._page * RPAGE, (recFilter._page + 1) * RPAGE);
+  let pager = '';
+  if(totalPages > 1){
+    const start = recFilter._page * RPAGE + 1;
+    const end = Math.min((recFilter._page + 1) * RPAGE, listData.length);
+    const prevBtn = recFilter._page > 0 ? '<button class="btn ghost" onclick="recPage(-1)">← Prev</button>' : '';
+    const nextBtn = recFilter._page < totalPages - 1 ? '<button class="btn ghost" onclick="recPage(1)">Next →</button>' : '';
+    pager = '<div style="display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.5rem;color:var(--grey);font-size:.85rem">'+
+      prevBtn+'Showing '+start+'–'+end+' of '+listData.length+' words'+nextBtn+'</div>';
+  }
+  if(pageRows.length){
     document.getElementById('recList').innerHTML =
-      '<h3 style="color:var(--grey);font-weight:normal;font-size:.95rem;margin:1.5rem 0 .5rem">Up next</h3>'+
-      '<table><tbody>'+next.map(w=>recRow(w)).join('')+'</tbody></table>';
-  } else document.getElementById('recList').innerHTML = '';
+      '<h3 style="color:var(--grey);font-weight:normal;font-size:.95rem;margin:1.5rem 0 .5rem">Up next — '+data.length.toLocaleString()+' total words in this filter</h3>'+
+      pager+
+      '<table><tbody>'+pageRows.map(w=>recRow(w)).join('')+'</tbody></table>'+
+      (totalPages > 1 ? pager : '');
+  } else {
+    document.getElementById('recList').innerHTML = '';
+  }
 }
 
 function renderRecCard(w){
