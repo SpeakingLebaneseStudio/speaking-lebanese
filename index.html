@@ -372,8 +372,11 @@
 </div>
 
 <div class="modal-bg" id="manageCatModal">
-  <div class="modal" style="max-width:720px">
-    <h2>Categories</h2>
+  <div class="modal" id="manageCatModalInner" style="max-width:720px;cursor:default">
+    <div id="manageCatDragHandle" style="cursor:move;display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid var(--grey-pale)">
+      <h2 style="margin:0">Categories</h2>
+      <span style="color:var(--grey);font-size:.8rem;user-select:none">⠿ drag to move</span>
+    </div>
     <p style="color:var(--grey);font-size:.85rem">Click a category name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically.</p>
     <div style="display:flex;gap:.5rem;margin:.8rem 0">
       <input id="newCatInput" placeholder="+ Add a new category…" style="flex:1;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit">
@@ -399,8 +402,11 @@
 </div>
 
 <div class="modal-bg" id="manageTypeModal">
-  <div class="modal" style="max-width:720px">
-    <h2>Word types (parts of speech)</h2>
+  <div class="modal" id="manageTypeModalInner" style="max-width:720px;cursor:default">
+    <div id="manageTypeDragHandle" style="cursor:move;display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid var(--grey-pale)">
+      <h2 style="margin:0">Word types (parts of speech)</h2>
+      <span style="color:var(--grey);font-size:.8rem;user-select:none">⠿ drag to move</span>
+    </div>
     <p style="color:var(--grey);font-size:.85rem">Click a type name to filter to it. Use Rename / Merge / Delete to manage. All changes save automatically.</p>
     <div style="display:flex;gap:.5rem;margin:.8rem 0">
       <input id="newTypeInput" placeholder="+ Add a new word type…" style="flex:1;padding:.5rem .7rem;border:1px solid var(--grey-pale);border-radius:5px;font-family:inherit">
@@ -796,12 +802,20 @@ function switchTab(name){
 // ============================================================================
 // BROWSE TAB
 // ============================================================================
-let browseFilter = { q:'', cat:'', pos:'', rec:'' };
-document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; renderBrowse(); };
-document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; renderBrowse(); };
+let browseFilter = { q:'', cat:'', pos:'', rec:'', _page:0 };
+document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; browseFilter._page=0; renderBrowse(); };
+document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; browseFilter._page=0; renderBrowse(); };
+function browsePage(dir){ browseFilter._page = (browseFilter._page||0) + dir; renderBrowse(); }
+
+function normalizeSearch(s){
+  return (s||'').toLowerCase()
+    .replace(/\s*&\s*/g,' & ')
+    .replace(/\s*and\s*/g,' & ')
+    .trim();
+}
 
 function filteredFor(filter){
-  const q = filter.q.toLowerCase();
+  const q = normalizeSearch(filter.q);
   return WORDS.filter(w => {
     // Category: '__none__' = no category set
     if(filter.cat === '__none__'){ if(w.category && w.category.trim()) return false; }
@@ -814,7 +828,7 @@ function filteredFor(filter){
     if(filter.rec === 'trans' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
     if(filter.rec === 'notrans' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
     if(q){
-      const hay = (w.english+' '+w.french+' '+w.lebanese_headword+' '+w.arabic+' '+w.category+' '+w.notes).toLowerCase();
+      const hay = normalizeSearch(w.english+' '+w.french+' '+(w.lebanese_headword||'')+' '+(w.arabic||'')+' '+(w.category||'')+' '+(w.notes||''));
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -829,11 +843,26 @@ function renderBrowse(){
       '<div class="empty"><h3>No words match those filters</h3><p>Try clearing search or selecting a different category.</p></div>';
     return;
   }
-  const rows = data.slice(0, 200).map(w => browseRow(w)).join('');
-  const more = data.length > 200 ? '<p style="color:var(--grey);font-size:.85rem;text-align:center;margin-top:.5rem"><i>Showing first 200 of '+data.length+' — refine your search to see more</i></p>' : '';
+  const PAGE = 300;
+  if(typeof browseFilter._page === 'undefined') browseFilter._page = 0;
+  const totalPages = Math.ceil(data.length / PAGE);
+  if(browseFilter._page >= totalPages) browseFilter._page = 0;
+  const pageData = data.slice(browseFilter._page * PAGE, (browseFilter._page + 1) * PAGE);
+  const rows = pageData.map(w => browseRow(w)).join('');
+  let pager = '';
+  if(totalPages > 1){
+    const start = browseFilter._page * PAGE + 1;
+    const end = Math.min((browseFilter._page + 1) * PAGE, data.length);
+    const prevBtn = browseFilter._page > 0 ? '<button class="btn ghost" onclick="browsePage(-1)">← Prev</button>' : '';
+    const nextBtn = browseFilter._page < totalPages - 1 ? '<button class="btn ghost" onclick="browsePage(1)">Next →</button>' : '';
+    pager = '<div style="display:flex;align-items:center;gap:.7rem;justify-content:center;padding:.7rem;color:var(--grey);font-size:.85rem">'+
+      prevBtn+'Showing '+start+'–'+end+' of '+data.length+' words'+nextBtn+'</div>';
+  }
   document.getElementById('browseTable').innerHTML =
+    pager+
     '<table><thead><tr><th>#</th><th>English</th><th>French</th><th>Lebanese</th><th>Arabic</th><th>Category</th><th></th></tr></thead>'+
-    '<tbody>'+rows+'</tbody></table>'+more;
+    '<tbody>'+rows+'</tbody></table>'+
+    (totalPages > 1 ? pager : '');
 }
 
 function browseRow(w){
@@ -866,7 +895,7 @@ document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target
 document.getElementById('filterDone').onchange = e => { transFilter.done = e.target.value; renderTranslate(); };
 
 function renderTranslate(){
-  const q = transFilter.q.toLowerCase();
+  const q = normalizeSearch(transFilter.q);
   let data = WORDS.filter(w => {
     if(transFilter.cat === '__none__'){ if(w.category && w.category.trim()) return false; }
     else if(transFilter.cat && w.category !== transFilter.cat) return false;
@@ -881,7 +910,7 @@ function renderTranslate(){
     }
     return true;
   });
-  document.getElementById('cnt-translate').textContent = data.length;
+  // tab badge managed by refreshAll (fixed totals)
   if(data.length===0){
     document.getElementById('transTable').innerHTML =
       '<div class="empty"><h3>'+(transFilter.done==='todo'?'All caught up — no untranslated words match these filters 🎉':'No words match')+'</h3></div>';
@@ -1209,7 +1238,7 @@ function getActiveCatFilter(){
 function setActiveCatFilter(val){
   if(_manageCatContext === 'translate'){ transFilter.cat = val; renderTranslate(); }
   else if(_manageCatContext === 'record'){ recFilter.cat = val; renderRecord(); }
-  else { browseFilter.cat = val; renderBrowse(); }
+  else { browseFilter.cat = val; browseFilter._page = 0; renderBrowse(); }
   refreshAll(); // updates button labels
 }
 function clearCatFilter(){
@@ -1219,9 +1248,25 @@ function clearCatFilter(){
 function renderManageCatList(){
   const counts = {};
   WORDS.forEach(w => { const c = (w.category||'').trim(); if(c) counts[c] = (counts[c]||0)+1; });
-  // Union of: actually-used + defaults + custom added (none unused get filtered later)
-  const allKeys = new Set([...Object.keys(counts), ...DEFAULT_CATS, ...CUSTOM_CATS]);
-  const cats = [...allKeys].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
+  // Filter out cats that were explicitly deleted by user
+  let removedCats = [];
+  try { removedCats = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+  const removedLower = new Set(removedCats.map(c=>c.toLowerCase()));
+
+  // Union of: actually-used + defaults + custom added, DEDUPLICATED case-insensitively
+  // Prefer: used name > DEFAULT name > CUSTOM name
+  const seenLower = new Map(); // lowercase -> canonical name
+  const addCat = (name) => {
+    const key = name.toLowerCase();
+    if(!removedLower.has(key) && !seenLower.has(key)) seenLower.set(key, name);
+  };
+  Object.keys(counts).forEach(c => {
+    const key = c.toLowerCase();
+    if(!removedLower.has(key)) seenLower.set(key, c); // always show used cats even if removed from list
+  });
+  DEFAULT_CATS.forEach(addCat);
+  CUSTOM_CATS.forEach(addCat);
+  const cats = [...seenLower.values()].sort((a,b)=> a.toLowerCase().localeCompare(b.toLowerCase()));
   const search = (document.getElementById('catSearch')?.value || '').toLowerCase();
   const filtered = search ? cats.filter(c => c.toLowerCase().includes(search)) : cats;
   const active = getActiveCatFilter();
@@ -1315,6 +1360,13 @@ function applyRenameOrMergeCat(oldCat){
       try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
     }
   }
+  // Mark old name as removed (so it doesn't ghost-appear if it was a DEFAULT_CAT)
+  {
+    let removed = [];
+    try { removed = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+    if(!removed.includes(oldCat)) removed.push(oldCat);
+    try { localStorage.setItem('sl_removed_cats', JSON.stringify(removed)); } catch(e){}
+  }
   saveCache();
   closeRenameModal();
   renderManageCatList();
@@ -1326,16 +1378,18 @@ function deleteCategory(cat){
   const text = document.getElementById('catDeleteText');
   const actions = document.getElementById('catDeleteActions');
   if(affected.length === 0){
-    // Just remove from custom list if present
+    // Remove from custom list if present; also track removed built-ins
     const idx = CUSTOM_CATS.indexOf(cat);
-    if(idx >= 0){
-      CUSTOM_CATS.splice(idx, 1);
-      try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
-      renderManageCatList();
-      toast('Removed unused category "'+cat+'"', 'ok');
-    } else {
-      toast('"'+cat+'" is a built-in category — can\'t fully remove (no words use it anyway)', 'warn');
-    }
+    if(idx >= 0) CUSTOM_CATS.splice(idx, 1);
+    // Track removed built-ins so they don't reappear
+    let removed = [];
+    try { removed = JSON.parse(localStorage.getItem('sl_removed_cats')||'[]'); } catch(e){}
+    if(!removed.includes(cat)) removed.push(cat);
+    try { localStorage.setItem('sl_removed_cats', JSON.stringify(removed)); } catch(e){}
+    try { localStorage.setItem('sl_custom_cats', JSON.stringify(CUSTOM_CATS)); } catch(e){}
+    // Also remove from DEFAULT_CATS tracking (just mark, don't splice since it's const)
+    renderManageCatList();
+    toast('Removed unused category "'+cat+'"', 'ok');
     return;
   }
   // Build move-into target list
@@ -1415,8 +1469,15 @@ function clearPosFilter(){
 function renderManageTypeList(){
   const counts = {};
   WORDS.forEach(w => { const p = (w.pos||'').toLowerCase().trim(); if(p) counts[p] = (counts[p]||0)+1; });
-  const allKeys = new Set([...Object.keys(counts), ...DEFAULT_POS, ...CUSTOM_POS]);
-  const types = [...allKeys].sort();
+  let removedPos = [];
+  try { removedPos = JSON.parse(localStorage.getItem('sl_removed_pos')||'[]'); } catch(e){}
+  const removedSet = new Set(removedPos.map(p=>p.toLowerCase()));
+  // Deduplicate case-insensitively; always show types in use even if removed
+  const seen = new Map();
+  Object.keys(counts).forEach(p => { if(!removedSet.has(p)) seen.set(p, p); });
+  DEFAULT_POS.forEach(p => { const k=p.toLowerCase(); if(!removedSet.has(k) && !seen.has(k)) seen.set(k,p); });
+  CUSTOM_POS.forEach(p => { const k=p.toLowerCase(); if(!removedSet.has(k) && !seen.has(k)) seen.set(k,p); });
+  const types = [...seen.values()].sort();
   const search = (document.getElementById('typeSearch')?.value || '').toLowerCase();
   const filtered = search ? types.filter(t => t.toLowerCase().includes(search)) : types;
   const active = getActivePosFilter();
@@ -1492,6 +1553,13 @@ function applyRenameOrMergeType(oldType){
       try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
     }
   }
+  // Mark old name as removed so it doesn't reappear
+  {
+    let removed = [];
+    try { removed = JSON.parse(localStorage.getItem('sl_removed_pos')||'[]'); } catch(e){}
+    if(!removed.includes(oldType)) removed.push(oldType);
+    try { localStorage.setItem('sl_removed_pos', JSON.stringify(removed)); } catch(e){}
+  }
   saveCache();
   closeRenameModal();
   renderManageTypeList();
@@ -1504,14 +1572,14 @@ function deleteType(type){
   const actions = document.getElementById('typeDeleteActions');
   if(affected.length === 0){
     const idx = CUSTOM_POS.indexOf(type);
-    if(idx >= 0){
-      CUSTOM_POS.splice(idx, 1);
-      try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
-      renderManageTypeList();
-      toast('Removed unused type "'+type+'"', 'ok');
-    } else {
-      toast('"'+type+'" is built-in — can\'t remove (no words use it anyway)', 'warn');
-    }
+    if(idx >= 0) CUSTOM_POS.splice(idx, 1);
+    let removed = [];
+    try { removed = JSON.parse(localStorage.getItem('sl_removed_pos')||'[]'); } catch(e){}
+    if(!removed.includes(type)) removed.push(type);
+    try { localStorage.setItem('sl_removed_pos', JSON.stringify(removed)); } catch(e){}
+    try { localStorage.setItem('sl_custom_pos', JSON.stringify(CUSTOM_POS)); } catch(e){}
+    renderManageTypeList();
+    toast('Removed unused type "'+type+'"', 'ok');
     return;
   }
   const allTypes = [...new Set([...WORDS.map(w => (w.pos||'').toLowerCase()).filter(Boolean), ...DEFAULT_POS, ...CUSTOM_POS])]
@@ -1629,7 +1697,7 @@ function renderRecord(){
     }
     return true;
   });
-  document.getElementById('cnt-record').textContent = data.length;
+  // tab badge managed by refreshAll (fixed totals)
   if(data.length===0){
     document.getElementById('recList').innerHTML = '<div class="empty"><h3>Nothing to record with these filters</h3></div>';
     document.getElementById('recCard').innerHTML = '';
@@ -1948,6 +2016,12 @@ function refreshAll(){
   // Update type filter button labels (browse / translate)
   updatePosBtnLabel('filterPosBrowseBtn', browseFilter.pos, posCounts, noPos);
   updatePosBtnLabel('filterPosTransBtn', transFilter.pos, posCounts, noPos);
+  // Tab badge counts: fixed totals (not filtered)
+  const totalUntranslated = WORDS.filter(w => !(w.lebanese_headword && w.lebanese_headword.trim())).length;
+  const totalUnrecorded = WORDS.filter(w => w.lebanese_headword && w.lebanese_headword.trim() && !w.recorded).length;
+  document.getElementById('cnt-translate').textContent = totalUntranslated;
+  document.getElementById('cnt-record').textContent = totalUnrecorded;
+  document.getElementById('cnt-browse').textContent = WORDS.length;
   refreshStats();
   if(curTab==='browse') renderBrowse();
   else if(curTab==='translate') renderTranslate();
@@ -2073,3 +2147,63 @@ document.addEventListener('keydown', e => {
 </script>
 </body>
 </html>
+<script>
+// ============================================================================
+// DRAGGABLE PANELS
+// ============================================================================
+function makeDraggable(handleId, modalBgId, innerElId){
+  const handle = document.getElementById(handleId);
+  const modalBg = document.getElementById(modalBgId);
+  const inner = document.getElementById(innerElId);
+  if(!handle || !inner) return;
+  let isDragging = false, startX, startY, origLeft, origTop;
+  handle.addEventListener('mousedown', e => {
+    if(!inner.style.position || inner.style.position !== 'absolute'){
+      const rect = inner.getBoundingClientRect();
+      inner.style.position = 'absolute';
+      inner.style.margin = '0';
+      inner.style.left = rect.left + 'px';
+      inner.style.top = rect.top + 'px';
+      modalBg.style.alignItems = 'flex-start';
+      modalBg.style.justifyContent = 'flex-start';
+    }
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    origLeft = parseInt(inner.style.left)||0;
+    origTop = parseInt(inner.style.top)||0;
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if(!isDragging) return;
+    inner.style.left = (origLeft + e.clientX - startX) + 'px';
+    inner.style.top = Math.max(0, origTop + e.clientY - startY) + 'px';
+  });
+  document.addEventListener('mouseup', () => { isDragging = false; });
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  makeDraggable('manageCatDragHandle','manageCatModal','manageCatModalInner');
+  makeDraggable('manageTypeDragHandle','manageTypeModal','manageTypeModalInner');
+  // Patch openManageCategories to reset position each time
+  const _origCats = window.openManageCategories;
+  if(_origCats){
+    window.openManageCategories = function(context){
+      const inner = document.getElementById('manageCatModalInner');
+      const bg = document.getElementById('manageCatModal');
+      if(inner){ inner.style.position=''; inner.style.left=''; inner.style.top=''; inner.style.margin=''; }
+      if(bg){ bg.style.alignItems=''; bg.style.justifyContent=''; }
+      _origCats(context);
+    };
+  }
+  const _origTypes = window.openManageTypes;
+  if(_origTypes){
+    window.openManageTypes = function(context){
+      const inner = document.getElementById('manageTypeModalInner');
+      const bg = document.getElementById('manageTypeModal');
+      if(inner){ inner.style.position=''; inner.style.left=''; inner.style.top=''; inner.style.margin=''; }
+      if(bg){ bg.style.alignItems=''; bg.style.justifyContent=''; }
+      _origTypes(context);
+    };
+  }
+});
+</script>
