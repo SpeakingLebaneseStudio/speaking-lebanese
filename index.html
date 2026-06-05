@@ -207,6 +207,46 @@
   .rec-meta{font-size:.8rem;color:var(--grey);margin-left:auto}
   .inline-rec-status{font-size:.85rem;color:var(--grey);margin-top:.4rem;min-height:1.1em}
 
+  /* ARABIZI KEYBOARD */
+  .arabizi-bar{
+    display:none;
+    flex-wrap:wrap;
+    gap:4px;
+    padding:5px 6px;
+    background:#FFF3CD;
+    border:1px solid var(--gold);
+    border-bottom:none;
+    border-radius:4px 4px 0 0;
+    align-items:center;
+  }
+  .arabizi-bar.visible{ display:flex; }
+  .arabizi-bar span{
+    font-size:.72rem;
+    color:var(--grey);
+    margin-right:2px;
+    white-space:nowrap;
+  }
+  .az-btn{
+    padding:2px 8px;
+    background:white;
+    border:1.5px solid var(--gold);
+    border-radius:4px;
+    font-family:"SF Mono",Menlo,monospace;
+    font-size:.92rem;
+    font-weight:bold;
+    color:var(--cedar-deep);
+    cursor:pointer;
+    line-height:1.4;
+    transition:.1s;
+  }
+  .az-btn:hover{ background:var(--cedar);color:white;border-color:var(--cedar); }
+  .az-btn title-only{ font-size:.7rem; }
+  .arabizi-bar + input,
+  .arabizi-bar + textarea{
+    border-top-left-radius:0;
+    border-top-right-radius:0;
+  }
+
   /* CLICKABLE ROW */
   tr.clickable{cursor:pointer}
   tr.clickable:hover td{background:var(--cedar-pale) !important}
@@ -620,9 +660,16 @@ async function fetchSheet(opts){
   opts = opts || {};
   if(!CFG.sheetUrl){ setConnStatus('warn','No sheet configured'); return; }
 
-  // PROTECTION 1: don't overwrite local data while user is actively editing
+  // PROTECTION 1a: don't overwrite local data while user is actively editing
   if(EXPANDED_ID !== null && !opts.force){
     // Skip this refetch — try again later
+    return;
+  }
+  // PROTECTION 1b: don't overwrite local data while audio uploads are still pending.
+  // Each recording queues audio + 2 translation updates. A background refetch before
+  // the queue drains would reset `recorded=false` on those words from the stale sheet.
+  const hasAudioPending = PENDING.some(p => p.type === 'audio' || p.type === 'translation');
+  if(hasAudioPending && !opts.force){
     return;
   }
 
@@ -761,6 +808,26 @@ async function syncPending(){
 }
 
 function updateOutboxes(){
+  const audioCount = PENDING.filter(p => p.type === 'audio').length;
+  const totalCount = PENDING.length;
+  // Show a prominent warning in the header if audio is still uploading
+  let headerWarning = document.getElementById('uploadingWarning');
+  if(!headerWarning){
+    headerWarning = document.createElement('div');
+    headerWarning.id = 'uploadingWarning';
+    headerWarning.style.cssText = 'background:#B45309;color:white;padding:.3rem .8rem;border-radius:99px;font-size:.8rem;font-weight:bold;display:none';
+    headerWarning.textContent = '';
+    document.querySelector('header').appendChild(headerWarning);
+  }
+  if(audioCount > 0){
+    headerWarning.style.display = '';
+    headerWarning.textContent = '⏫ Uploading ' + audioCount + ' recording' + (audioCount>1?'s':'') + '… do not close this tab';
+  } else if(totalCount > 0){
+    headerWarning.style.display = '';
+    headerWarning.textContent = '⏳ Syncing ' + totalCount + ' change' + (totalCount>1?'s':'') + '…';
+  } else {
+    headerWarning.style.display = 'none';
+  }
   const html = PENDING.length === 0 ? '' :
     '<div class="outbox"><h3>'+PENDING.length+' change'+(PENDING.length>1?'s':'')+' pending sync to your Sheet/Drive</h3>'+
     '<ul>'+PENDING.slice(0,5).map(p=>{
@@ -877,6 +944,7 @@ function renderBrowse(){
     '<table><thead><tr><th>#</th><th>English</th><th>French</th><th>Lebanese</th><th>Arabic</th><th>Category</th><th></th></tr></thead>'+
     '<tbody>'+rows+'</tbody></table>'+
     (totalPages > 1 ? pager : '');
+  setTimeout(()=> attachArabiziListeners(document.getElementById('browseTable')), 0);
 }
 
 function browseRow(w){
@@ -1022,6 +1090,7 @@ function renderTranslate(){
     '<table><thead><tr><th>#</th><th>English</th><th>French</th><th>Lebanese (main)</th><th>Arabic</th><th>Notes</th></tr></thead>'+
     '<tbody>'+rows+'</tbody></table>'+
     (totalPages > 1 ? pager : '');
+  setTimeout(()=> attachArabiziListeners(document.getElementById('transTable')), 0);
 }
 function transRow(w){
   const expanded = EXPANDED_ID === w.id;
@@ -2314,6 +2383,81 @@ function updatePosBtnLabel(btnId, filterVal, posCounts, noPos){
   if(!filterVal){ el.innerHTML = '⚙ All types'; el.classList.remove('filter-active'); }
   else if(filterVal === '__none__'){ el.innerHTML = '⚙ (no type) — '+noPos; el.classList.add('filter-active'); }
   else { el.innerHTML = '⚙ '+esc(filterVal)+' ('+(posCounts[filterVal]||0)+')'; el.classList.add('filter-active'); }
+}
+
+// ============================================================================
+// ARABIZI KEYBOARD
+// ============================================================================
+// The 7 Arabizi symbols with their Arabic letter and a short English hint
+const ARABIZI_KEYS = [
+  { sym:'2', ar:'ء/أ', hint:'glottal stop — e.g. 2ism (اسم)' },
+  { sym:'3', ar:'ع',   hint:'deep throat vowel — e.g. 3arabi (عربي)' },
+  { sym:'5', ar:'خ',   hint:'like Scottish "loch" — e.g. 5ubez (خبز)' },
+  { sym:'6', ar:'ط',   hint:'emphatic T — e.g. 6ayyib (طيب)' },
+  { sym:'7', ar:'ح',   hint:'breathy H — e.g. 7elo (حلو)' },
+  { sym:'8', ar:'غ',   hint:'French R / gargle — e.g. 8adan (غداً)' },
+  { sym:'9', ar:'ق',   hint:'deep K from throat — e.g. 9ahwe (قهوة)' },
+];
+
+// The fields that get the Arabizi bar (transliteration inputs only)
+const ARABIZI_FIELDS = new Set([
+  'lebanese_headword','mouzakkar','mou2annass','mousanna','jam3',
+  'maadi','moudaare3','amr','mousta2bal','moustamerr','example','notes'
+]);
+
+// Track which input is currently focused for the arabizi bar
+let _azActiveInput = null;
+
+function insertArabizi(sym){
+  const el = _azActiveInput;
+  if(!el) return;
+  const start = el.selectionStart;
+  const end   = el.selectionEnd;
+  const before = el.value.substring(0, start);
+  const after  = el.value.substring(end);
+  el.value = before + sym + after;
+  el.selectionStart = el.selectionEnd = start + sym.length;
+  el.focus();
+  // Trigger the change handler so it auto-saves
+  el.dispatchEvent(new Event('change', { bubbles:true }));
+}
+
+function buildArabiziBar(inputEl){
+  const bar = document.createElement('div');
+  bar.className = 'arabizi-bar';
+  bar.innerHTML = '<span>Arabizi:</span>' +
+    ARABIZI_KEYS.map(k =>
+      '<button class="az-btn" title="'+k.ar+' — '+k.hint+'" onmousedown="event.preventDefault();insertArabizi(\''+k.sym+'\')">'+k.sym+'<sup style="font-size:.6rem;font-weight:normal;margin-left:1px">'+k.ar+'</sup></button>'
+    ).join('');
+  return bar;
+}
+
+// Attach arabizi bars to all transliteration inputs in a container
+function attachArabiziListeners(container){
+  container = container || document;
+  container.querySelectorAll('input[data-field], textarea[data-field]').forEach(el => {
+    const field = el.dataset.field;
+    if(!ARABIZI_FIELDS.has(field)) return;
+    if(el.dataset.azAttached) return; // don't double-attach
+    el.dataset.azAttached = '1';
+    // Insert bar before the input
+    const bar = buildArabiziBar(el);
+    el.parentNode.insertBefore(bar, el);
+    // Show/hide on focus/blur
+    el.addEventListener('focus', () => {
+      _azActiveInput = el;
+      bar.classList.add('visible');
+    });
+    el.addEventListener('blur', () => {
+      // Small delay so onmousedown on a button fires before blur hides the bar
+      setTimeout(() => {
+        if(_azActiveInput === el){
+          bar.classList.remove('visible');
+          _azActiveInput = null;
+        }
+      }, 150);
+    });
+  });
 }
 
 function toast(msg, type){
