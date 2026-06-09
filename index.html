@@ -277,6 +277,7 @@
     <span><b id="stat-total">—</b> words</span>
     <span><b id="stat-trans">—</b> translated</span>
     <span><b id="stat-recs">—</b> recorded</span>
+    <span id="stat-level-pills" style="display:flex;gap:.3rem;align-items:center"></span>
   </div>
   <div class="status-pill" id="conn-status"><span class="dot"></span><span id="conn-text">Setup needed</span></div>
 </header>
@@ -347,6 +348,16 @@
         <option value="trans">Translated only</option>
         <option value="notrans">Not translated</option>
       </select>
+      <select id="filterLevelBrowse" title="Filter by CEFR level">
+        <option value="">All levels</option>
+        <option value="A1">A1 — Beginner Survival</option>
+        <option value="A2">A2 — Everyday Communication</option>
+        <option value="B1">B1</option>
+        <option value="B2">B2</option>
+        <option value="C1">C1</option>
+        <option value="C2">C2</option>
+        <option value="__none__">No level tagged</option>
+      </select>
       <button class="btn ghost" onclick="exportCSV()">Export CSV</button>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
@@ -372,6 +383,16 @@
         <option value="done_fr" id="opt-has-fr">Has French</option>
         <option value="done_ar" id="opt-has-ar">Has Arabic</option>
       </select>
+      <select id="filterLevelTrans" title="Filter by CEFR level">
+        <option value="">All levels</option>
+        <option value="A1">A1 — Beginner Survival</option>
+        <option value="A2">A2 — Everyday Communication</option>
+        <option value="B1">B1</option>
+        <option value="B2">B2</option>
+        <option value="C1">C1</option>
+        <option value="C2">C2</option>
+        <option value="__none__">No level tagged</option>
+      </select>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
     <div id="transLangStats" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem;align-items:center"></div>
@@ -389,6 +410,16 @@
         <option value="todo">Unrecorded with translation</option>
         <option value="all-todo">All unrecorded</option>
         <option value="done">Already recorded (for review/re-record)</option>
+      </select>
+      <select id="filterLevelRec" title="Filter by CEFR level">
+        <option value="">All levels</option>
+        <option value="A1">A1 — Beginner Survival</option>
+        <option value="A2">A2 — Everyday Communication</option>
+        <option value="B1">B1</option>
+        <option value="B2">B2</option>
+        <option value="C1">C1</option>
+        <option value="C2">C2</option>
+        <option value="__none__">No level tagged</option>
       </select>
       <span style="margin-left:auto">Upload mode:</span>
       <div class="mode-toggle">
@@ -859,6 +890,25 @@ function refreshStats(){
   document.getElementById('stat-total').textContent = total.toLocaleString();
   document.getElementById('stat-trans').textContent = trans.toLocaleString();
   document.getElementById('stat-recs').textContent = recs.toLocaleString();
+  // Level pills
+  const LEVEL_COLORS = { A1:'#D20014', A2:'#008228', B1:'#0055A4', B2:'#7B3F00', C1:'#5A1A1A', C2:'#2A1F18' };
+  const levelCounts = {};
+  WORDS.forEach(w => { const l = (w.level||'').toUpperCase().trim(); if(l) levelCounts[l] = (levelCounts[l]||0)+1; });
+  const pillsEl = document.getElementById('stat-level-pills');
+  if(pillsEl){
+    pillsEl.innerHTML = Object.keys(LEVEL_COLORS).filter(l => levelCounts[l]).map(l =>
+      '<span style="padding:.1rem .45rem;border-radius:4px;font-size:.78rem;font-weight:700;color:white;background:'+LEVEL_COLORS[l]+';cursor:pointer" title="Click to filter Browse to '+l+'" onclick="setLevelFilter(\''+l+'\')">'+l+' '+levelCounts[l]+'</span>'
+    ).join('');
+  }
+}
+
+// Quick filter: clicking a level pill in the header jumps to Browse filtered to that level
+function setLevelFilter(level){
+  browseFilter.level = level;
+  browseFilter._page = 0;
+  const sel = document.getElementById('filterLevelBrowse');
+  if(sel) sel.value = level;
+  switchTab('browse');
 }
 
 // ============================================================================
@@ -883,9 +933,10 @@ function switchTab(name){
 // ============================================================================
 // BROWSE TAB
 // ============================================================================
-let browseFilter = { q:'', cat:'', pos:'', rec:'', _page:0 };
+let browseFilter = { q:'', cat:'', pos:'', rec:'', level:'', _page:0 };
 document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; browseFilter._page=0; renderBrowse(); };
 document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; browseFilter._page=0; renderBrowse(); };
+document.getElementById('filterLevelBrowse').onchange = e => { browseFilter.level = e.target.value; browseFilter._page=0; renderBrowse(); };
 function browsePage(dir){ browseFilter._page = (browseFilter._page||0) + dir; renderBrowse(); }
 
 function normalizeSearch(s){
@@ -904,6 +955,9 @@ function filteredFor(filter){
     // POS: '__none__' = no type set
     if(filter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
     else if(filter.pos && (w.pos||'').toLowerCase() !== filter.pos) return false;
+    // Level filter
+    if(filter.level === '__none__'){ if((w.level||'').trim()) return false; }
+    else if(filter.level && (w.level||'').toUpperCase() !== filter.level) return false;
     if(filter.rec === 'rec' && !w.recorded) return false;
     if(filter.rec === 'norec' && w.recorded) return false;
     if(filter.rec === 'trans' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
@@ -952,10 +1006,13 @@ function browseRow(w){
   const cls = (w.recorded ? 'has-audio' : (w.lebanese_headword ? '' : 'no-trans')) + ' clickable' + (expanded ? ' expanded' : '');
   const audio = w.recorded ? '<span class="audio-badge">REC</span>' : '';
   const isPlaying = currentAudioId === w.id;
+  const LEVEL_COLORS = { A1:'#D20014', A2:'#008228', B1:'#0055A4', B2:'#7B3F00', C1:'#5A1A1A', C2:'#2A1F18' };
+  const lvl = (w.level||'').toUpperCase().trim();
+  const lvlBadge = lvl ? '<span style="display:inline-block;padding:.05rem .4rem;border-radius:4px;font-size:.72rem;font-weight:700;color:white;background:'+(LEVEL_COLORS[lvl]||'#888')+';margin-left:.3rem;vertical-align:middle">'+lvl+'</span>' : '';
   const dash = '<i style="color:var(--grey)">—</i>';
   return '<tr class="'+cls+'" onclick="toggleExpand('+w.id+', event)">'+
     '<td class="id"><span class="expand-arrow">▶</span> '+w.id+'</td>'+
-    '<td class="eng">'+esc(w.english)+'</td>'+
+    '<td class="eng">'+esc(w.english)+lvlBadge+'</td>'+
     '<td class="fr">'+esc(w.french||'')+'</td>'+
     '<td class="leb">'+(w.lebanese_headword ? esc(w.lebanese_headword) : dash)+'</td>'+
     '<td class="ar">'+esc(w.arabic||'')+'</td>'+
@@ -972,7 +1029,7 @@ function browseRow(w){
 // ============================================================================
 // TRANSLATE TAB
 // ============================================================================
-let transFilter = { q:'', cat:'', pos:'', field:'', _page:0 };
+let transFilter = { q:'', cat:'', pos:'', field:'', level:'', _page:0 };
 
 function refreshTransLangStats(){
   // Compute counts for all language fields
@@ -1039,6 +1096,7 @@ function setTransField(val){
 }
 document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; transFilter._page=0; renderTranslate(); };
 document.getElementById('filterTransField').onchange = e => { transFilter.field = e.target.value; transFilter._page=0; renderTranslate(); };
+document.getElementById('filterLevelTrans').onchange = e => { transFilter.level = e.target.value; transFilter._page=0; renderTranslate(); };
 function transPage(dir){ transFilter._page = (transFilter._page||0) + dir; renderTranslate(); }
 
 function renderTranslate(){
@@ -1050,6 +1108,9 @@ function renderTranslate(){
     else if(transFilter.cat && w.category !== transFilter.cat) return false;
     if(transFilter.pos === '__none__'){ if((w.pos||'').trim()) return false; }
     else if(transFilter.pos && (w.pos||'').toLowerCase() !== transFilter.pos) return false;
+    // Level filter
+    if(transFilter.level === '__none__'){ if((w.level||'').trim()) return false; }
+    else if(transFilter.level && (w.level||'').toUpperCase() !== transFilter.level) return false;
     // Language field filter
     const f = transFilter.field;
     if(f === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
@@ -1199,6 +1260,11 @@ function renderEditCard(w){
         '</select></div>'+
       '<div class="edit-field"><label>Type (part of speech)</label>'+
         '<select data-field="pos" data-id="'+w.id+'" onchange="handlePosChange(this, '+w.id+')">'+posOptions+'</select></div>'+
+      '<div class="edit-field"><label>CEFR Level</label>'+
+        '<select data-field="level" data-id="'+w.id+'" onchange="handleLevelChange(this, '+w.id+')">'+
+          '<option value="" '+((!w.level||!w.level.trim())?'selected':'')+'>— not set —</option>'+
+          ['A1','A2','B1','B2','C1','C2'].map(l=>'<option value="'+l+'" '+(w.level===l?'selected':'')+'>'+l+'</option>').join('')+
+        '</select></div>'+
       field(w,'example','Example sentence','use in a sentence')+
       field(w,'notes','Notes','additional context, irregularities, etc.','','textarea')+
       renderConjugationSection(w)+
@@ -1290,7 +1356,7 @@ function openAddWord(){
   const newId = maxId + 1;
   const newWord = {
     id: newId, english:'', french:'', lebanese_headword:'', arabic:'',
-    category:'', pos:'', mouzakkar:'', mou2annass:'', mousanna:'', jam3:'',
+    category:'', pos:'', level:'', mouzakkar:'', mou2annass:'', mousanna:'', jam3:'',
     maadi:'', moudaare3:'', amr:'', mousta2bal:'', moustamerr:'',
     example:'', notes:'', audio_filename:'', recorded:false, last_edited:''
   };
@@ -1399,6 +1465,18 @@ function handlePosChange(selectEl, id){
       selectEl.value = w ? (w.pos||'').toLowerCase() : '';
     }
   }
+}
+
+// handleLevelChange — saves CEFR level assignment for a word
+function handleLevelChange(selectEl, id){
+  const w = WORDS.find(x => x.id === id);
+  if(!w) return;
+  w.level = selectEl.value;
+  saveCache();
+  queueChange('translation', { id, field:'level', value:selectEl.value, ts:new Date().toISOString() });
+  flashSaveIndicator(id);
+  if(curTab==='browse') renderBrowse();
+  else if(curTab==='translate') renderTranslate();
 }
 
 // ============================================================================
@@ -1992,9 +2070,10 @@ function closeAndNext(currentId){
 // ============================================================================
 // RECORD TAB
 // ============================================================================
-let recFilter = { q:'', cat:'', mode:'todo', _page:0 };
+let recFilter = { q:'', cat:'', mode:'todo', level:'', _page:0 };
 document.getElementById('searchRec').oninput = e => { recFilter.q = e.target.value; recFilter._page=0; renderRecord(); };
 document.getElementById('filterRecMode').onchange = e => { recFilter.mode = e.target.value; recFilter._page=0; renderRecord(); };
+document.getElementById('filterLevelRec').onchange = e => { recFilter.level = e.target.value; recFilter._page=0; renderRecord(); };
 function recPage(dir){ recFilter._page = (recFilter._page||0) + dir; renderRecord(); }
 
 function setUploadMode(mode, silent){
@@ -2009,6 +2088,9 @@ function renderRecord(){
   const q = recFilter.q.toLowerCase();
   let data = WORDS.filter(w => {
     if(recFilter.cat && w.category !== recFilter.cat) return false;
+    // Level filter
+    if(recFilter.level === '__none__'){ if((w.level||'').trim()) return false; }
+    else if(recFilter.level && (w.level||'').toUpperCase() !== recFilter.level) return false;
     const hasTrans = w.lebanese_headword && w.lebanese_headword.trim();
     if(recFilter.mode === 'todo' && (!hasTrans || w.recorded)) return false;
     if(recFilter.mode === 'all-todo' && w.recorded) return false;
@@ -2080,9 +2162,12 @@ function recRow(w){
   const playBtn = w.recorded
     ? '<button class="btn ghost" style="margin-left:.3rem" onclick="event.stopPropagation();playRec('+w.id+')">'+(isPlaying?'⏹ Stop':'▶ Play')+'</button>'
     : '';
+  const LEVEL_COLORS = { A1:'#D20014', A2:'#008228', B1:'#0055A4', B2:'#7B3F00', C1:'#5A1A1A', C2:'#2A1F18' };
+  const lvl = (w.level||'').toUpperCase().trim();
+  const lvlBadge = lvl ? '<span style="display:inline-block;padding:.05rem .35rem;border-radius:4px;font-size:.7rem;font-weight:700;color:white;background:'+(LEVEL_COLORS[lvl]||'#888')+';margin-left:.3rem;vertical-align:middle">'+lvl+'</span>' : '';
   return '<tr>'+
     '<td class="id">'+w.id+'</td>'+
-    '<td class="eng">'+esc(w.english)+'</td>'+
+    '<td class="eng">'+esc(w.english)+lvlBadge+'</td>'+
     '<td class="leb">'+esc(w.lebanese_headword||'')+'</td>'+
     '<td class="cat">'+esc(w.category||'')+(w.recorded?'<span class="audio-badge" style="margin-left:.4rem">REC</span>':'')+'</td>'+
     '<td class="actions">'+playBtn+'<button class="btn ghost" onclick="openRecord('+w.id+')">Record</button></td>'+
@@ -2312,7 +2397,7 @@ function rerenderIfExpanded(id){
 // EXPORT
 // ============================================================================
 function exportCSV(){
-  const headers = ['id','english','french','lebanese_headword','arabic','category','pos','mouzakkar','mou2annass','mousanna','jam3','maadi','moudaare3','amr','mousta2bal','moustamerr','example','notes','audio_filename','recorded','last_edited'];
+  const headers = ['id','english','french','lebanese_headword','arabic','category','pos','level','mouzakkar','mou2annass','mousanna','jam3','maadi','moudaare3','amr','mousta2bal','moustamerr','example','notes','audio_filename','recorded','last_edited'];
   const csv = [headers.join(',')].concat(WORDS.map(w =>
     headers.map(h => csvField(h==='recorded' ? (w[h]?'TRUE':'FALSE') : (w[h]||''))).join(',')
   )).join('\n');
