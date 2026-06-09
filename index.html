@@ -806,8 +806,9 @@ async function fetchSheet(opts){
           WORDS.unshift(localW);
         }
       });
+      WORDS = applyDefaultLevels(WORDS);
     } else {
-      WORDS = fresh;
+      WORDS = applyDefaultLevels(fresh);
     }
 
     saveCache();
@@ -853,7 +854,6 @@ function parseCSV(text){
     o.recorded = (o.recorded||'').toUpperCase()==='TRUE';
     return o;
   }).filter(w=>w.id>0);
-  WORDS = applyDefaultLevels(WORDS);
 }
 
 // ============================================================================
