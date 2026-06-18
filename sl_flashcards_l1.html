@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Lesson 1 Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F7F7F5;font-family:'Source Sans 3',sans-serif;padding:2rem 1.5rem;min-height:100vh}
+.sl-fc{max-width:620px;margin:0 auto}
+.sl-header{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem}
+.sl-logo-text{font-family:'Playfair Display',serif;font-size:16px;color:#0A0A0A}
+.sl-logo-red{color:#D20014}
+.sl-lesson{font-size:11px;color:#AAAAAA;letter-spacing:0.05em}
+.sl-controls{display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
+.sl-btn{font-family:'Source Sans 3',sans-serif;font-size:13px;padding:5px 14px;border:0.5px solid #0A0A0A;background:transparent;color:#0A0A0A;border-radius:4px;cursor:pointer;transition:background 0.15s}
+.sl-btn:hover{background:#EBEBEB}
+.sl-btn-red{border-color:#D20014;color:#D20014}
+.sl-btn-red:hover{background:#FAE6E6}
+.sl-counter{font-size:13px;color:#666;margin-left:auto}
+.sl-progress{height:3px;background:#EBEBEB;border-radius:2px;margin-bottom:1.5rem;overflow:hidden}
+.sl-bar{height:100%;background:#D20014;transition:width 0.3s ease;border-radius:2px}
+.sl-scene{width:100%;height:300px;perspective:1200px;cursor:pointer;margin-bottom:1rem}
+.sl-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.45s ease}
+.sl-card.flipped{transform:rotateY(180deg)}
+.sl-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:8px;border:0.5px solid #EBEBEB;background:#F7F7F5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.sl-back{transform:rotateY(180deg);background:#FFFFFF}
+.sl-front-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#D20014;margin-bottom:1rem}
+.sl-front-en{font-family:'Playfair Display',serif;font-size:28px;color:#0A0A0A;text-align:center;margin-bottom:6px}
+.sl-front-fr{font-size:15px;color:#666;font-weight:300;text-align:center}
+.sl-hint{font-size:12px;color:#AAAAAA;margin-top:1.75rem}
+.sl-back-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#666;margin-bottom:1rem;align-self:flex-start}
+.sl-arabic{font-size:30px;color:#0A0A0A;text-align:right;width:100%;direction:rtl;margin-bottom:10px;line-height:1.4}
+.sl-arabizi{font-size:22px;color:#D20014;font-weight:600;text-align:left;width:100%;margin-bottom:6px}
+.sl-translation{font-size:14px;color:#666;font-weight:300;text-align:left;width:100%;border-top:0.5px solid #EBEBEB;padding-top:10px;margin-top:4px}
+.sl-rating{display:flex;gap:10px;justify-content:center;margin-bottom:1.5rem}
+.sl-summary{text-align:center;padding:2.5rem 2rem;background:#F7F7F5;border:0.5px solid #EBEBEB;border-radius:8px}
+.sl-summary-title{font-family:'Playfair Display',serif;font-size:22px;color:#0A0A0A;margin-bottom:8px}
+.sl-summary-sub{font-size:15px;color:#666;font-weight:300;margin-bottom:1.5rem}
+</style>
+</head>
+<body>
+<div class="sl-fc">
+
+<div class="sl-header">
+  <span class="sl-logo-text">Speaking <span class="sl-logo-red">Lebanese</span></span>
+  <span class="sl-lesson">— Lesson 1 Flashcards</span>
+</div>
+
+<div class="sl-controls">
+  <button class="sl-btn" onclick="shuffle()">⇄ shuffle</button>
+  <button class="sl-btn" onclick="restart()">↺ restart</button>
+  <span class="sl-counter" id="sl-counter">1 / 22</span>
+</div>
+
+<div class="sl-progress"><div class="sl-bar" id="sl-bar" style="width:0%"></div></div>
+
+<div class="sl-scene" onclick="slFlip()" id="sl-scene">
+  <div class="sl-card" id="sl-card">
+    <div class="sl-face">
+      <div class="sl-front-label">what is this in Lebanese?</div>
+      <div class="sl-front-en" id="sl-f-en"></div>
+      <div class="sl-front-fr" id="sl-f-fr"></div>
+      <div class="sl-hint">tap to reveal</div>
+    </div>
+    <div class="sl-face sl-back">
+      <div class="sl-back-label">Lebanese</div>
+      <div class="sl-arabic" id="sl-b-ar"></div>
+      <div class="sl-arabizi" id="sl-b-az"></div>
+      <div class="sl-translation" id="sl-b-en"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sl-rating" id="sl-rating" style="display:none">
+  <button class="sl-btn sl-btn-red" onclick="slRate(false)">✗ not yet</button>
+  <button class="sl-btn" onclick="slRate(true)">✓ got it</button>
+</div>
+
+<div id="sl-summary" style="display:none" class="sl-summary">
+  <div style="font-size:18px;margin-bottom:0.75rem">🌲</div>
+  <div class="sl-summary-title">Round complete</div>
+  <div class="sl-summary-sub" id="sl-score"></div>
+  <button class="sl-btn" onclick="restart()">↺ study again</button>
+</div>
+
+</div>
+
+<script>
+const slWords=[
+{en:"hello",fr:"bonjour",ar:"مرحبا",az:"mar7aba"},
+{en:"welcome",fr:"bienvenue",ar:"أَهْلاً / أَهْلين / أَهْلا / أَهْلا وْ سَهْلا",az:"ahlan / ahlén / ahla / ahla w sahla"},
+{en:"how are you?",fr:"comment vas-tu?",ar:"كيفَك؟ / كيفِك؟",az:"keefak? / keefik?"},
+{en:"fine",fr:"bien",ar:"مْنيح",az:"mnee7"},
+{en:"thanks God",fr:"dieu merci",ar:"الحَمْدً للَّه",az:"hamdellah"},
+{en:"thank you",fr:"merci",ar:"شٌكراً",az:"shukran"},
+{en:"you're welcome / pardon",fr:"de rien / pardon",ar:"عَفْواً",az:"3afwan"},
+{en:"sorry",fr:"désolé(e)",ar:"آسِف / آسْفِة",az:"aasef / aasfet"},
+{en:"no problem",fr:"pas de problème",ar:"ما في مِشكْلِة",az:"ma fi meshklet"},
+{en:"yes",fr:"oui",ar:"إِي / نَعَم",az:"eh / na3am"},
+{en:"no",fr:"non",ar:"لَأ / لا",az:"la2 / laa"},
+{en:"maybe",fr:"peut-être",ar:"يِمْكِن",az:"yimkin"},
+{en:"let's go",fr:"allez / dépêche-toi",ar:"يَلّا",az:"yalla"},
+{en:"goodbye",fr:"au revoir",ar:"إِلى اللِقاء / مَع السَلامِة",az:"ila l'likaa2 / ma3 el salémet"},
+{en:"I",fr:"je",ar:"أنا",az:"ana"},
+{en:"you (m/f/pl)",fr:"tu / vous",ar:"إنتَ / إنتِ / إنتو",az:"inta / inté / into"},
+{en:"he",fr:"il",ar:"هوِّ",az:"houwwé"},
+{en:"she",fr:"elle",ar:"هيِّ",az:"hiyyé"},
+{en:"we",fr:"nous",ar:"نِحنا",az:"ne7na"},
+{en:"they",fr:"ils / elles",ar:"هِنّي",az:"hinné"},
+{en:"situation / how are things",fr:"situation",ar:"حال / حالِة",az:"7aal / 7aalet"},
+{en:"parents / family",fr:"parents / famille",ar:"أهل",az:"ahl"}
+];
+
+let slDeck=[...slWords],slIdx=0,slFlipped=false,slKnown=0,slTotal=0;
+
+function slRender(){
+  const w=slDeck[slIdx];
+  document.getElementById('sl-f-en').textContent=w.en;
+  document.getElementById('sl-f-fr').textContent=w.fr;
+  document.getElementById('sl-b-ar').textContent=w.ar;
+  document.getElementById('sl-b-az').textContent=w.az;
+  document.getElementById('sl-b-en').textContent=w.en+' | '+w.fr;
+  document.getElementById('sl-counter').textContent=(slIdx+1)+' / '+slDeck.length;
+  document.getElementById('sl-bar').style.width=(slIdx/slDeck.length*100)+'%';
+  document.getElementById('sl-card').classList.remove('flipped');
+  document.getElementById('sl-rating').style.display='none';
+  document.getElementById('sl-scene').style.display='block';
+  slFlipped=false;
+}
+
+function slFlip(){
+  if(slFlipped)return;
+  document.getElementById('sl-card').classList.add('flipped');
+  document.getElementById('sl-rating').style.display='flex';
+  slFlipped=true;
+}
+
+function slRate(ok){
+  slTotal++;
+  if(ok)slKnown++;
+  if(slIdx+1>=slDeck.length){
+    document.getElementById('sl-scene').style.display='none';
+    document.getElementById('sl-rating').style.display='none';
+    document.getElementById('sl-summary').style.display='block';
+    document.getElementById('sl-score').textContent='You knew '+slKnown+' of '+slTotal+' words';
+    document.getElementById('sl-bar').style.width='100%';
+  } else {
+    slIdx++;
+    slRender();
+  }
+}
+
+function shuffle(){
+  slDeck.sort(()=>Math.random()-0.5);
+  slIdx=0;slKnown=0;slTotal=0;
+  document.getElementById('sl-summary').style.display='none';
+  slRender();
+}
+
+function restart(){
+  slIdx=0;slKnown=0;slTotal=0;
+  document.getElementById('sl-summary').style.display='none';
+  slRender();
+}
+
+slRender();
+</script>
+</body>
+</html>
