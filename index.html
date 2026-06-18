@@ -363,6 +363,13 @@
         <option value="C2">C2</option>
         <option value="__none__">No level tagged</option>
       </select>
+      <select id="filterUnitTypeBrowse" title="Filter by unit type">
+        <option value="">All unit types</option>
+        <option value="word">Words only</option>
+        <option value="phrase">Phrases only</option>
+        <option value="sentence">Sentences only</option>
+        <option value="__none__">No type tagged</option>
+      </select>
       <button class="btn ghost" onclick="exportCSV()">Export CSV</button>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
@@ -398,6 +405,13 @@
         <option value="C2">C2</option>
         <option value="__none__">No level tagged</option>
       </select>
+      <select id="filterUnitTypeTrans" title="Filter by unit type">
+        <option value="">All unit types</option>
+        <option value="word">Words only</option>
+        <option value="phrase">Phrases only</option>
+        <option value="sentence">Sentences only</option>
+        <option value="__none__">No type tagged</option>
+      </select>
       <button class="btn gold" onclick="openAddWord()">+ Add word</button>
     </div>
     <div id="transLangStats" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem;align-items:center"></div>
@@ -425,6 +439,13 @@
         <option value="C1">C1</option>
         <option value="C2">C2</option>
         <option value="__none__">No level tagged</option>
+      </select>
+      <select id="filterUnitTypeRec" title="Filter by unit type">
+        <option value="">All unit types</option>
+        <option value="word">Words only</option>
+        <option value="phrase">Phrases only</option>
+        <option value="sentence">Sentences only</option>
+        <option value="__none__">No type tagged</option>
       </select>
       <span style="margin-left:auto">Upload mode:</span>
       <div class="mode-toggle">
@@ -1006,10 +1027,11 @@ function switchTab(name){
 // ============================================================================
 // BROWSE TAB
 // ============================================================================
-let browseFilter = { q:'', cat:'', pos:'', rec:'', level:'', _page:0 };
+let browseFilter = { q:'', cat:'', pos:'', rec:'', level:'', unitType:'', _page:0 };
 document.getElementById('searchBrowse').oninput = e => { browseFilter.q = e.target.value; browseFilter._page=0; renderBrowse(); };
 document.getElementById('filterRecBrowse').onchange = e => { browseFilter.rec = e.target.value; browseFilter._page=0; renderBrowse(); };
 document.getElementById('filterLevelBrowse').onchange = e => { browseFilter.level = e.target.value; browseFilter._page=0; renderBrowse(); };
+document.getElementById('filterUnitTypeBrowse').onchange = e => { browseFilter.unitType = e.target.value; browseFilter._page=0; renderBrowse(); };
 function browsePage(dir){ browseFilter._page = (browseFilter._page||0) + dir; renderBrowse(); }
 
 function normalizeSearch(s){
@@ -1031,6 +1053,9 @@ function filteredFor(filter){
     // Level filter
     if(filter.level === '__none__'){ if((w.level||'').trim()) return false; }
     else if(filter.level && (w.level||'').toUpperCase() !== filter.level) return false;
+    // Unit type filter
+    if(filter.unitType === '__none__'){ if((w.unit_type||'').trim()) return false; }
+    else if(filter.unitType && (w.unit_type||'').toLowerCase() !== filter.unitType) return false;
     if(filter.rec === 'rec' && !w.recorded) return false;
     if(filter.rec === 'norec' && w.recorded) return false;
     if(filter.rec === 'trans' && !(w.lebanese_headword && w.lebanese_headword.trim())) return false;
@@ -1082,10 +1107,13 @@ function browseRow(w){
   const LEVEL_COLORS = { A1:'#D20014', A2:'#008228', B1:'#0055A4', B2:'#7B3F00', C1:'#5A1A1A', C2:'#2A1F18' };
   const lvl = (w.level||'').toUpperCase().trim();
   const lvlBadge = lvl ? '<span style="display:inline-block;padding:.05rem .4rem;border-radius:4px;font-size:.72rem;font-weight:700;color:white;background:'+(LEVEL_COLORS[lvl]||'#888')+';margin-left:.3rem;vertical-align:middle">'+lvl+'</span>' : '';
+  const UNIT_COLORS = { word:'#7C7269', phrase:'#0055A4', sentence:'#6B4E9B' };
+  const ut = (w.unit_type||'').toLowerCase().trim();
+  const utBadge = ut ? '<span style="display:inline-block;padding:.05rem .4rem;border-radius:4px;font-size:.68rem;font-weight:600;color:white;background:'+(UNIT_COLORS[ut]||'#888')+';margin-left:.3rem;vertical-align:middle">'+ut+'</span>' : '';
   const dash = '<i style="color:var(--grey)">—</i>';
   return '<tr class="'+cls+'" onclick="toggleExpand('+w.id+', event)">'+
     '<td class="id"><span class="expand-arrow">▶</span> '+w.id+'</td>'+
-    '<td class="eng">'+esc(w.english)+lvlBadge+'</td>'+
+    '<td class="eng">'+esc(w.english)+lvlBadge+utBadge+'</td>'+
     '<td class="fr">'+esc(w.french||'')+'</td>'+
     '<td class="leb">'+(w.lebanese_headword ? esc(w.lebanese_headword) : dash)+'</td>'+
     '<td class="ar">'+esc(w.arabic||'')+'</td>'+
@@ -1102,7 +1130,7 @@ function browseRow(w){
 // ============================================================================
 // TRANSLATE TAB
 // ============================================================================
-let transFilter = { q:'', cat:'', pos:'', field:'', level:'', _page:0 };
+let transFilter = { q:'', cat:'', pos:'', field:'', level:'', unitType:'', _page:0 };
 
 function refreshTransLangStats(){
   // Compute counts for all language fields
@@ -1170,6 +1198,7 @@ function setTransField(val){
 document.getElementById('searchTrans').oninput = e => { transFilter.q = e.target.value; transFilter._page=0; renderTranslate(); };
 document.getElementById('filterTransField').onchange = e => { transFilter.field = e.target.value; transFilter._page=0; renderTranslate(); };
 document.getElementById('filterLevelTrans').onchange = e => { transFilter.level = e.target.value; transFilter._page=0; renderTranslate(); };
+document.getElementById('filterUnitTypeTrans').onchange = e => { transFilter.unitType = e.target.value; transFilter._page=0; renderTranslate(); };
 function transPage(dir){ transFilter._page = (transFilter._page||0) + dir; renderTranslate(); }
 
 function renderTranslate(){
@@ -1184,6 +1213,9 @@ function renderTranslate(){
     // Level filter
     if(transFilter.level === '__none__'){ if((w.level||'').trim()) return false; }
     else if(transFilter.level && (w.level||'').toUpperCase() !== transFilter.level) return false;
+    // Unit type filter
+    if(transFilter.unitType === '__none__'){ if((w.unit_type||'').trim()) return false; }
+    else if(transFilter.unitType && (w.unit_type||'').toLowerCase() !== transFilter.unitType) return false;
     // Language field filter
     const f = transFilter.field;
     if(f === 'lebanese' && (w.lebanese_headword && w.lebanese_headword.trim())) return false;
@@ -1337,6 +1369,11 @@ function renderEditCard(w){
         '<select data-field="level" data-id="'+w.id+'" onchange="handleLevelChange(this, '+w.id+')">'+
           '<option value="" '+((!w.level||!w.level.trim())?'selected':'')+'>— not set —</option>'+
           ['A1','A2','B1','B2','C1','C2'].map(l=>'<option value="'+l+'" '+(w.level===l?'selected':'')+'>'+l+'</option>').join('')+
+        '</select></div>'+
+      '<div class="edit-field"><label>Unit Type <span class="hint">word / phrase / sentence</span></label>'+
+        '<select data-field="unit_type" data-id="'+w.id+'" onchange="handleUnitTypeChange(this, '+w.id+')">'+
+          '<option value="" '+((!w.unit_type||!w.unit_type.trim())?'selected':'')+'>— not set —</option>'+
+          ['word','phrase','sentence'].map(t=>'<option value="'+t+'" '+(w.unit_type===t?'selected':'')+'>'+t+'</option>').join('')+
         '</select></div>'+
       field(w,'example','Example sentence','use in a sentence')+
       field(w,'notes','Notes','additional context, irregularities, etc.','','textarea')+
@@ -1552,8 +1589,19 @@ function handleLevelChange(selectEl, id){
   else if(curTab==='translate') renderTranslate();
 }
 
-// ============================================================
-// MISSING A1/A2 WORDS — words from the curriculum not yet in DB
+// handleUnitTypeChange — saves unit_type for a word
+function handleUnitTypeChange(selectEl, id){
+  const w = WORDS.find(x => x.id === id);
+  if(!w) return;
+  w.unit_type = selectEl.value;
+  saveCache();
+  queueChange('translation', { id, field:'unit_type', value:selectEl.value, ts:new Date().toISOString() });
+  flashSaveIndicator(id);
+  if(curTab==='browse') renderBrowse();
+  else if(curTab==='translate') renderTranslate();
+}
+
+// ============================================================ — words from the curriculum not yet in DB
 // ============================================================
 const SL_MISSING_WORDS = [
 {"english": "I am from", "french": "je suis de", "lebanese_headword": "ana min", "arabic": "أنا مِن", "category": "Greetings", "pos": "phrase", "level": "A1"},
@@ -2255,10 +2303,11 @@ function closeAndNext(currentId){
 // ============================================================================
 // RECORD TAB
 // ============================================================================
-let recFilter = { q:'', cat:'', mode:'todo', level:'', _page:0 };
+let recFilter = { q:'', cat:'', mode:'todo', level:'', unitType:'', _page:0 };
 document.getElementById('searchRec').oninput = e => { recFilter.q = e.target.value; recFilter._page=0; renderRecord(); };
 document.getElementById('filterRecMode').onchange = e => { recFilter.mode = e.target.value; recFilter._page=0; renderRecord(); };
 document.getElementById('filterLevelRec').onchange = e => { recFilter.level = e.target.value; recFilter._page=0; renderRecord(); };
+document.getElementById('filterUnitTypeRec').onchange = e => { recFilter.unitType = e.target.value; recFilter._page=0; renderRecord(); };
 function recPage(dir){ recFilter._page = (recFilter._page||0) + dir; renderRecord(); }
 
 function setUploadMode(mode, silent){
@@ -2276,6 +2325,9 @@ function renderRecord(){
     // Level filter
     if(recFilter.level === '__none__'){ if((w.level||'').trim()) return false; }
     else if(recFilter.level && (w.level||'').toUpperCase() !== recFilter.level) return false;
+    // Unit type filter
+    if(recFilter.unitType === '__none__'){ if((w.unit_type||'').trim()) return false; }
+    else if(recFilter.unitType && (w.unit_type||'').toLowerCase() !== recFilter.unitType) return false;
     const hasTrans = w.lebanese_headword && w.lebanese_headword.trim();
     if(recFilter.mode === 'todo' && (!hasTrans || w.recorded)) return false;
     if(recFilter.mode === 'all-todo' && w.recorded) return false;
@@ -2582,7 +2634,7 @@ function rerenderIfExpanded(id){
 // EXPORT
 // ============================================================================
 function exportCSV(){
-  const headers = ['id','english','french','lebanese_headword','arabic','category','pos','level','mouzakkar','mou2annass','mousanna','jam3','maadi','moudaare3','amr','mousta2bal','moustamerr','example','notes','audio_filename','recorded','last_edited'];
+  const headers = ['id','english','french','lebanese_headword','arabic','category','pos','level','unit_type','mouzakkar','mou2annass','mousanna','jam3','maadi','moudaare3','amr','mousta2bal','moustamerr','example','notes','audio_filename','recorded','last_edited'];
   const csv = [headers.join(',')].concat(WORDS.map(w =>
     headers.map(h => csvField(h==='recorded' ? (w[h]?'TRUE':'FALSE') : (w[h]||''))).join(',')
   )).join('\n');
