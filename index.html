@@ -2578,6 +2578,7 @@ function blobToB64(blob){
 // PLAYBACK
 // ============================================================================
 let currentAudio = null, currentAudioId = null, audioLoading = false;
+const AUDIO_CACHE = {}; // in-memory cache: id -> data: URL
 async function playRec(id){
   if(currentAudio && currentAudioId === id){
     currentAudio.pause(); currentAudio = null; currentAudioId = null;
@@ -2588,11 +2589,15 @@ async function playRec(id){
   if(audioLoading) return;
   audioLoading = true;
   let src = null;
-  // 1. Local copy from this session
+  // 1. Local copy from this session (just recorded)
   if(RECS_LOCAL[id]){
     src = RECS_LOCAL[id].blobUrl;
   }
-  // 2. Fetch from Apps Script (which returns a data: URL as plain text)
+  // 2. In-memory cache (already fetched this session)
+  else if(AUDIO_CACHE[id]){
+    src = AUDIO_CACHE[id];
+  }
+  // 3. Fetch from Apps Script
   else if(CFG.scriptUrl){
     try {
       const url = CFG.scriptUrl + '?action=audio&id=' + id + '&_t='+Date.now();
@@ -2605,6 +2610,7 @@ async function playRec(id){
         return;
       }
       src = text.trim();
+      AUDIO_CACHE[id] = src; // cache for this session
     } catch(e){
       toast('Could not fetch audio: '+e.message, 'err');
       audioLoading = false;
