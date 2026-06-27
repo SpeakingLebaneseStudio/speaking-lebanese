@@ -7,11 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --red: #D20014;
     --black: #0A0A0A;
-    --green: #008228;
     --cream: #FAF8F4;
     --off-white: #F2EDE6;
     --grey: #666666;
@@ -20,517 +18,218 @@
     --shadow-bg: #F0EAE3;
     --shadow-border: #D5CCC3;
   }
-
-  body {
-    font-family: 'Source Sans 3', sans-serif;
-    background: var(--cream);
-    color: var(--black);
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
-  /* ── Header ── */
-  .page-header {
-    background: var(--cream);
-    padding: 22px 28px 16px;
-    border-bottom: 2px solid var(--off-white);
-  }
-  .page-header .eyebrow {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-    color: var(--grey);
-    margin-bottom: 5px;
-  }
-  .page-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 900;
-    font-size: 24px;
-    color: var(--black);
-    line-height: 1.2;
-  }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--black); font-size: 16px; line-height: 1.5; }
+  .page-header { background: var(--cream); padding: 22px 28px 16px; border-bottom: 2px solid var(--off-white); }
+  .page-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--grey); margin-bottom: 5px; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 24px; color: var(--black); line-height: 1.2; }
   .page-header h1 span { color: var(--red); }
-
-  /* ── Intro ── */
-  .intro-strip {
-    background: var(--off-white);
-    border-bottom: 1px solid var(--grey-light);
-    padding: 13px 28px;
-  }
-  .intro-strip p {
-    font-size: 14px;
-    color: var(--grey);
-    line-height: 1.6;
-  }
-
-  /* ── Content ── */
-  .content {
-    padding: 28px 24px 48px;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  /* ── Sound section ── */
+  .intro-strip { background: var(--off-white); border-bottom: 1px solid var(--grey-light); padding: 13px 28px; }
+  .intro-strip p { font-size: 14px; color: var(--grey); line-height: 1.6; }
+  .content { padding: 28px 24px 48px; max-width: 700px; margin: 0 auto; }
   .sound-section { margin-bottom: 44px; }
-
-  .sound-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 5px;
-  }
-  .sound-badge {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--red);
-    color: #fff;
-    font-family: 'Playfair Display', serif;
-    font-weight: 900;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .sound-title-block h2 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 19px;
-    color: var(--black);
-    line-height: 1.2;
-  }
-  .sound-title-block .arabic {
-    font-size: 20px;
-    color: var(--red);
-    line-height: 1;
-  }
-  .sound-description {
-    font-size: 13px;
-    color: var(--grey);
-    font-style: italic;
-    padding-left: 58px;
-    margin-bottom: 16px;
-    line-height: 1.55;
-  }
-  .section-divider {
-    height: 1px;
-    background: var(--grey-light);
-    margin-bottom: 16px;
-  }
-
-  /* ── Word table ── */
-  .word-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 16px;
-    background: #fff;
-    border: 1px solid var(--grey-light);
-    border-radius: 4px;
-    overflow: hidden;
-  }
+  .sound-header { display: flex; align-items: center; gap: 14px; margin-bottom: 5px; }
+  .sound-badge { width: 44px; height: 44px; border-radius: 50%; background: var(--red); color: #fff; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sound-title-block h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; color: var(--black); line-height: 1.2; }
+  .sound-title-block .arabic { font-size: 20px; color: var(--red); line-height: 1; }
+  .sound-description { font-size: 13px; color: var(--grey); font-style: italic; padding-left: 58px; margin-bottom: 16px; line-height: 1.55; }
+  .section-divider { height: 1px; background: var(--grey-light); margin-bottom: 16px; }
+  .word-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; background: #fff; border: 1px solid var(--grey-light); border-radius: 4px; overflow: hidden; }
   .word-table thead tr { background: var(--black); }
-  .word-table thead th {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #fff;
-    padding: 8px 10px;
-    text-align: left;
-  }
-  .word-table tbody tr {
-    border-bottom: 1px solid var(--grey-light);
-    transition: background 0.12s;
-  }
+  .word-table thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; padding: 8px 10px; text-align: left; }
+  .word-table tbody tr { border-bottom: 1px solid var(--grey-light); transition: background 0.12s; }
   .word-table tbody tr:last-child { border-bottom: none; }
   .word-table tbody tr:hover { background: var(--red-tint); }
   .word-table td { padding: 10px 10px; vertical-align: middle; }
-
   .word-arabizi { font-weight: 700; font-size: 15px; color: var(--red); }
   .word-arabic { font-size: 17px; color: var(--black); direction: rtl; text-align: right; }
   .word-english { font-size: 13px; color: var(--black); }
   .word-french { font-size: 13px; color: var(--grey); font-style: italic; }
-
-  /* ── Audio buttons ── */
   .audio-btns { display: flex; gap: 6px; white-space: nowrap; }
-  .btn-audio {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 3px;
-    padding: 6px 10px;
-    cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-  }
+  .btn-audio { display: inline-flex; align-items: center; gap: 5px; font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border: none; border-radius: 3px; padding: 6px 10px; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
   .btn-audio:active { transform: scale(0.96); }
   .btn-slow { background: var(--black); color: #fff; }
   .btn-slow:hover { opacity: 0.78; }
   .btn-natural { background: var(--red); color: #fff; }
   .btn-natural:hover { opacity: 0.85; }
   .btn-audio.playing { opacity: 0.6; }
-
-  /* ── Shadow prompt card — lighter ── */
-  .shadow-card {
-    background: var(--shadow-bg);
-    border: 1px solid var(--shadow-border);
-    border-left: 4px solid var(--black);
-    border-radius: 4px;
-    padding: 16px 18px;
-    margin-bottom: 12px;
-  }
-  .shadow-card .shadow-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--black);
-    margin-bottom: 8px;
-  }
-  .shadow-card .shadow-phrase {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--black);
-    margin-bottom: 4px;
-  }
+  .shadow-card { background: var(--shadow-bg); border: 1px solid var(--shadow-border); border-left: 4px solid var(--black); border-radius: 4px; padding: 16px 18px; margin-bottom: 12px; }
+  .shadow-card .shadow-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--black); margin-bottom: 8px; }
+  .shadow-card .shadow-phrase { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; color: var(--black); margin-bottom: 4px; }
   .shadow-card .shadow-phrase .highlight { color: var(--red); }
-  .shadow-card .shadow-instruction {
-    font-size: 12px;
-    color: var(--grey);
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-  .btn-shadow {
-    background: var(--black);
-    color: #fff;
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 3px;
-    padding: 8px 14px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: opacity 0.15s;
-  }
+  .shadow-card .shadow-instruction { font-size: 12px; color: var(--grey); margin-bottom: 12px; line-height: 1.5; }
+  .btn-shadow { background: var(--black); color: #fff; font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border: none; border-radius: 3px; padding: 8px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
   .btn-shadow:hover { opacity: 0.78; }
   .btn-shadow.playing { opacity: 0.5; }
-
-  /* ── Encouragement box ── */
-  .encourage-box {
-    border-left: 3px solid var(--red);
-    background: #fff;
-    padding: 11px 14px;
-    margin-bottom: 4px;
-  }
-  .encourage-box p {
-    font-size: 13px;
-    color: var(--grey);
-    line-height: 1.6;
-    font-style: italic;
-  }
-
-  /* ── Section rule ── */
-  .section-end-rule {
-    height: 1px;
-    background: var(--grey-light);
-    margin-top: 28px;
-  }
-
-  /* ── Bottom bar ── */
-  .bottom-bar {
-    background: var(--off-white);
-    border-top: 1px solid var(--grey-light);
-    padding: 11px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .bottom-bar span {
-    font-size: 12px;
-    color: var(--grey);
-  }
-
-  @media (max-width: 480px) {
-    .content { padding: 16px 14px 32px; }
-    .page-header, .intro-strip { padding-left: 16px; padding-right: 16px; }
-    .word-arabic { display: none; }
-    .sound-description { padding-left: 0; margin-top: 6px; }
-  }
+  .encourage-box { border-left: 3px solid var(--red); background: #fff; padding: 11px 14px; margin-bottom: 4px; }
+  .encourage-box p { font-size: 13px; color: var(--grey); line-height: 1.6; font-style: italic; }
+  .section-end-rule { height: 1px; background: var(--grey-light); margin-top: 28px; }
+  .bottom-bar { background: var(--off-white); border-top: 1px solid var(--grey-light); padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .bottom-bar span { font-size: 12px; color: var(--grey); }
+  @media (max-width: 480px) { .content { padding: 16px 14px 32px; } .page-header, .intro-strip { padding-left: 16px; padding-right: 16px; } .word-arabic { display: none; } .sound-description { padding-left: 0; margin-top: 6px; } }
 </style>
 </head>
 <body>
-
 <div class="page-header">
   <div class="eyebrow">A1 Beginner Survival — Lesson 1 — Activity 4</div>
   <h1>Pronunciation <span>Training</span></h1>
 </div>
-
 <div class="intro-strip">
   <p>Three sounds. Every lesson. These are the sounds English speakers find hardest — and the ones that appear most in Lebanese. Master them here, and every word becomes easier.</p>
 </div>
-
 <div class="content">
 
-  <!-- ════════════════════════════════ SOUND 7 ════════════════════════════════ -->
+  <!-- SOUND 7 -->
   <div class="sound-section">
     <div class="sound-header">
       <div class="sound-badge">7</div>
-      <div class="sound-title-block">
-        <h2>The 7 sound</h2>
-        <div class="arabic">ح</div>
-      </div>
+      <div class="sound-title-block"><h2>The 7 sound</h2><div class="arabic">ح</div></div>
     </div>
     <p class="sound-description">Constrict the back of your throat as if fogging a mirror — then push air through. Heavy, breathy H. Much heavier than the English H in "hello."</p>
     <div class="section-divider"></div>
-
     <table class="word-table">
-      <thead>
-        <tr>
-          <th>Arabizi</th>
-          <th>Arabic</th>
-          <th>English</th>
-          <th>Français</th>
-          <th>Listen</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Arabizi</th><th>Arabic</th><th>English</th><th>Français</th><th>Listen</th></tr></thead>
       <tbody>
         <tr>
-          <td class="word-arabizi">mar7aba</td>
-          <td class="word-arabic">مرحبا</td>
-          <td class="word-english">hello</td>
-          <td class="word-french">bonjour</td>
+          <td class="word-arabizi">mar7aba</td><td class="word-arabic">مرحبا</td><td class="word-english">hello</td><td class="word-french">bonjour</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_7_mar7aba_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_7_mar7aba_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_7_mar7aba_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_7_mar7aba_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
         <tr>
-          <td class="word-arabizi">saba7 el khayr</td>
-          <td class="word-arabic">صباح الخير</td>
-          <td class="word-english">good morning</td>
-          <td class="word-french">bonjour (matin)</td>
+          <td class="word-arabizi">saba7 el khayr</td><td class="word-arabic">صباح الخير</td><td class="word-english">good morning</td><td class="word-french">bonjour (matin)</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_7_saba7_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_7_saba7_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_7_saba7_slow.m4a.mp3', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_7_saba7_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
         <tr>
-          <td class="word-arabizi">keef 7aalak</td>
-          <td class="word-arabic">كيف حالك</td>
-          <td class="word-english">how are you</td>
-          <td class="word-french">comment vas-tu</td>
+          <td class="word-arabizi">keef 7aalak</td><td class="word-arabic">كيف حالك</td><td class="word-english">how are you</td><td class="word-french">comment vas-tu</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_7_keef7aalak_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_7_keef7aalak_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_7_keef7aalak_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_7_keef7aalak_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
       </tbody>
     </table>
-
     <div class="shadow-card">
       <div class="shadow-label">Shadow Prompt — Sound 7</div>
       <div class="shadow-phrase"><span class="highlight">mar7aba</span>, keef <span class="highlight">7aalak</span>?</div>
       <p class="shadow-instruction">Listen. Repeat during the silence. Listen again and compare. You will hear the phrase twice with a 3-second gap.</p>
-      <button class="btn-shadow" onclick="playAudio('A1_L1_pron_shadow_7.mp3', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
+      <button class="btn-shadow" onclick="playAudio('A1_L1_pron_shadow_7.m4a.mp4', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
     </div>
-
-    <div class="encourage-box">
-      <p>The 7 sound feels unfamiliar at first. Most learners get it within a week. Yours just needs practice.</p>
-    </div>
+    <div class="encourage-box"><p>The 7 sound feels unfamiliar at first. Most learners get it within a week. Yours just needs practice.</p></div>
     <div class="section-end-rule"></div>
   </div>
 
-  <!-- ════════════════════════════════ SOUND 3 ════════════════════════════════ -->
+  <!-- SOUND 3 -->
   <div class="sound-section" style="margin-top: 36px;">
     <div class="sound-header">
       <div class="sound-badge">3</div>
-      <div class="sound-title-block">
-        <h2>The 3 sound</h2>
-        <div class="arabic">ع</div>
-      </div>
+      <div class="sound-title-block"><h2>The 3 sound</h2><div class="arabic">ع</div></div>
     </div>
     <p class="sound-description">Squeeze the very back of your throat — the place you feel when you swallow. Hold briefly, release with a vowel. No English equivalent.</p>
     <div class="section-divider"></div>
-
     <table class="word-table">
-      <thead>
-        <tr>
-          <th>Arabizi</th>
-          <th>Arabic</th>
-          <th>English</th>
-          <th>Français</th>
-          <th>Listen</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Arabizi</th><th>Arabic</th><th>English</th><th>Français</th><th>Listen</th></tr></thead>
       <tbody>
         <tr>
-          <td class="word-arabizi">3afwan</td>
-          <td class="word-arabic">عفواً</td>
-          <td class="word-english">excuse me / you're welcome</td>
-          <td class="word-french">de rien / pardon</td>
+          <td class="word-arabizi">3afwan</td><td class="word-arabic">عفواً</td><td class="word-english">excuse me / you're welcome</td><td class="word-french">de rien / pardon</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_3_3afwan_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_3_3afwan_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_3_3afwan_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_3_3afwan_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
         <tr>
-          <td class="word-arabizi">shou elwad3</td>
-          <td class="word-arabic">شو الوضع</td>
-          <td class="word-english">what's up</td>
-          <td class="word-french">quoi de neuf</td>
+          <td class="word-arabizi">shou elwad3</td><td class="word-arabic">شو الوضع</td><td class="word-english">what's up</td><td class="word-french">quoi de neuf</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_3_shou elwad3_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_3_shu elwad3_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_3_shou elwad3_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_3_shu elwad3_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
         <tr>
-          <td class="word-arabizi">min 3youni</td>
-          <td class="word-arabic">من عيوني</td>
-          <td class="word-english">my pleasure (lit. from my eyes)</td>
-          <td class="word-french">avec plaisir</td>
+          <td class="word-arabizi">min 3youni</td><td class="word-arabic">من عيوني</td><td class="word-english">my pleasure (lit. from my eyes)</td><td class="word-french">avec plaisir</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_3_3youni_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_3_3youni_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_3_3youni_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_3_3youni_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
       </tbody>
     </table>
-
     <div class="shadow-card">
       <div class="shadow-label">Shadow Prompt — Sound 3</div>
       <div class="shadow-phrase"><span class="highlight">3afwan</span>, shou el<span class="highlight">wad3</span>?</div>
       <p class="shadow-instruction">Listen. Repeat during the silence. Listen again and compare. You will hear the phrase twice with a 3-second gap.</p>
-      <button class="btn-shadow" onclick="playAudio('A1_L1_pron_shadow_3.mp3', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
+      <button class="btn-shadow" onclick="playAudio('A1_L1_pron_shadow_3.m4a.mp4', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
     </div>
-
-    <div class="encourage-box">
-      <p>The 3 sound has no equivalent in English. That is normal. Your ear will adjust before your mouth does — that is the right order.</p>
-    </div>
+    <div class="encourage-box"><p>The 3 sound has no equivalent in English. That is normal. Your ear will adjust before your mouth does — that is the right order.</p></div>
     <div class="section-end-rule"></div>
   </div>
 
-  <!-- ════════════════════════════════ SOUND 2 ════════════════════════════════ -->
+  <!-- SOUND 2 -->
   <div class="sound-section" style="margin-top: 36px;">
     <div class="sound-header">
       <div class="sound-badge">2</div>
-      <div class="sound-title-block">
-        <h2>The 2 sound</h2>
-        <div class="arabic">ء</div>
-      </div>
+      <div class="sound-title-block"><h2>The 2 sound</h2><div class="arabic">ء</div></div>
     </div>
     <p class="sound-description">Stop all airflow completely at the back of your throat for a split second — like the catch between syllables in "uh-oh." Then release.</p>
     <div class="section-divider"></div>
-
     <table class="word-table">
-      <thead>
-        <tr>
-          <th>Arabizi</th>
-          <th>Arabic</th>
-          <th>English</th>
-          <th>Français</th>
-          <th>Listen</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Arabizi</th><th>Arabic</th><th>English</th><th>Français</th><th>Listen</th></tr></thead>
       <tbody>
         <tr>
-          <td class="word-arabizi">2ahlan</td>
-          <td class="word-arabic">أهلاً</td>
-          <td class="word-english">welcome</td>
-          <td class="word-french">bienvenue</td>
+          <td class="word-arabizi">2ahlan</td><td class="word-arabic">أهلاً</td><td class="word-english">welcome</td><td class="word-french">bienvenue</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_2_2ahlan_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_2_2ahlan_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_2_2ahlan_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_2_2ahlan_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
         <tr>
-          <td class="word-arabizi">2ism</td>
-          <td class="word-arabic">إسم</td>
-          <td class="word-english">name</td>
-          <td class="word-french">prénom</td>
+          <td class="word-arabizi">2ism</td><td class="word-arabic">إسم</td><td class="word-english">name</td><td class="word-french">prénom</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_2_2ism_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_2_2ism_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_2_2ism_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_2_2ism_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
         <tr>
-          <td class="word-arabizi">halla2</td>
-          <td class="word-arabic">هلأ</td>
-          <td class="word-english">now</td>
-          <td class="word-french">maintenant</td>
+          <td class="word-arabizi">halla2</td><td class="word-arabic">هلأ</td><td class="word-english">now</td><td class="word-french">maintenant</td>
           <td><div class="audio-btns">
-            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_2_halla2_slow.mp3', this)"><span class="icon">▶</span> Slow</button>
-            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_2_halla2_natural.mp3', this)"><span class="icon">▶</span> Natural</button>
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L1_pron_2_halla2_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L1_pron_2_halla2_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
           </div></td>
         </tr>
       </tbody>
     </table>
-
     <div class="shadow-card">
       <div class="shadow-label">Shadow Prompt — Sound 2</div>
       <div class="shadow-phrase"><span class="highlight">2ahlan</span>, shou <span class="highlight">2ismak</span>?</div>
       <p class="shadow-instruction">Listen. Repeat during the silence. Listen again and compare. You will hear the phrase twice with a 3-second gap.</p>
-      <button class="btn-shadow" onclick="playAudio('A1_L1_pron_shadow_2.mp3', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
+      <button class="btn-shadow" onclick="playAudio('A1_L1_pron_shadow_2.m4a.mp4', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
     </div>
-
-    <div class="encourage-box">
-      <p>The glottal stop already exists in English — you use it every time you say "uh-oh." You are further along than you think.</p>
-    </div>
-
+    <div class="encourage-box"><p>The glottal stop already exists in English — you use it every time you say "uh-oh." You are further along than you think.</p></div>
   </div>
 
-</div><!-- end .content -->
-
+</div>
 <div class="bottom-bar">
   <span>Speaking Lebanese — A1 Lesson 1 — Pronunciation Training</span>
   <span>speakinglebanese.com</span>
 </div>
-
 <script>
   let currentAudio = null;
   let currentBtn = null;
-
   function playAudio(filename, btn) {
     if (currentAudio) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-      if (currentBtn) {
-        currentBtn.classList.remove('playing');
-        const ic = currentBtn.querySelector('.icon');
-        if (ic) ic.textContent = '▶';
-      }
+      currentAudio.pause(); currentAudio.currentTime = 0;
+      if (currentBtn) { currentBtn.classList.remove('playing'); const ic = currentBtn.querySelector('.icon'); if (ic) ic.textContent = '▶'; }
     }
     if (currentBtn === btn) { currentAudio = null; currentBtn = null; return; }
-
     const audio = new Audio(filename);
-    currentAudio = audio;
-    currentBtn = btn;
+    currentAudio = audio; currentBtn = btn;
     btn.classList.add('playing');
     const icon = btn.querySelector('.icon');
     if (icon) icon.textContent = '■';
-
-    audio.play().catch(() => {
-      btn.classList.remove('playing');
-      if (icon) icon.textContent = '▶';
-      currentAudio = null; currentBtn = null;
-    });
-    audio.addEventListener('ended', () => {
-      btn.classList.remove('playing');
-      if (icon) icon.textContent = '▶';
-      currentAudio = null; currentBtn = null;
-    });
+    audio.play().catch(() => { btn.classList.remove('playing'); if (icon) icon.textContent = '▶'; currentAudio = null; currentBtn = null; });
+    audio.addEventListener('ended', () => { btn.classList.remove('playing'); if (icon) icon.textContent = '▶'; currentAudio = null; currentBtn = null; });
   }
 </script>
 </body>
