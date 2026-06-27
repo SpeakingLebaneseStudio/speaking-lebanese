@@ -2345,6 +2345,7 @@ function renderRecord(){
   }
   const cur = data[0];
   document.getElementById('recCard').innerHTML = renderRecCard(cur);
+  setTimeout(()=> attachArabiziListeners(document.getElementById('recCard')), 0);
   const RPAGE = 50;
   const listData = data.slice(1);
   const totalPages = Math.ceil(listData.length / RPAGE);
@@ -2576,7 +2577,7 @@ function blobToB64(blob){
 // ============================================================================
 // PLAYBACK
 // ============================================================================
-let currentAudio = null, currentAudioId = null;
+let currentAudio = null, currentAudioId = null, audioLoading = false;
 async function playRec(id){
   if(currentAudio && currentAudioId === id){
     currentAudio.pause(); currentAudio = null; currentAudioId = null;
@@ -2584,6 +2585,8 @@ async function playRec(id){
     return;
   }
   if(currentAudio){ currentAudio.pause(); currentAudio = null; currentAudioId = null; }
+  if(audioLoading) return;
+  audioLoading = true;
   let src = null;
   // 1. Local copy from this session
   if(RECS_LOCAL[id]){
@@ -2598,14 +2601,17 @@ async function playRec(id){
       const text = await resp.text();
       if(!text || !text.startsWith('data:')){
         toast('Audio not found in Drive for word #'+id, 'err');
+        audioLoading = false;
         return;
       }
       src = text.trim();
     } catch(e){
       toast('Could not fetch audio: '+e.message, 'err');
+      audioLoading = false;
       return;
     }
   }
+  audioLoading = false;
   if(!src){
     toast('Audio not available — set up Apps Script to play files from Drive', 'err');
     return;
