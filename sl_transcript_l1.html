@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dialogue Transcript — Tante Mona's Call</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #D20014;
+    --black: #0A0A0A;
+    --cream: #FAF8F4;
+    --off-white: #F2EDE6;
+    --grey: #888888;
+    --grey-light: #E0DAD3;
+  }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--black);
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--cream);
+    padding: 26px 36px 20px;
+    border-bottom: 2px solid var(--off-white);
+  }
+  .header .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: var(--black);
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+  .header h1 span { color: var(--red); }
+  .header .subtitle {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--grey);
+  }
+
+  /* ── Context strip ── */
+  .context-strip {
+    background: var(--off-white);
+    border-bottom: 1px solid var(--grey-light);
+    padding: 11px 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .context-strip p {
+    font-size: 13px;
+    color: var(--grey);
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .context-strip strong {
+    color: var(--black);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  /* ── Transcript ── */
+  .transcript {
+    padding: 8px 36px 48px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .exchange {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--grey-light);
+  }
+  .exchange:last-child { border-bottom: none; }
+
+  .exchange-number {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .exchange-number::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--grey-light);
+  }
+
+  .arabizi {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--black);
+    line-height: 1.6;
+    margin-bottom: 5px;
+  }
+  .arabizi .s { color: var(--red); }
+
+  .english {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--grey);
+    line-height: 1.6;
+    font-style: italic;
+    padding-left: 14px;
+    border-left: 2px solid var(--grey-light);
+    margin-bottom: 8px;
+  }
+
+  .vocab-note {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid var(--grey-light);
+    border-left: 3px solid var(--black);
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--grey);
+  }
+  .vocab-note strong {
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  /* ── Bottom bar ── */
+  .bottom-bar {
+    background: var(--off-white);
+    border-top: 1px solid var(--grey-light);
+    padding: 11px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .bottom-bar span { font-size: 12px; color: var(--grey); }
+
+  @media (max-width: 480px) {
+    .header, .context-strip, .bottom-bar { padding-left: 18px; padding-right: 18px; }
+    .transcript { padding: 8px 18px 36px; }
+    .header h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">A1 Beginner Survival — Lesson 1 — Dialogue Transcript</div>
+  <h1>Tante <span>Mona's</span> Call</h1>
+  <div class="subtitle">Listen along. Arabizi first, English below.</div>
+</div>
+
+<div class="context-strip">
+  <p><strong>Setting:</strong> A voicemail from Tante Mona, calling from Jounieh. She hasn't heard from you in a while.</p>
+</div>
+
+<div class="transcript">
+
+  <div class="exchange">
+    <div class="exchange-number">01</div>
+    <div class="arabizi">Allo? Allo!</div>
+    <div class="english">Hello? Hello!</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">02</div>
+    <div class="arabizi"><span class="s">2</span>ana Tante Mona! <span class="s">3</span>am be<span class="s">7</span>keek min Jounieh, eh eh, <span class="s">2</span>ana hiyyi Mona, Mona Khoury!</div>
+    <div class="english">I'm Aunt Mona! I'm calling you from Jounieh, yes yes, it's me — Mona, Mona Khoury!</div>
+    <div class="vocab-note"><strong>3am be7keek</strong> — I'm calling you</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">03</div>
+    <div class="arabizi">Keefak <span class="s">2</span>enta? Nchallah mnee<span class="s">7</span>? El <span class="s">7</span>amdellah <span class="s">2</span>ana mnee<span class="s">7</span>a, merci!</div>
+    <div class="english">How are you? Are you well? Thank God I'm fine, thank you!</div>
+    <div class="vocab-note"><strong>El 7amdellah</strong> — Thank God (standard response to "how are you")</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">04</div>
+    <div class="arabizi">Zamén ma smi<span class="s">3</span>na sawtak! Walla zamén! Killna hown, killna <span class="s">3</span>am nes<span class="s">2</span>al <span class="s">3</span>annak!</div>
+    <div class="english">It's been so long since we heard your voice! Really so long! We're all here, everyone's asking about you!</div>
+    <div class="vocab-note"><strong>Walla</strong> — really / I swear (emphatic)</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">05</div>
+    <div class="arabizi">Yalla, <span class="s">2</span>ahlan wa sahlan feek deyman — beitna houwwi beitak! Ta<span class="s">3</span>a la <span class="s">3</span>inna! Walla, kteer min<span class="s">7</span>ebb nchoufak, <span class="s">3</span>an jadd, kteer!</div>
+    <div class="english">Come on, you're always welcome — our home is your home! Come over, we'd love to see you so much, really!</div>
+    <div class="vocab-note"><strong>2ahlan wa sahlan</strong> — you are most welcome</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">06</div>
+    <div class="arabizi">Min fadlak bass feek, <span class="s">2</span>ittossil fiyyi — <span class="s">2</span>ana natritak, ok? Yalla!</div>
+    <div class="english">Please, just call me back — I'm waiting for you!</div>
+    <div class="vocab-note"><strong>2ittossil</strong> — call (imperative) / <strong>natritak</strong> — I'm waiting for you</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">07</div>
+    <div class="arabizi">Yalla bye <span class="s">7</span>abibi, <span class="s">3</span>afwan <span class="s">2</span>iza <span class="s">2</span>az<span class="s">3</span>ajtak. Ma<span class="s">3</span> el salémet! Shoukran!</div>
+    <div class="english">Okay bye habibi, sorry if I bothered you. Take care! Thank you!</div>
+    <div class="vocab-note"><strong>7abibi</strong> — my love / darling (term of endearment)</div>
+  </div>
+
+  <div class="exchange">
+    <div class="exchange-number">08</div>
+    <div class="arabizi">Ahhh w kamén, sallim, sallim kteer <span class="s">3</span>al ahl killon!</div>
+    <div class="english">And also, give my warmest regards to all the family!</div>
+    <div class="vocab-note"><strong>Sallim 3al ahl</strong> — give my regards to the family</div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <span>Speaking Lebanese — A1 Lesson 1 — Dialogue Transcript</span>
+  <span>speakinglebanese.com</span>
+</div>
+
+</body>
+</html>
