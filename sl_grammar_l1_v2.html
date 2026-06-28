@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Grammar in Context — Lesson 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red:        #D20014;
+    --red-dark:   #A8000F;
+    --red-tint:   #FAE6E6;
+    --black:      #0A0A0A;
+    --cream:      #FAF8F4;
+    --green:      #008228;
+    --green-tint: #E8F5ED;
+    --grey-mid:   #666666;
+    --grey-light: #EBEBEB;
+    --white:      #FFFFFF;
+  }
+
+  body {
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--black);
+    line-height: 1.65;
+    padding: 0 0 48px;
+  }
+
+  /* ── HEADER BAND ── */
+  .lesson-header {
+    background: var(--cream);
+    border-bottom: 1px solid var(--grey-light);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .lesson-header .eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+  }
+  .lesson-header .divider {
+    width: 1px;
+    height: 22px;
+    background: var(--grey-light);
+  }
+  .lesson-header .title {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--black);
+  }
+  .lesson-header .activity-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── GRAMMAR INTRO ── */
+  .grammar-intro {
+    padding: 36px 0 8px;
+  }
+  .grammar-intro .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .grammar-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.25;
+    color: var(--black);
+    margin-bottom: 18px;
+  }
+  .grammar-intro .lead {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--black);
+    border-left: 3px solid var(--red);
+    padding-left: 18px;
+    margin-bottom: 20px;
+  }
+  .grammar-intro p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 14px;
+  }
+
+  /* ── RULE CARD ── */
+  .rule-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    padding: 24px 24px 20px;
+    margin: 28px 0;
+  }
+  .rule-card .rule-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+    margin-bottom: 12px;
+  }
+  .rule-card .rule-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .rule-card .rule-example {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    background: var(--cream);
+    border-radius: 4px;
+    padding: 12px 16px;
+  }
+  .rule-card .lebanese {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .rule-card .equals {
+    font-size: 16px;
+    color: var(--grey-mid);
+  }
+  .rule-card .english {
+    font-size: 16px;
+    color: var(--black);
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 32px 0 24px;
+  }
+  .section-divider span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+    white-space: nowrap;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--grey-light);
+  }
+
+  /* ── EXAMPLES TABLE ── */
+  .examples-intro {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 16px;
+  }
+
+  .example-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .example-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    border-left: 4px solid var(--red);
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 12px;
+  }
+  .example-card .arabic-script {
+    font-size: 24px;
+    direction: rtl;
+    color: var(--black);
+    line-height: 1.4;
+    grid-column: 1 / -1;
+    text-align: right;
+  }
+  .example-card .arabizi {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .example-card .translation {
+    font-size: 15px;
+    color: var(--grey-mid);
+    text-align: right;
+    align-self: center;
+  }
+  .example-card .breakdown {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .word-chip {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: var(--cream);
+    border: 1px solid var(--grey-light);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  .word-chip .w-lebanese {
+    font-weight: 700;
+    color: var(--black);
+  }
+  .word-chip .w-english {
+    font-size: 11px;
+    color: var(--grey-mid);
+  }
+  .word-chip.no-verb {
+    border-color: var(--red);
+    background: var(--red-tint);
+  }
+  .word-chip.no-verb .w-english {
+    color: var(--red-dark);
+    font-weight: 700;
+  }
+
+  /* ── PRONOUNS GRID ── */
+  .pronouns-section {
+    margin-bottom: 32px;
+  }
+  .pronouns-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--black);
+  }
+  .pronouns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 500px) {
+    .pronouns-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .pronoun-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .pronoun-card .p-arabic {
+    font-size: 22px;
+    direction: rtl;
+    line-height: 1.4;
+    color: var(--black);
+  }
+  .pronoun-card .p-arabizi {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--red);
+    margin: 2px 0;
+  }
+  .pronoun-card .p-english {
+    font-size: 13px;
+    color: var(--grey-mid);
+  }
+
+  /* ── WARNING BOX ── */
+  .warning-box {
+    background: #FFF8E1;
+    border: 1px solid #FFD54F;
+    border-left: 4px solid #F9A825;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin: 28px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .warning-box .warn-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .warning-box .warn-content {}
+  .warning-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7B5800;
+    margin-bottom: 6px;
+  }
+  .warning-box p {
+    font-size: 15px;
+    color: #4A3800;
+    line-height: 1.6;
+  }
+  .warning-box .compare {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .compare-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .compare-row .mark {
+    font-size: 16px;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .compare-row .phrase {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--black);
+  }
+  .compare-row .label {
+    font-size: 12px;
+    color: var(--grey-mid);
+  }
+  .compare-row.wrong .phrase { color: #B71C1C; text-decoration: line-through; }
+  .compare-row.right .phrase { color: var(--green); }
+
+  /* ── QUIZ ── */
+  .quiz-section {
+    margin-top: 8px;
+  }
+  .quiz-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--black);
+  }
+  .quiz-section .quiz-intro {
+    font-size: 15px;
+    color: var(--grey-mid);
+    margin-bottom: 24px;
+  }
+
+  .question-block {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s;
+  }
+  .question-block.answered { box-shadow: 0 0 0 2px var(--green); }
+  .question-block.answered-wrong { box-shadow: 0 0 0 2px var(--red); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .q-number {
+    background: var(--black);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+    line-height: 1.45;
+  }
+  .q-arabic {
+    font-size: 20px;
+    direction: rtl;
+    color: var(--black);
+    text-align: right;
+    margin: -8px 0 8px;
+    padding: 8px 12px;
+    background: var(--cream);
+    border-radius: 4px;
+  }
+
+  /* MCQ */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .option-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border: 1.5px solid var(--grey-light);
+    border-radius: 6px;
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: var(--black);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--black);
+    background: var(--white);
+  }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-tint);
+    color: #004d15;
+  }
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-tint);
+    color: var(--red-dark);
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-letter {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--grey-mid);
+    width: 18px;
+    flex-shrink: 0;
+  }
+  .option-btn.correct .option-letter { color: var(--green); }
+  .option-btn.incorrect .option-letter { color: var(--red); }
+
+  /* Fill in blank */
+  .fill-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .fill-prefix, .fill-suffix {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--black);
+  }
+  .fill-input {
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
+    border: 2px solid var(--grey-light);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    background: var(--cream);
+    color: var(--black);
+    transition: border-color 0.15s;
+    text-align: center;
+  }
+  .fill-input:focus {
+    outline: none;
+    border-color: var(--black);
+  }
+  .fill-input.correct-input {
+    border-color: var(--green);
+    background: var(--green-tint);
+    color: #004d15;
+  }
+  .fill-input.incorrect-input {
+    border-color: var(--red);
+    background: var(--red-tint);
+    color: var(--red-dark);
+  }
+  .fill-input:disabled { cursor: default; }
+
+  /* Check button */
+  .check-btn {
+    margin-top: 14px;
+    padding: 10px 22px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .check-btn:hover { background: #333; }
+  .check-btn:disabled { background: var(--grey-light); color: var(--grey-mid); cursor: default; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.fb-correct {
+    background: var(--green-tint);
+    color: #004d15;
+    border: 1px solid #a8d5b5;
+  }
+  .feedback.fb-incorrect {
+    background: var(--red-tint);
+    color: var(--red-dark);
+    border: 1px solid #f5b8b8;
+  }
+  .feedback .correct-answer {
+    margin-top: 4px;
+    font-weight: 400;
+    color: #333;
+  }
+
+  /* ── SCORE PANEL ── */
+  .score-panel {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 8px;
+    padding: 28px 24px;
+    margin-top: 24px;
+    text-align: center;
+    display: none;
+  }
+  .score-panel.show { display: block; }
+  .score-panel .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+  }
+  .score-panel .score-label {
+    font-size: 14px;
+    color: var(--grey-mid);
+    margin-top: 4px;
+    margin-bottom: 14px;
+  }
+  .score-panel .score-message {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 16px;
+  }
+  .score-panel .score-sub {
+    font-size: 14px;
+    color: var(--grey-mid);
+    margin-bottom: 18px;
+  }
+  .retry-btn {
+    padding: 10px 26px;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .retry-btn:hover { background: var(--red-dark); }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--grey-light);
+    text-align: center;
+    font-size: 12px;
+    color: var(--grey-mid);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="lesson-header">
+  <div>
+    <div class="eyebrow">A1 — Beginner Survival · Lesson 1</div>
+  </div>
+  <div class="divider"></div>
+  <div class="title">Greetings &amp; Introductions</div>
+  <div class="activity-badge">Activity 5</div>
+</div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="grammar-intro">
+    <div class="section-label">Grammar in Context</div>
+    <h2>You don't need a verb to say who you are</h2>
+    <p class="lead">In Lebanese, there is no word for "am," "is," or "are" when describing who someone is or where they're from. You simply leave it out.</p>
+    <p>This is called the <strong>zero-copula</strong> — and it's one of the first things that makes Lebanese feel very different from English. In English you say <em>"I am from Beirut."</em> In Lebanese you say <em>"Ana min Beirut"</em> — literally: "I from Beirut." The verb just isn't there, and that's exactly right.</p>
+  </div>
+
+  <!-- RULE CARD -->
+  <div class="rule-card">
+    <div class="rule-label">The Rule</div>
+    <div class="rule-text">Pronoun + [thing you are] — no verb needed</div>
+    <div class="rule-example">
+      <span class="lebanese">Ana Justine</span>
+      <span class="equals">=</span>
+      <span class="english">I am Justine</span>
+    </div>
+  </div>
+
+  <!-- SUBJECT PRONOUNS -->
+  <div class="pronouns-section">
+    <h3>Subject pronouns</h3>
+    <p class="examples-intro" style="margin-bottom:14px; font-size:15px; color:#444;">These are the six pronouns you need for Lesson 1. Notice how many start with the glottal stop sound — <strong>2</strong>.</p>
+    <div class="pronouns-grid">
+      <div class="pronoun-card">
+        <div class="p-arabic">أنا</div>
+        <div class="p-arabizi">2ana</div>
+        <div class="p-english">I</div>
+      </div>
+      <div class="pronoun-card">
+        <div class="p-arabic">أنتَ</div>
+        <div class="p-arabizi">2enta</div>
+        <div class="p-english">you (m)</div>
+      </div>
+      <div class="pronoun-card">
+        <div class="p-arabic">أنتِ</div>
+        <div class="p-arabizi">2enti</div>
+        <div class="p-english">you (f)</div>
+      </div>
+      <div class="pronoun-card">
+        <div class="p-arabic">هوَّ</div>
+        <div class="p-arabizi">houwwi</div>
+        <div class="p-english">he</div>
+      </div>
+      <div class="pronoun-card">
+        <div class="p-arabic">هيَّ</div>
+        <div class="p-arabizi">hiyyi</div>
+        <div class="p-english">she</div>
+      </div>
+      <div class="pronoun-card" style="background: var(--cream); border-style: dashed;">
+        <div class="p-arabic" style="font-size:14px; color:var(--grey-mid); padding-top:8px;">—</div>
+        <div class="p-arabizi" style="font-size:13px; color:var(--grey-mid);">Lessons 2–3</div>
+        <div class="p-english">we / they</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES SECTION -->
+  <div class="section-divider"><span>Three examples</span></div>
+
+  <p class="examples-intro">Each sentence below shows the zero-copula in action. Notice the gap where English has a verb — that gap is correct Lebanese.</p>
+
+  <div class="example-cards">
+
+    <div class="example-card">
+      <div class="arabic-script">أنا من لندن</div>
+      <div class="arabizi">ana min London</div>
+      <div class="translation">I am from London</div>
+      <div class="breakdown">
+        <div class="word-chip">
+          <span class="w-lebanese">ana</span>
+          <span class="w-english">I</span>
+        </div>
+        <div class="word-chip no-verb">
+          <span class="w-lebanese">—</span>
+          <span class="w-english">no "am"</span>
+        </div>
+        <div class="word-chip">
+          <span class="w-lebanese">min</span>
+          <span class="w-english">from</span>
+        </div>
+        <div class="word-chip">
+          <span class="w-lebanese">London</span>
+          <span class="w-english">London</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="arabic-script">هوَّ لبناني</div>
+      <div class="arabizi">houwwi lebnéni</div>
+      <div class="translation">He is Lebanese</div>
+      <div class="breakdown">
+        <div class="word-chip">
+          <span class="w-lebanese">houwwi</span>
+          <span class="w-english">he</span>
+        </div>
+        <div class="word-chip no-verb">
+          <span class="w-lebanese">—</span>
+          <span class="w-english">no "is"</span>
+        </div>
+        <div class="word-chip">
+          <span class="w-lebanese">lebnéni</span>
+          <span class="w-english">Lebanese</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="arabic-script">هيَّ معلّمة</div>
+      <div class="arabizi">hiyyi m3allmet</div>
+      <div class="translation">She is a teacher</div>
+      <div class="breakdown">
+        <div class="word-chip">
+          <span class="w-lebanese">hiyyi</span>
+          <span class="w-english">she</span>
+        </div>
+        <div class="word-chip no-verb">
+          <span class="w-lebanese">—</span>
+          <span class="w-english">no "is"</span>
+        </div>
+        <div class="word-chip">
+          <span class="w-lebanese">m3allmet</span>
+          <span class="w-english">teacher</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WARNING BOX -->
+  <div class="warning-box">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-content">
+      <div class="warn-label">Common mistake — introducing yourself</div>
+      <p>In English you say "I am called Sarah" — so learners often add <strong>ana</strong> before <strong>2ismi</strong>. Don't. The word <strong>2ismi</strong> already means "my name is" — the "my" is built in. Adding <strong>ana</strong> on top is redundant and unnatural.</p>
+      <div class="compare">
+        <div class="compare-row wrong">
+          <span class="mark">✗</span>
+          <span class="phrase">ana 2ismi Sarah</span>
+          <span class="label">— too much</span>
+        </div>
+        <div class="compare-row right">
+          <span class="mark">✓</span>
+          <span class="phrase">2ismi Sarah</span>
+          <span class="label">— natural Lebanese</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUIZ ── -->
+  <div class="section-divider"><span>Practice — 4 questions</span></div>
+
+  <div class="quiz-section">
+    <h3>Try it yourself</h3>
+    <p class="quiz-intro">Ungraded — no right or wrong to worry about. Check your answers instantly. Retake as many times as you like.</p>
+
+    <!-- Q1: MCQ -->
+    <div class="question-block" id="q1-block">
+      <div class="q-header">
+        <div class="q-number">1</div>
+        <div class="q-text">How do you say "I am from Beirut" in Lebanese?</div>
+      </div>
+      <div class="options" id="q1-options">
+        <button class="option-btn" data-q="1" data-correct="false">
+          <span class="option-letter">A</span>Ana houwwi min Beirut
+        </button>
+        <button class="option-btn" data-q="1" data-correct="true">
+          <span class="option-letter">B</span>Ana min Beirut
+        </button>
+        <button class="option-btn" data-q="1" data-correct="false">
+          <span class="option-letter">C</span>2ana mafi Beirut
+        </button>
+        <button class="option-btn" data-q="1" data-correct="false">
+          <span class="option-letter">D</span>Min Beirut 2ana hiyyi
+        </button>
+      </div>
+      <div class="feedback" id="q1-feedback"></div>
+    </div>
+
+    <!-- Q2: MCQ -->
+    <div class="question-block" id="q2-block">
+      <div class="q-header">
+        <div class="q-number">2</div>
+        <div class="q-text">Which sentence is correct Lebanese for "She is a teacher"?</div>
+      </div>
+      <div class="options" id="q2-options">
+        <button class="option-btn" data-q="2" data-correct="false">
+          <span class="option-letter">A</span>Hiyyi is m3allmet
+        </button>
+        <button class="option-btn" data-q="2" data-correct="false">
+          <span class="option-letter">B</span>Houwwi m3allmet
+        </button>
+        <button class="option-btn" data-q="2" data-correct="true">
+          <span class="option-letter">C</span>Hiyyi m3allmet
+        </button>
+        <button class="option-btn" data-q="2" data-correct="false">
+          <span class="option-letter">D</span>Hiyyi hiyyi m3allmet
+        </button>
+      </div>
+      <div class="feedback" id="q2-feedback"></div>
+    </div>
+
+    <!-- Q3: Fill in blank -->
+    <div class="question-block" id="q3-block">
+      <div class="q-header">
+        <div class="q-number">3</div>
+        <div class="q-text">Fill in the blank. What word is missing?</div>
+      </div>
+      <div class="q-arabic">هوَّ _____ لبناني</div>
+      <div class="fill-input-row">
+        <span class="fill-prefix">houwwi</span>
+        <input class="fill-input" id="q3-input" type="text" placeholder="type here" autocomplete="off" autocorrect="off" spellcheck="false">
+        <span class="fill-suffix">lebnéni</span>
+      </div>
+      <button class="check-btn" id="q3-check" onclick="checkFill(3, [], 'nothing')">Check</button>
+      <div class="feedback" id="q3-feedback"></div>
+    </div>
+
+    <!-- Q4: MCQ -->
+    <div class="question-block" id="q4-block">
+      <div class="q-header">
+        <div class="q-number">4</div>
+        <div class="q-text">Your name is Sarah and you want to introduce yourself. Which is the natural Lebanese way?</div>
+      </div>
+      <div class="options" id="q4-options">
+        <button class="option-btn" data-q="4" data-correct="false">
+          <span class="option-letter">A</span>2ana is Sarah
+        </button>
+        <button class="option-btn" data-q="4" data-correct="false">
+          <span class="option-letter">B</span>2ismi Sarah hiyyi
+        </button>
+        <button class="option-btn" data-q="4" data-correct="true">
+          <span class="option-letter">C</span>2ismi Sarah
+        </button>
+        <button class="option-btn" data-q="4" data-correct="false">
+          <span class="option-letter">D</span>Sarah 2ana min
+        </button>
+      </div>
+      <div class="feedback" id="q4-feedback"></div>
+    </div>
+
+    <!-- SCORE PANEL -->
+    <div class="score-panel" id="score-panel">
+      <div class="score-num" id="score-num">0/4</div>
+      <div class="score-label">questions correct</div>
+      <div class="score-message" id="score-message"></div>
+      <div class="score-sub" id="score-sub"></div>
+      <button class="retry-btn" onclick="retryQuiz()">Try again</button>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    Speaking Lebanese · A1 Beginner Survival · Lesson 1 — Greetings &amp; Introductions<br>
+    speakinglebanese.com
+  </div>
+
+</div>
+
+<script>
+  // ── STATE ──
+  const answers = { 1: null, 2: null, 4: null };
+  const correct = { 1: false, 2: false, 3: false, 4: false };
+  let totalAnswered = 0;
+
+  // ── MCQ HANDLER ──
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const q = this.dataset.q;
+      const isCorrect = this.dataset.correct === 'true';
+      const block = document.getElementById('q' + q + '-block');
+      const feedback = document.getElementById('q' + q + '-feedback');
+      const allOpts = document.querySelectorAll('[data-q="' + q + '"]');
+
+      // Disable all options for this question
+      allOpts.forEach(opt => {
+        opt.disabled = true;
+        if (opt.dataset.correct === 'true') opt.classList.add('correct');
+      });
+
+      if (!isCorrect) {
+        this.classList.add('incorrect');
+        block.classList.add('answered-wrong');
+        feedback.className = 'feedback fb-incorrect show';
+        feedback.innerHTML = '❌ Not quite — the correct answer is highlighted in green above.';
+        correct[q] = false;
+      } else {
+        block.classList.add('answered');
+        feedback.className = 'feedback fb-correct show';
+        if (q == '1') feedback.innerHTML = '✓ Correct. In Lebanese, "Ana min Beirut" — no word for "am" needed.';
+        if (q == '2') feedback.innerHTML = '✓ Correct. Hiyyi m3allmet — she is a teacher. No verb, no problem.';
+        if (q == '4') feedback.innerHTML = '✓ Correct. 2ismi Sarah — "my name is Sarah." Simple and natural.';
+        correct[q] = true;
+      }
+
+      answers[q] = true;
+      checkAllDone();
+    });
+  });
+
+  // ── FILL CHECK ──
+  function checkFill(q, accepted, specialCase) {
+    const input = document.getElementById('q' + q + '-input');
+    const val = input.value.trim().toLowerCase();
+    const block = document.getElementById('q' + q + '-block');
+    const feedback = document.getElementById('q' + q + '-feedback');
+    const btn = document.getElementById('q' + q + '-check');
+
+    if (!val) return;
+
+    // Q3: the blank represents the MISSING VERB — correct answer is nothing (empty / zero-copula)
+    // Accept: nothing, -, --, "nothing", "zero", blank concept explanations
+    // The WRONG thing is any verb like "is", "huwwe", "hiyyi" etc.
+    const emptyAnswers = ['', 'nothing', '-', '--', '–', 'zero', 'none', 'null', 'no verb', 'no word'];
+    const verbAnswers = ['is', 'are', 'am', 'huwwe', 'huwwi', 'hiyyi', 'huwa', 'هو', 'هي'];
+
+    let isCorrect = false;
+    let fbText = '';
+
+    if (emptyAnswers.includes(val)) {
+      isCorrect = true;
+      fbText = '✓ Exactly right — nothing goes there. In Lebanese, there is no word for "is" in this construction. The blank stays blank.';
+    } else if (verbAnswers.some(v => val.includes(v))) {
+      isCorrect = false;
+      fbText = '❌ In Lebanese, you don\'t need a word for "is" here. The sentence is: <strong>houwwi lebnéni</strong> — no verb between the pronoun and the description.';
+    } else {
+      isCorrect = false;
+      fbText = '❌ Think about the zero-copula — the correct answer is that <em>nothing</em> goes there. The sentence is complete as: <strong>houwwi lebnéni</strong>.';
+    }
+
+    input.disabled = true;
+    btn.disabled = true;
+    correct[q] = isCorrect;
+
+    if (isCorrect) {
+      input.classList.add('correct-input');
+      block.classList.add('answered');
+      feedback.className = 'feedback fb-correct show';
+    } else {
+      input.classList.add('incorrect-input');
+      block.classList.add('answered-wrong');
+      feedback.className = 'feedback fb-incorrect show';
+    }
+    feedback.innerHTML = fbText;
+
+    answers[3] = true;
+    checkAllDone();
+  }
+
+  // Handle Enter key on fill input
+  document.getElementById('q3-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      document.getElementById('q3-check').click();
+    }
+  });
+
+  // ── CHECK ALL DONE ──
+  function checkAllDone() {
+    const done = answers[1] && answers[2] && answers[3] && answers[4];
+    if (!done) return;
+
+    const total = Object.values(correct).filter(Boolean).length;
+    const panel = document.getElementById('score-panel');
+    const scoreNum = document.getElementById('score-num');
+    const scoreMsg = document.getElementById('score-message');
+    const scoreSub = document.getElementById('score-sub');
+
+    scoreNum.textContent = total + '/4';
+    panel.classList.add('show');
+
+    if (total === 4) {
+      scoreMsg.textContent = 'Perfect — you have the zero-copula.';
+      scoreSub.textContent = 'This rule will appear in every single lesson. Getting it now is a big deal.';
+    } else if (total >= 3) {
+      scoreMsg.textContent = 'Good work — the pattern is forming.';
+      scoreSub.textContent = 'Review the questions you missed, then move on. This rule will get easier through repetition.';
+    } else if (total >= 2) {
+      scoreMsg.textContent = 'Getting there — try once more.';
+      scoreSub.textContent = 'The zero-copula is a new concept for English speakers. Another pass will help it stick.';
+    } else {
+      scoreMsg.textContent = 'This one takes a moment — give it another try.';
+      scoreSub.textContent = 'Go back and re-read the examples, then come back to the questions.';
+    }
+  }
+
+  // ── RETRY ──
+  function retryQuiz() {
+    // Reset answer state
+    answers[1] = null; answers[2] = null; answers[3] = null; answers[4] = null;
+    correct[1] = false; correct[2] = false; correct[3] = false; correct[4] = false;
+
+    // Reset MCQ blocks
+    [1, 2, 4].forEach(q => {
+      const block = document.getElementById('q' + q + '-block');
+      block.classList.remove('answered', 'answered-wrong');
+      document.getElementById('q' + q + '-feedback').className = 'feedback';
+      document.querySelectorAll('[data-q="' + q + '"]').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'incorrect');
+      });
+    });
+
+    // Reset fill block
+    const fillInput = document.getElementById('q3-input');
+    const fillBlock = document.getElementById('q3-block');
+    fillInput.value = '';
+    fillInput.disabled = false;
+    fillInput.classList.remove('correct-input', 'incorrect-input');
+    fillBlock.classList.remove('answered', 'answered-wrong');
+    document.getElementById('q3-feedback').className = 'feedback';
+    document.getElementById('q3-check').disabled = false;
+
+    // Hide score
+    document.getElementById('score-panel').classList.remove('show');
+
+    // Scroll back to quiz
+    document.querySelector('.quiz-section').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
