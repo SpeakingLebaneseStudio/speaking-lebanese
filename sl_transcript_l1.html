@@ -3,140 +3,408 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dialogue Transcript — Tante Mona's Call</title>
+<title>Speaking Lebanese — Dialogue Transcript — Lesson 1</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --red: #D20014;
-    --black: #0A0A0A;
-    --cream: #FAF8F4;
-    --off-white: #F2EDE6;
-    --grey: #888888;
-    --grey-light: #E0DAD3;
+    --red:        #D20014;
+    --red-dark:   #A8000F;
+    --red-tint:   #FAE6E6;
+    --black:      #0A0A0A;
+    --cream:      #FAF8F4;
+    --green:      #008228;
+    --green-tint: #E8F5ED;
+    --grey-mid:   #666666;
+    --grey-light: #EBEBEB;
+    --white:      #FFFFFF;
   }
-  body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--black); margin: 0; padding: 0; }
-  .header { background: var(--cream); padding: 26px 36px 20px; border-bottom: 2px solid var(--off-white); }
-  .header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 6px; }
-  .header h1 { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 26px; color: var(--black); line-height: 1.2; margin-bottom: 5px; }
-  .header h1 span { color: var(--red); }
-  .header .subtitle { font-size: 13px; font-weight: 400; color: var(--grey); }
+  body {
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--black);
+    line-height: 1.65;
+    padding: 0 0 48px;
+  }
 
-  /* Audio player */
-  .audio-section { background: var(--off-white); border-bottom: 1px solid var(--grey-light); padding: 16px 36px; display: flex; align-items: center; gap: 16px; }
-  .play-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--red); border: none; color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity 0.15s; }
-  .play-btn:hover { opacity: 0.85; }
+  /* HEADER */
+  .lesson-header {
+    background: var(--cream);
+    border-bottom: 1px solid var(--grey-light);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .lesson-header .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--grey-mid);
+  }
+  .lesson-header .divider { width: 1px; height: 22px; background: var(--grey-light); }
+  .lesson-header .title { font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 15px; color: var(--black); }
+  .lesson-header .activity-badge {
+    margin-left: auto; background: var(--red); color: var(--white);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 2px;
+  }
+
+  .container { max-width: 740px; margin: 0 auto; padding: 0 24px; }
+
+  /* INTRO */
+  .intro { padding: 32px 0 24px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+  .intro h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 26px; line-height: 1.25; margin-bottom: 14px; }
+  .intro p { font-size: 15px; color: #444; margin-bottom: 10px; }
+
+  /* AUDIO PLAYER */
+  .audio-block {
+    background: var(--black); border-radius: 8px; padding: 18px 22px;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+  }
+  .play-btn {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--red);
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s;
+  }
+  .play-btn:hover { background: var(--red-dark); }
+  .play-btn svg { fill: white; margin-left: 3px; }
+  .play-btn.playing svg.play-icon { display: none; }
+  .play-btn.playing svg.pause-icon { display: block !important; }
   .audio-info { flex: 1; }
-  .audio-info .audio-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 2px; }
-  .audio-info .audio-sub { font-size: 12px; color: var(--grey); }
-  .audio-time { font-size: 12px; color: var(--grey); font-variant-numeric: tabular-nums; min-width: 70px; text-align: right; }
-  .progress-wrap { flex: 1; height: 4px; background: var(--grey-light); border-radius: 2px; cursor: pointer; position: relative; }
-  .progress-bar { height: 100%; background: var(--red); border-radius: 2px; width: 0%; transition: width 0.1s linear; pointer-events: none; }
+  .audio-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .audio-sub { font-size: 12px; color: #888; }
+  .progress-wrap { flex: 2; display: flex; flex-direction: column; gap: 6px; }
+  .progress-bar-track {
+    height: 4px; background: #333; border-radius: 2px; cursor: pointer; position: relative;
+  }
+  .progress-bar-fill { height: 100%; background: var(--red); border-radius: 2px; width: 0%; transition: width 0.1s linear; pointer-events: none; }
+  .time-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
 
-  .context-strip { background: var(--off-white); border-bottom: 1px solid var(--grey-light); padding: 11px 36px; }
-  .context-strip p { font-size: 13px; color: var(--grey); font-style: italic; line-height: 1.4; }
-  .context-strip strong { color: var(--black); font-style: normal; font-weight: 700; }
-  .transcript { padding: 8px 36px 48px; max-width: 680px; margin: 0 auto; }
-  .exchange { padding: 22px 0; border-bottom: 1px solid var(--grey-light); }
-  .exchange:last-child { border-bottom: none; }
-  .exchange-number { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--red); margin-bottom: 7px; display: flex; align-items: center; gap: 8px; }
-  .exchange-number::after { content: ''; flex: 1; height: 1px; background: var(--grey-light); }
-  .arabizi { font-weight: 700; font-size: 16px; color: var(--black); line-height: 1.6; margin-bottom: 5px; }
-  .arabizi .s { color: var(--red); }
-  .english { font-weight: 400; font-size: 14px; color: var(--grey); line-height: 1.6; font-style: italic; padding-left: 14px; border-left: 2px solid var(--grey-light); margin-bottom: 8px; }
-  .vocab-note { display: inline-block; background: #fff; border: 1px solid var(--grey-light); border-left: 3px solid var(--black); border-radius: 3px; padding: 5px 10px; font-size: 12px; color: var(--grey); }
-  .vocab-note strong { color: var(--black); font-weight: 700; }
-  .bottom-bar { background: var(--off-white); border-top: 1px solid var(--grey-light); padding: 11px 36px; display: flex; justify-content: space-between; align-items: center; }
-  .bottom-bar span { font-size: 12px; color: var(--grey); }
-  @media (max-width: 480px) { .header, .audio-section, .context-strip, .bottom-bar { padding-left: 18px; padding-right: 18px; } .transcript { padding: 8px 18px 36px; } .header h1 { font-size: 22px; } .audio-section { flex-wrap: wrap; } .progress-wrap { width: 100%; order: 3; } }
+  /* LANGUAGE TABS */
+  .lang-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid var(--grey-light); }
+  .lang-tab {
+    padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; background: none; color: var(--grey-mid);
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .lang-tab.active { color: var(--red); border-bottom-color: var(--red); }
+  .lang-tab:hover:not(.active) { color: var(--black); }
+
+  /* TRANSCRIPT PANELS */
+  .transcript-panel { display: none; }
+  .transcript-panel.active { display: block; }
+
+  /* LINE BLOCKS */
+  .line-block {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--grey-light);
+    align-items: start;
+  }
+  .line-block:last-child { border-bottom: none; }
+  .line-num {
+    font-size: 11px; color: var(--grey-light); font-weight: 600;
+    padding-top: 3px; text-align: right;
+  }
+  .line-content {}
+  .line-arabic {
+    font-size: 20px; direction: rtl; text-align: right;
+    color: var(--black); line-height: 1.6; margin-bottom: 4px;
+  }
+  .line-arabizi {
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    font-size: 17px; color: var(--red); margin-bottom: 3px;
+  }
+  .line-translation { font-size: 14px; color: var(--grey-mid); }
+  .line-french { font-size: 14px; color: #555; font-style: italic; }
+
+  /* VOCAB NOTES */
+  .section-divider {
+    display: flex; align-items: center; gap: 14px; margin: 28px 0 20px;
+  }
+  .section-divider span {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--grey-mid); white-space: nowrap;
+  }
+  .section-divider::before, .section-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--grey-light);
+  }
+  .vocab-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .vocab-card {
+    background: var(--white); border: 1px solid var(--grey-light);
+    border-left: 4px solid var(--red); border-radius: 6px;
+    padding: 12px 16px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 8px 16px; align-items: center;
+  }
+  @media (max-width: 560px) { .vocab-card { grid-template-columns: 1fr 1fr; } }
+  .vc-arabizi { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; color: var(--red); }
+  .vc-arabic { font-size: 18px; direction: rtl; text-align: right; color: var(--black); }
+  .vc-english { font-size: 14px; color: var(--black); }
+  .vc-french { font-size: 13px; color: var(--grey-mid); font-style: italic; }
+
+  /* FOOTER */
+  .page-footer {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--grey-light);
+    text-align: center; font-size: 12px; color: var(--grey-mid); letter-spacing: 0.05em;
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="eyebrow">A1 Beginner Survival — Lesson 1 — Dialogue Transcript</div>
-  <h1>Tante <span>Mona's</span> Call</h1>
-  <div class="subtitle">Listen along. Arabizi first, English below.</div>
+<div class="lesson-header">
+  <div><div class="eyebrow">A1 — Beginner Survival · Lesson 1</div></div>
+  <div class="divider"></div>
+  <div class="title">Greetings &amp; Introductions</div>
+  <div class="activity-badge">Activity 8</div>
 </div>
 
-<div class="audio-section">
-  <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-  <div class="audio-info">
-    <div class="audio-title">Tante Mona's Call — Full Recording</div>
-    <div class="audio-sub">Press play to listen along as you read</div>
-  </div>
-  <div class="progress-wrap" id="progressWrap" onclick="seekAudio(event)">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
-  <div class="audio-time" id="audioTime">0:00 / 0:00</div>
-</div>
+<div class="container">
 
-<div class="context-strip">
-  <p><strong>Setting:</strong> A voicemail from Tante Mona, calling from Jounieh. She hasn't heard from you in a while.</p>
-</div>
+  <div class="intro">
+    <div class="section-label">Dialogue Transcript</div>
+    <h2>Tante Mona's Call</h2>
+    <p>A voicemail from Tante Mona. She's calling from Jounieh. You haven't spoken in a while — she makes sure you know it. Listen first, then read along below.</p>
+    <p>This is real Lebanese. Every word is exactly how someone from Lebanon would say it.</p>
+  </div>
 
-<div class="transcript">
-  <div class="exchange">
-    <div class="exchange-number">01</div>
-    <div class="arabizi">Allo? Allo!</div>
-    <div class="english">Hello? Hello!</div>
+  <!-- AUDIO PLAYER -->
+  <div class="audio-block">
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">
+      <svg class="play-icon" width="18" height="18" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg class="pause-icon" width="18" height="18" viewBox="0 0 24 24" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+    </button>
+    <div class="audio-info">
+      <div class="audio-title">Tante Mona's Call</div>
+      <div class="audio-sub">A1 · Lesson 1 · Listening</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-track" id="progressTrack" onclick="seekAudio(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="time-row">
+        <span id="timeElapsed">0:00</span>
+        <span id="timeDuration">—</span>
+      </div>
+    </div>
   </div>
-  <div class="exchange">
-    <div class="exchange-number">02</div>
-    <div class="arabizi"><span class="s">2</span>ana Tante Mona! <span class="s">3</span>am be<span class="s">7</span>keek min Jounieh, eh eh, <span class="s">2</span>ana hiyyi Mona, Mona Khoury!</div>
-    <div class="english">I'm Aunt Mona! I'm calling you from Jounieh, yes yes, it's me — Mona, Mona Khoury!</div>
-    <div class="vocab-note"><strong>3am be7keek</strong> — I'm calling you</div>
-  </div>
-  <div class="exchange">
-    <div class="exchange-number">03</div>
-    <div class="arabizi">Keefak <span class="s">2</span>enta? Nchallah mnee<span class="s">7</span>? El <span class="s">7</span>amdellah <span class="s">2</span>ana mnee<span class="s">7</span>a, merci!</div>
-    <div class="english">How are you? Are you well? Thank God I'm fine, thank you!</div>
-    <div class="vocab-note"><strong>El 7amdellah</strong> — Thank God (standard response to "how are you")</div>
-  </div>
-  <div class="exchange">
-    <div class="exchange-number">04</div>
-    <div class="arabizi">Zamén ma smi<span class="s">3</span>na sawtak! Walla zamén! Killna hown, killna <span class="s">3</span>am nes<span class="s">2</span>al <span class="s">3</span>annak!</div>
-    <div class="english">It's been so long since we heard your voice! Really so long! We're all here, everyone's asking about you!</div>
-    <div class="vocab-note"><strong>Walla</strong> — really / I swear (emphatic)</div>
-  </div>
-  <div class="exchange">
-    <div class="exchange-number">05</div>
-    <div class="arabizi">Yalla, <span class="s">2</span>ahlan wa sahlan feek deyman — beitna houwwi beitak! Ta<span class="s">3</span>a la <span class="s">3</span>inna! Walla, kteer min<span class="s">7</span>ebb nchoufak, <span class="s">3</span>an jadd, kteer!</div>
-    <div class="english">Come on, you're always welcome — our home is your home! Come over, we'd love to see you so much, really!</div>
-    <div class="vocab-note"><strong>2ahlan wa sahlan</strong> — you are most welcome</div>
-  </div>
-  <div class="exchange">
-    <div class="exchange-number">06</div>
-    <div class="arabizi">Min fadlak bass feek, <span class="s">2</span>ittossil fiyyi — <span class="s">2</span>ana natritak, ok? Yalla!</div>
-    <div class="english">Please, just call me back — I'm waiting for you!</div>
-    <div class="vocab-note"><strong>2ittossil</strong> — call (imperative) / <strong>natritak</strong> — I'm waiting for you</div>
-  </div>
-  <div class="exchange">
-    <div class="exchange-number">07</div>
-    <div class="arabizi">Yalla bye <span class="s">7</span>abibi, <span class="s">3</span>afwan <span class="s">2</span>iza <span class="s">2</span>az<span class="s">3</span>ajtak. Ma<span class="s">3</span> el salémet! Shoukran!</div>
-    <div class="english">Okay bye habibi, sorry if I bothered you. Take care! Thank you!</div>
-    <div class="vocab-note"><strong>7abibi</strong> — my love / darling (term of endearment)</div>
-  </div>
-  <div class="exchange">
-    <div class="exchange-number">08</div>
-    <div class="arabizi">Ahhh w kamén, sallim, sallim kteer <span class="s">3</span>al ahl killon!</div>
-    <div class="english">And also, give my warmest regards to all the family!</div>
-    <div class="vocab-note"><strong>Sallim 3al ahl</strong> — give my regards to the family</div>
-  </div>
-</div>
+  <audio id="audioPlayer" src="https://speakinglebanesestudio.github.io/speaking-lebanese/A1_L1_listening.m4a.mp3"></audio>
 
-<div class="bottom-bar">
-  <span>Speaking Lebanese — A1 Lesson 1 — Dialogue Transcript</span>
-  <span>speakinglebanese.com</span>
-</div>
+  <!-- LANGUAGE TABS -->
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('tri')">Lebanese + English + French</button>
+    <button class="lang-tab" onclick="showLang('leb')">Lebanese only</button>
+    <button class="lang-tab" onclick="showLang('en')">English only</button>
+    <button class="lang-tab" onclick="showLang('fr')">Français</button>
+  </div>
+
+  <!-- TRILINGUAL TRANSCRIPT -->
+  <div class="transcript-panel active" id="panel-tri">
+
+    <div class="line-block">
+      <div class="line-num">1</div>
+      <div class="line-content">
+        <div class="line-arabic">ألو؟ ألو؟</div>
+        <div class="line-arabizi">Allô? Allô?</div>
+        <div class="line-translation">Hello? Hello?</div>
+        <div class="line-french">Allô ? Allô ?</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">2</div>
+      <div class="line-content">
+        <div class="line-arabic">أنا عمّة مونا.</div>
+        <div class="line-arabizi">Ana 3ammet Mona.</div>
+        <div class="line-translation">I am Auntie Mona.</div>
+        <div class="line-french">Je suis tante Mona.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">3</div>
+      <div class="line-content">
+        <div class="line-arabic">عم بكلّك من جونيه.</div>
+        <div class="line-arabizi">3am bkallak min Jounieh.</div>
+        <div class="line-translation">I'm calling you from Jounieh.</div>
+        <div class="line-french">Je t'appelle depuis Jounieh.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">4</div>
+      <div class="line-content">
+        <div class="line-arabic">إيه، إيه، أنا مونا، مونا خوري.</div>
+        <div class="line-arabizi">Eh, eh, ana Mona, Mona Khoury.</div>
+        <div class="line-translation">Yes, yes, it's me, Mona, Mona Khoury.</div>
+        <div class="line-french">Oui, oui, c'est moi, Mona, Mona Khoury.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">5</div>
+      <div class="line-content">
+        <div class="line-arabic">كيفَك؟ يسلّم ربّك!</div>
+        <div class="line-arabizi">Keefak? Yisallim rabbak!</div>
+        <div class="line-translation">How are you? God bless you!</div>
+        <div class="line-french">Comment vas-tu ? J'espère que tu vas bien !</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">6</div>
+      <div class="line-content">
+        <div class="line-arabic">الحمدلله منيح، شكراً.</div>
+        <div class="line-arabizi">El 7amdellah mnee7, shoukran.</div>
+        <div class="line-translation">Thank God, fine. Thank you.</div>
+        <div class="line-french">Dieu merci, je vais bien. Merci.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">7</div>
+      <div class="line-content">
+        <div class="line-arabic">كتير صار وقت ما سمعت صوتك. والله كتير.</div>
+        <div class="line-arabizi">Ktir sar wa2et ma sme3et sawtik. Walla ktir.</div>
+        <div class="line-translation">It's been so long since I heard your voice. I swear, really long.</div>
+        <div class="line-french">Ça fait longtemps que je n'ai pas entendu ta voix. Je te jure, ça fait vraiment longtemps.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">8</div>
+      <div class="line-content">
+        <div class="line-arabic">كلّنا هون، كلّنا عم نفكّر فيك. يلّا تعا. دايماً مرحّب فيك. بيتنا بيتك. تعا شوفنا. كتير بدّنا نشوفك. كتير.</div>
+        <div class="line-arabizi">Killna houn, killna 3am nfakkar fik. Yalla ta3a. Daymen mar7aba fik. Betna betak. Ta3a shufna. Ktir baddna nshufak. Ktir.</div>
+        <div class="line-translation">We're all here, we all think of you. Come on, come. You are always welcome. Our house is your house. Come and see us. We really want to see you. Really, a lot.</div>
+        <div class="line-french">On est tous là, on pense tous à toi. Allez, viens. Tu es toujours le bienvenu. Notre maison est ta maison. Viens nous voir. On a vraiment envie de te voir. Vraiment, beaucoup.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">9</div>
+      <div class="line-content">
+        <div class="line-arabic">من فضلك، إذا فيك، كلّمني. عم استنّاك. تمام؟</div>
+        <div class="line-arabizi">Mn fadlak, iza fik, kallimni. 3am estannak. Tamém?</div>
+        <div class="line-translation">Please, if you can, call me. I'm waiting for you. Okay?</div>
+        <div class="line-french">S'il te plaît, si tu peux, appelle-moi. Je t'attends. D'accord ?</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">10</div>
+      <div class="line-content">
+        <div class="line-arabic">يلّا، يلّا، حبيبي، آسفة إذا زعجتك. مع السلامة. مع السلامة.</div>
+        <div class="line-arabizi">Yalla, yalla, 7abibi, aasfet iza za3ajtik. Ma3 el salémet. Ma3 el salémet.</div>
+        <div class="line-translation">Alright, alright, dear, sorry if I bothered you. Goodbye. Goodbye.</div>
+        <div class="line-french">Allez, allez, mon cher, désolée si je t'ai dérangé. Au revoir. Au revoir.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">11</div>
+      <div class="line-content">
+        <div class="line-arabic">شكراً.</div>
+        <div class="line-arabizi">Shoukran.</div>
+        <div class="line-translation">Thank you.</div>
+        <div class="line-french">Merci.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">12</div>
+      <div class="line-content">
+        <div class="line-arabic">آه، وكمان، سلّم، سلّم عَ كل العيلة.</div>
+        <div class="line-arabizi">Ah, w kaman, sallim, sallim 3a kil el 3aylet.</div>
+        <div class="line-translation">Oh, and also, say hi, say hi to all the family.</div>
+        <div class="line-french">Ah, et aussi, dis bonjour, dis bonjour à toute la famille.</div>
+      </div>
+    </div>
+
+  </div><!-- end panel-tri -->
+
+  <!-- LEBANESE ONLY -->
+  <div class="transcript-panel" id="panel-leb">
+    <div class="line-block"><div class="line-num">1</div><div class="line-content"><div class="line-arabic">ألو؟ ألو؟</div><div class="line-arabizi">Allô? Allô?</div></div></div>
+    <div class="line-block"><div class="line-num">2</div><div class="line-content"><div class="line-arabic">أنا عمّة مونا.</div><div class="line-arabizi">Ana 3ammet Mona.</div></div></div>
+    <div class="line-block"><div class="line-num">3</div><div class="line-content"><div class="line-arabic">عم بكلّك من جونيه.</div><div class="line-arabizi">3am bkallak min Jounieh.</div></div></div>
+    <div class="line-block"><div class="line-num">4</div><div class="line-content"><div class="line-arabic">إيه، إيه، أنا مونا، مونا خوري.</div><div class="line-arabizi">Eh, eh, ana Mona, Mona Khoury.</div></div></div>
+    <div class="line-block"><div class="line-num">5</div><div class="line-content"><div class="line-arabic">كيفَك؟ يسلّم ربّك!</div><div class="line-arabizi">Keefak? Yisallim rabbak!</div></div></div>
+    <div class="line-block"><div class="line-num">6</div><div class="line-content"><div class="line-arabic">الحمدلله منيح، شكراً.</div><div class="line-arabizi">El 7amdellah mnee7, shoukran.</div></div></div>
+    <div class="line-block"><div class="line-num">7</div><div class="line-content"><div class="line-arabic">كتير صار وقت ما سمعت صوتك. والله كتير.</div><div class="line-arabizi">Ktir sar wa2et ma sme3et sawtik. Walla ktir.</div></div></div>
+    <div class="line-block"><div class="line-num">8</div><div class="line-content"><div class="line-arabic">كلّنا هون، كلّنا عم نفكّر فيك. يلّا تعا. دايماً مرحّب فيك. بيتنا بيتك. تعا شوفنا. كتير بدّنا نشوفك. كتير.</div><div class="line-arabizi">Killna houn, killna 3am nfakkar fik. Yalla ta3a. Daymen mar7aba fik. Betna betak. Ta3a shufna. Ktir baddna nshufak. Ktir.</div></div></div>
+    <div class="line-block"><div class="line-num">9</div><div class="line-content"><div class="line-arabic">من فضلك، إذا فيك، كلّمني. عم استنّاك. تمام؟</div><div class="line-arabizi">Mn fadlak, iza fik, kallimni. 3am estannak. Tamém?</div></div></div>
+    <div class="line-block"><div class="line-num">10</div><div class="line-content"><div class="line-arabic">يلّا، يلّا، حبيبي، آسفة إذا زعجتك. مع السلامة. مع السلامة.</div><div class="line-arabizi">Yalla, yalla, 7abibi, aasfet iza za3ajtik. Ma3 el salémet. Ma3 el salémet.</div></div></div>
+    <div class="line-block"><div class="line-num">11</div><div class="line-content"><div class="line-arabic">شكراً.</div><div class="line-arabizi">Shoukran.</div></div></div>
+    <div class="line-block"><div class="line-num">12</div><div class="line-content"><div class="line-arabic">آه، وكمان، سلّم، سلّم عَ كل العيلة.</div><div class="line-arabizi">Ah, w kaman, sallim, sallim 3a kil el 3aylet.</div></div></div>
+  </div>
+
+  <!-- ENGLISH ONLY -->
+  <div class="transcript-panel" id="panel-en">
+    <div class="line-block"><div class="line-num">1</div><div class="line-content"><div class="line-translation" style="font-size:16px">Hello? Hello?</div></div></div>
+    <div class="line-block"><div class="line-num">2</div><div class="line-content"><div class="line-translation" style="font-size:16px">I am Auntie Mona.</div></div></div>
+    <div class="line-block"><div class="line-num">3</div><div class="line-content"><div class="line-translation" style="font-size:16px">I'm calling you from Jounieh.</div></div></div>
+    <div class="line-block"><div class="line-num">4</div><div class="line-content"><div class="line-translation" style="font-size:16px">Yes, yes, it's me, Mona, Mona Khoury.</div></div></div>
+    <div class="line-block"><div class="line-num">5</div><div class="line-content"><div class="line-translation" style="font-size:16px">How are you? God bless you!</div></div></div>
+    <div class="line-block"><div class="line-num">6</div><div class="line-content"><div class="line-translation" style="font-size:16px">Thank God, fine. Thank you.</div></div></div>
+    <div class="line-block"><div class="line-num">7</div><div class="line-content"><div class="line-translation" style="font-size:16px">It's been so long since I heard your voice. I swear, really long.</div></div></div>
+    <div class="line-block"><div class="line-num">8</div><div class="line-content"><div class="line-translation" style="font-size:16px">We're all here, we all think of you. Come on, come. You are always welcome. Our house is your house. Come and see us. We really want to see you. Really, a lot.</div></div></div>
+    <div class="line-block"><div class="line-num">9</div><div class="line-content"><div class="line-translation" style="font-size:16px">Please, if you can, call me. I'm waiting for you. Okay?</div></div></div>
+    <div class="line-block"><div class="line-num">10</div><div class="line-content"><div class="line-translation" style="font-size:16px">Alright, alright, dear, sorry if I bothered you. Goodbye. Goodbye.</div></div></div>
+    <div class="line-block"><div class="line-num">11</div><div class="line-content"><div class="line-translation" style="font-size:16px">Thank you.</div></div></div>
+    <div class="line-block"><div class="line-num">12</div><div class="line-content"><div class="line-translation" style="font-size:16px">Oh, and also, say hi, say hi to all the family.</div></div></div>
+  </div>
+
+  <!-- FRENCH ONLY -->
+  <div class="transcript-panel" id="panel-fr">
+    <div class="line-block"><div class="line-num">1</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Allô ? Allô ?</div></div></div>
+    <div class="line-block"><div class="line-num">2</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Je suis tante Mona.</div></div></div>
+    <div class="line-block"><div class="line-num">3</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Je t'appelle depuis Jounieh.</div></div></div>
+    <div class="line-block"><div class="line-num">4</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Oui, oui, c'est moi, Mona, Mona Khoury.</div></div></div>
+    <div class="line-block"><div class="line-num">5</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Comment vas-tu ? J'espère que tu vas bien !</div></div></div>
+    <div class="line-block"><div class="line-num">6</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Dieu merci, je vais bien. Merci.</div></div></div>
+    <div class="line-block"><div class="line-num">7</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Ça fait longtemps que je n'ai pas entendu ta voix. Je te jure, ça fait vraiment longtemps.</div></div></div>
+    <div class="line-block"><div class="line-num">8</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">On est tous là, on pense tous à toi. Allez, viens. Tu es toujours le bienvenu. Notre maison est ta maison. Viens nous voir. On a vraiment envie de te voir. Vraiment, beaucoup.</div></div></div>
+    <div class="line-block"><div class="line-num">9</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">S'il te plaît, si tu peux, appelle-moi. Je t'attends. D'accord ?</div></div></div>
+    <div class="line-block"><div class="line-num">10</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Allez, allez, mon cher, désolée si je t'ai dérangé. Au revoir. Au revoir.</div></div></div>
+    <div class="line-block"><div class="line-num">11</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Merci.</div></div></div>
+    <div class="line-block"><div class="line-num">12</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Ah, et aussi, dis bonjour, dis bonjour à toute la famille.</div></div></div>
+  </div>
+
+  <!-- VOCAB NOTES -->
+  <div class="section-divider"><span>Vocab in this dialogue</span></div>
+  <div class="vocab-grid">
+    <div class="vocab-card"><div class="vc-arabizi">mar7aba</div><div class="vc-arabic">مَرْحَبا</div><div class="vc-english">hello / hi</div><div class="vc-french">bonjour / salut</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">keefak?</div><div class="vc-arabic">كِيفَك؟</div><div class="vc-english">how are you (m)</div><div class="vc-french">comment vas-tu?</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">el 7amdellah</div><div class="vc-arabic">الحَمْدِلله</div><div class="vc-english">thank God / fine thanks</div><div class="vc-french">grâce à Dieu</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">mnee7</div><div class="vc-arabic">مْنِيح</div><div class="vc-english">good / fine</div><div class="vc-french">bien</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">shoukran</div><div class="vc-arabic">شُكْراً</div><div class="vc-english">thank you</div><div class="vc-french">merci</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">aasfet</div><div class="vc-arabic">آسْفَة</div><div class="vc-english">sorry (f)</div><div class="vc-french">désolée</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">ma3 el salémet</div><div class="vc-arabic">مَع السَّلامَة</div><div class="vc-english">goodbye (go safely)</div><div class="vc-french">au revoir</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">yalla</div><div class="vc-arabic">يَلَّا</div><div class="vc-english">come on / let's go</div><div class="vc-french">allez</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">mn fadlak</div><div class="vc-arabic">مِن فَضْلَك</div><div class="vc-english">please (m)</div><div class="vc-french">s'il te plaît</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">tamém</div><div class="vc-arabic">تَمَام</div><div class="vc-english">okay / alright</div><div class="vc-french">d'accord</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">sallim</div><div class="vc-arabic">سَلِّم</div><div class="vc-english">say hi to… (m)</div><div class="vc-french">passe le bonjour à…</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">3aylet</div><div class="vc-arabic">عَيْلَة</div><div class="vc-english">family</div><div class="vc-french">famille</div></div>
+  </div>
+
+  <div class="page-footer">
+    Speaking Lebanese · A1 Beginner Survival · Lesson 1 — Greetings &amp; Introductions<br>
+    speakinglebanese.com
+  </div>
+
+</div><!-- end container -->
 
 <script>
-  const audio = new Audio('A1_L1_listening.m4a.mp3');
+  const audio = document.getElementById('audioPlayer');
   const playBtn = document.getElementById('playBtn');
-  const progressBar = document.getElementById('progressBar');
-  const progressWrap = document.getElementById('progressWrap');
-  const audioTime = document.getElementById('audioTime');
-  let playing = false;
+  const progressFill = document.getElementById('progressFill');
+  const timeElapsed = document.getElementById('timeElapsed');
+  const timeDuration = document.getElementById('timeDuration');
 
   function fmt(s) {
     const m = Math.floor(s / 60);
@@ -144,25 +412,45 @@
     return m + ':' + (sec < 10 ? '0' : '') + sec;
   }
 
-  function togglePlay() {
-    if (playing) { audio.pause(); playBtn.textContent = '▶'; playing = false; }
-    else { audio.play(); playBtn.textContent = '■'; playing = true; }
-  }
-
-  audio.addEventListener('timeupdate', () => {
-    if (audio.duration) {
-      progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
-      audioTime.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
-    }
+  audio.addEventListener('loadedmetadata', () => {
+    timeDuration.textContent = fmt(audio.duration);
   });
 
-  audio.addEventListener('ended', () => { playBtn.textContent = '▶'; playing = false; progressBar.style.width = '0%'; });
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = pct + '%';
+    timeElapsed.textContent = fmt(audio.currentTime);
+  });
+
+  audio.addEventListener('ended', () => {
+    playBtn.classList.remove('playing');
+    progressFill.style.width = '0%';
+    timeElapsed.textContent = '0:00';
+  });
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play();
+      playBtn.classList.add('playing');
+    } else {
+      audio.pause();
+      playBtn.classList.remove('playing');
+    }
+  }
 
   function seekAudio(e) {
-    if (!audio.duration) return;
-    const rect = progressWrap.getBoundingClientRect();
+    const track = document.getElementById('progressTrack');
+    const rect = track.getBoundingClientRect();
     const pct = (e.clientX - rect.left) / rect.width;
     audio.currentTime = pct * audio.duration;
+  }
+
+  function showLang(lang) {
+    document.querySelectorAll('.transcript-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + lang).classList.add('active');
+    event.target.classList.add('active');
   }
 </script>
 </body>
