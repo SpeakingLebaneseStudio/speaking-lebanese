@@ -379,21 +379,45 @@ const SECTIONS = [
 ];
 
 // ── AUDIO ──
+// Files may be uploaded with different suffix patterns depending on how GitHub/Voice Memos
+// exported them. We try each candidate in order and use the first one that actually loads.
 let currentAudio = null;
 let currentBtn   = null;
+function buildAudioCandidates(file) {
+  // file = 'A1_L1_vocab_01_mar7aba.m4a' (base form stored in WORDS)
+  const base = file.replace(/\.m4a$/, ''); // 'A1_L1_vocab_01_mar7aba'
+  return [
+    base + '.m4a',        // clean form
+    base + '_m4a.mp4',    // observed pattern: underscore + mp4
+    base + '_m4a.mp3',    // observed pattern: underscore + mp3
+    base + '.m4a.mp4',    // legacy double-dot form (older pronunciation files)
+    base + '.m4a.mp3',    // legacy double-dot form
+  ];
+}
 function playAudio(file, btn) {
   if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
   if (currentBtn)   { currentBtn.classList.remove('playing'); currentBtn.innerHTML = playIcon() + ' Play'; }
   if (!file) return;
-  const audio = new Audio(BASE + file);
-  currentAudio = audio;
+  const candidates = buildAudioCandidates(file);
   currentBtn = btn;
   if (btn) { btn.classList.add('playing'); btn.innerHTML = playIcon() + ' Playing…'; }
-  audio.play().catch(() => {});
-  audio.onended = () => {
+  tryNextCandidate(candidates, 0, btn);
+}
+function tryNextCandidate(candidates, idx, btn) {
+  if (idx >= candidates.length) {
     if (btn) { btn.classList.remove('playing'); btn.innerHTML = playIcon() + ' Play'; }
     currentAudio = null; currentBtn = null;
-  };
+    return;
+  }
+  const audio = new Audio(BASE + candidates[idx]);
+  currentAudio = audio;
+  audio.addEventListener('error', () => tryNextCandidate(candidates, idx + 1, btn), { once: true });
+  audio.play().then(() => {
+    audio.onended = () => {
+      if (btn) { btn.classList.remove('playing'); btn.innerHTML = playIcon() + ' Play'; }
+      currentAudio = null; currentBtn = null;
+    };
+  }).catch(() => tryNextCandidate(candidates, idx + 1, btn));
 }
 function playIcon() { return '<svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>'; }
 
