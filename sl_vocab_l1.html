@@ -425,18 +425,31 @@ function tryNextCandidate() {
     resetBtn();
     return;
   }
-  sharedAudioEl.src = BASE + audioCandidateQueue[audioCandidateIdx];
-  sharedAudioEl.load();
-  sharedAudioEl.play().catch(() => {
+  const url = BASE + audioCandidateQueue[audioCandidateIdx];
+  sharedAudioEl.src = url;
+
+  const onCanPlay = () => {
+    cleanup();
+    sharedAudioEl.play().catch(() => {
+      audioCandidateIdx++;
+      tryNextCandidate();
+    });
+  };
+  const onError = () => {
+    cleanup();
     audioCandidateIdx++;
     tryNextCandidate();
-  });
+  };
+  function cleanup() {
+    sharedAudioEl.removeEventListener('canplay', onCanPlay);
+    sharedAudioEl.removeEventListener('error', onError);
+  }
+
+  sharedAudioEl.addEventListener('canplay', onCanPlay, { once: true });
+  sharedAudioEl.addEventListener('error', onError, { once: true });
+  sharedAudioEl.load();
 }
 
-sharedAudioEl.addEventListener('error', () => {
-  audioCandidateIdx++;
-  tryNextCandidate();
-});
 sharedAudioEl.addEventListener('ended', () => {
   resetBtn();
 });
