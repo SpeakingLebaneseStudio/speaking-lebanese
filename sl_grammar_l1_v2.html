@@ -638,7 +638,7 @@
   </div>
   <div class="divider"></div>
   <div class="title">Greetings &amp; Introductions</div>
-  <div class="activity-badge">Activity 5</div>
+  <div class="activity-badge">Activity 4</div>
 </div>
 
 <div class="container">
@@ -669,27 +669,27 @@
     <div class="pronouns-grid">
       <div class="pronoun-card">
         <div class="p-arabic">أنا</div>
-        <div class="p-arabizi">ana</div>
+        <div class="p-arabizi">2ana</div>
         <div class="p-english">I</div>
       </div>
       <div class="pronoun-card">
         <div class="p-arabic">أنتَ</div>
-        <div class="p-arabizi">enta</div>
+        <div class="p-arabizi">2enta</div>
         <div class="p-english">you (m)</div>
       </div>
       <div class="pronoun-card">
         <div class="p-arabic">أنتِ</div>
-        <div class="p-arabizi">enti</div>
+        <div class="p-arabizi">2enti</div>
         <div class="p-english">you (f)</div>
       </div>
       <div class="pronoun-card">
         <div class="p-arabic">هوَّ</div>
-        <div class="p-arabizi">houwwé</div>
+        <div class="p-arabizi">houwwi</div>
         <div class="p-english">he</div>
       </div>
       <div class="pronoun-card">
         <div class="p-arabic">هيَّ</div>
-        <div class="p-arabizi">hiyyé</div>
+        <div class="p-arabizi">hiyyi</div>
         <div class="p-english">she</div>
       </div>
       <div class="pronoun-card" style="background: var(--cream); border-style: dashed;">
@@ -733,11 +733,11 @@
 
     <div class="example-card">
       <div class="arabic-script">هوَّ لبناني</div>
-      <div class="arabizi">houwwé lebnéni</div>
+      <div class="arabizi">houwwi lebnéni</div>
       <div class="translation">He is Lebanese</div>
       <div class="breakdown">
         <div class="word-chip">
-          <span class="w-lebanese">houwwé</span>
+          <span class="w-lebanese">houwwi</span>
           <span class="w-english">he</span>
         </div>
         <div class="word-chip no-verb">
@@ -753,11 +753,11 @@
 
     <div class="example-card">
       <div class="arabic-script">هيَّ معلّمة</div>
-      <div class="arabizi">hiyyé m3allmet</div>
+      <div class="arabizi">hiyyi m3allmet</div>
       <div class="translation">She is a teacher</div>
       <div class="breakdown">
         <div class="word-chip">
-          <span class="w-lebanese">hiyyé</span>
+          <span class="w-lebanese">hiyyi</span>
           <span class="w-english">she</span>
         </div>
         <div class="word-chip no-verb">
@@ -778,16 +778,16 @@
     <div class="warn-icon">⚠️</div>
     <div class="warn-content">
       <div class="warn-label">Common mistake — introducing yourself</div>
-      <p>In English you say "I am called Sarah" — so learners often add <strong>ana</strong> before <strong>ismi</strong>. Don't. The word <strong>ismi</strong> already means "my name is" — the "my" is built in. Adding <strong>ana</strong> on top is redundant and unnatural.</p>
+      <p>In English you say "I am called Sarah" — so learners often add <strong>ana</strong> before <strong>2ismi</strong>. Don't. The word <strong>2ismi</strong> already means "my name is" — the "my" is built in. Adding <strong>ana</strong> on top is redundant and unnatural.</p>
       <div class="compare">
         <div class="compare-row wrong">
           <span class="mark">✗</span>
-          <span class="phrase">ana ismi Sarah</span>
+          <span class="phrase">ana 2ismi Sarah</span>
           <span class="label">— too much</span>
         </div>
         <div class="compare-row right">
           <span class="mark">✓</span>
-          <span class="phrase">ismi Sarah</span>
+          <span class="phrase">2ismi Sarah</span>
           <span class="label">— natural Lebanese</span>
         </div>
       </div>
@@ -809,7 +809,7 @@
       </div>
       <div class="options" id="q1-options">
         <button class="option-btn" data-q="1" data-correct="false">
-          <span class="option-letter">A</span>Ana houwwé min Beirut
+          <span class="option-letter">A</span>Ana houwwi min Beirut
         </button>
         <button class="option-btn" data-q="1" data-correct="true">
           <span class="option-letter">B</span>Ana min Beirut
@@ -818,7 +818,7 @@
           <span class="option-letter">C</span>2ana mafi Beirut
         </button>
         <button class="option-btn" data-q="1" data-correct="false">
-          <span class="option-letter">D</span>Min Beirut 2ana hiyyé
+          <span class="option-letter">D</span>Min Beirut 2ana hiyyi
         </button>
       </div>
       <div class="feedback" id="q1-feedback"></div>
@@ -841,7 +841,7 @@
           <span class="option-letter">C</span>Hiyyi m3allmet
         </button>
         <button class="option-btn" data-q="2" data-correct="false">
-          <span class="option-letter">D</span>Hiyyé hiyyé m3allmet
+          <span class="option-letter">D</span>Hiyyi hiyyi m3allmet
         </button>
       </div>
       <div class="feedback" id="q2-feedback"></div>
@@ -851,15 +851,24 @@
     <div class="question-block" id="q3-block">
       <div class="q-header">
         <div class="q-number">3</div>
-        <div class="q-text">Fill in the blank. What word is missing?</div>
+        <div class="q-text">Which word goes in the blank?</div>
       </div>
       <div class="q-arabic">هوَّ _____ لبناني</div>
-      <div class="fill-input-row">
-        <span class="fill-prefix">houwwé</span>
-        <input class="fill-input" id="q3-input" type="text" placeholder="type here" autocomplete="off" autocorrect="off" spellcheck="false">
-        <span class="fill-suffix">lebnéni</span>
+      <div class="fill-prefix" style="margin-bottom: 14px;">houwwé _____ lebnéni</div>
+      <div class="options" id="q3-options">
+        <button class="option-btn" data-q="3" data-correct="false">
+          <span class="option-letter">A</span>ismo
+        </button>
+        <button class="option-btn" data-q="3" data-correct="true">
+          <span class="option-letter">B</span>no missing word
+        </button>
+        <button class="option-btn" data-q="3" data-correct="false">
+          <span class="option-letter">C</span>tekram
+        </button>
+        <button class="option-btn" data-q="3" data-correct="false">
+          <span class="option-letter">D</span>walaw
+        </button>
       </div>
-      <button class="check-btn" id="q3-check" onclick="checkFill(3, [], 'nothing')">Check</button>
       <div class="feedback" id="q3-feedback"></div>
     </div>
 
@@ -874,10 +883,10 @@
           <span class="option-letter">A</span>2ana is Sarah
         </button>
         <button class="option-btn" data-q="4" data-correct="false">
-          <span class="option-letter">B</span>ismi Sarah hiyyé
+          <span class="option-letter">B</span>2ismi Sarah hiyyi
         </button>
         <button class="option-btn" data-q="4" data-correct="true">
-          <span class="option-letter">C</span>ismi Sarah
+          <span class="option-letter">C</span>2ismi Sarah
         </button>
         <button class="option-btn" data-q="4" data-correct="false">
           <span class="option-letter">D</span>Sarah 2ana min
@@ -937,69 +946,14 @@
         feedback.className = 'feedback fb-correct show';
         if (q == '1') feedback.innerHTML = '✓ Correct. In Lebanese, "Ana min Beirut" — no word for "am" needed.';
         if (q == '2') feedback.innerHTML = '✓ Correct. Hiyyi m3allmet — she is a teacher. No verb, no problem.';
-        if (q == '4') feedback.innerHTML = '✓ Correct. ismi Sarah — "my name is Sarah." Simple and natural.';
+        if (q == '3') feedback.innerHTML = '✓ Correct. Houwwé lebnéni — nothing goes in the blank. The zero-copula means no word for "is" is needed at all.';
+        if (q == '4') feedback.innerHTML = '✓ Correct. 2ismi Sarah — "my name is Sarah." Simple and natural.';
         correct[q] = true;
       }
 
       answers[q] = true;
       checkAllDone();
     });
-  });
-
-  // ── FILL CHECK ──
-  function checkFill(q, accepted, specialCase) {
-    const input = document.getElementById('q' + q + '-input');
-    const val = input.value.trim().toLowerCase();
-    const block = document.getElementById('q' + q + '-block');
-    const feedback = document.getElementById('q' + q + '-feedback');
-    const btn = document.getElementById('q' + q + '-check');
-
-    if (!val) return;
-
-    // Q3: the blank represents the MISSING VERB — correct answer is nothing (empty / zero-copula)
-    // Accept: nothing, -, --, "nothing", "zero", blank concept explanations
-    // The WRONG thing is any verb like "is", "huwwe", "hiyyé" etc.
-    const emptyAnswers = ['', 'nothing', '-', '--', '–', 'zero', 'none', 'null', 'no verb', 'no word'];
-    const verbAnswers = ['is', 'are', 'am', 'huwwe', 'huwwi', 'hiyyé', 'huwa', 'هو', 'هي'];
-
-    let isCorrect = false;
-    let fbText = '';
-
-    if (emptyAnswers.includes(val)) {
-      isCorrect = true;
-      fbText = '✓ Exactly right — nothing goes there. In Lebanese, there is no word for "is" in this construction. The blank stays blank.';
-    } else if (verbAnswers.some(v => val.includes(v))) {
-      isCorrect = false;
-      fbText = '❌ In Lebanese, you don\'t need a word for "is" here. The sentence is: <strong>houwwé lebnéni</strong> — no verb between the pronoun and the description.';
-    } else {
-      isCorrect = false;
-      fbText = '❌ Think about the zero-copula — the correct answer is that <em>nothing</em> goes there. The sentence is complete as: <strong>houwwé lebnéni</strong>.';
-    }
-
-    input.disabled = true;
-    btn.disabled = true;
-    correct[q] = isCorrect;
-
-    if (isCorrect) {
-      input.classList.add('correct-input');
-      block.classList.add('answered');
-      feedback.className = 'feedback fb-correct show';
-    } else {
-      input.classList.add('incorrect-input');
-      block.classList.add('answered-wrong');
-      feedback.className = 'feedback fb-incorrect show';
-    }
-    feedback.innerHTML = fbText;
-
-    answers[3] = true;
-    checkAllDone();
-  }
-
-  // Handle Enter key on fill input
-  document.getElementById('q3-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      document.getElementById('q3-check').click();
-    }
   });
 
   // ── CHECK ALL DONE ──
@@ -1037,8 +991,8 @@
     answers[1] = null; answers[2] = null; answers[3] = null; answers[4] = null;
     correct[1] = false; correct[2] = false; correct[3] = false; correct[4] = false;
 
-    // Reset MCQ blocks
-    [1, 2, 4].forEach(q => {
+    // Reset MCQ blocks (Q3 is now multiple choice too)
+    [1, 2, 3, 4].forEach(q => {
       const block = document.getElementById('q' + q + '-block');
       block.classList.remove('answered', 'answered-wrong');
       document.getElementById('q' + q + '-feedback').className = 'feedback';
@@ -1047,16 +1001,6 @@
         btn.classList.remove('correct', 'incorrect');
       });
     });
-
-    // Reset fill block
-    const fillInput = document.getElementById('q3-input');
-    const fillBlock = document.getElementById('q3-block');
-    fillInput.value = '';
-    fillInput.disabled = false;
-    fillInput.classList.remove('correct-input', 'incorrect-input');
-    fillBlock.classList.remove('answered', 'answered-wrong');
-    document.getElementById('q3-feedback').className = 'feedback';
-    document.getElementById('q3-check').disabled = false;
 
     // Hide score
     document.getElementById('score-panel').classList.remove('show');
