@@ -303,6 +303,8 @@ body {
   </div>
 </div>
 
+<audio id="sharedAudioPlayer" preload="none" style="display:none"></audio>
+
 <script>
 // ── AUDIO BASE URL ──
 const BASE = 'https://speakinglebanesestudio.github.io/speaking-lebanese/';
@@ -381,44 +383,64 @@ const SECTIONS = [
 // ── AUDIO ──
 // Files may be uploaded with different suffix patterns depending on how GitHub/Voice Memos
 // exported them. We try each candidate in order and use the first one that actually loads.
-let currentAudio = null;
-let currentBtn   = null;
+// Uses a single persistent <audio> element in the DOM (not new Audio()) to avoid
+// browser codec/decode issues that can cause distortion with dynamically created audio objects.
+let audioCandidateQueue = [];
+let audioCandidateIdx = 0;
+let currentBtn = null;
+const sharedAudioEl = document.getElementById('sharedAudioPlayer');
+
 function buildAudioCandidates(file) {
   // file = 'A1_L1_vocab_01_mar7aba.m4a' (base form stored in WORDS)
   const base = file.replace(/\.m4a$/, ''); // 'A1_L1_vocab_01_mar7aba'
   return [
-    base + '.m4a',        // clean form
-    base + '_m4a.mp4',    // observed pattern: underscore + mp4
-    base + '_m4a.mp3',    // observed pattern: underscore + mp3
-    base + '.m4a.mp4',    // legacy double-dot form (older pronunciation files)
-    base + '.m4a.mp3',    // legacy double-dot form
+    base + '_m4a.mp4',    // confirmed actual upload pattern
+    base + '_m4a.mp3',
+    base + '.m4a',         // clean form, in case some are uploaded this way
+    base + '.m4a.mp4',     // legacy double-dot form (older pronunciation files)
+    base + '.m4a.mp3',
   ];
 }
+
+function resetBtn() {
+  if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.innerHTML = playIcon() + ' Play'; }
+  currentBtn = null;
+}
+
 function playAudio(file, btn) {
-  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
-  if (currentBtn)   { currentBtn.classList.remove('playing'); currentBtn.innerHTML = playIcon() + ' Play'; }
+  sharedAudioEl.pause();
+  sharedAudioEl.currentTime = 0;
+  resetBtn();
   if (!file) return;
-  const candidates = buildAudioCandidates(file);
+
+  audioCandidateQueue = buildAudioCandidates(file);
+  audioCandidateIdx = 0;
   currentBtn = btn;
   if (btn) { btn.classList.add('playing'); btn.innerHTML = playIcon() + ' Playing…'; }
-  tryNextCandidate(candidates, 0, btn);
+  tryNextCandidate();
 }
-function tryNextCandidate(candidates, idx, btn) {
-  if (idx >= candidates.length) {
-    if (btn) { btn.classList.remove('playing'); btn.innerHTML = playIcon() + ' Play'; }
-    currentAudio = null; currentBtn = null;
+
+function tryNextCandidate() {
+  if (audioCandidateIdx >= audioCandidateQueue.length) {
+    resetBtn();
     return;
   }
-  const audio = new Audio(BASE + candidates[idx]);
-  currentAudio = audio;
-  audio.addEventListener('error', () => tryNextCandidate(candidates, idx + 1, btn), { once: true });
-  audio.play().then(() => {
-    audio.onended = () => {
-      if (btn) { btn.classList.remove('playing'); btn.innerHTML = playIcon() + ' Play'; }
-      currentAudio = null; currentBtn = null;
-    };
-  }).catch(() => tryNextCandidate(candidates, idx + 1, btn));
+  sharedAudioEl.src = BASE + audioCandidateQueue[audioCandidateIdx];
+  sharedAudioEl.load();
+  sharedAudioEl.play().catch(() => {
+    audioCandidateIdx++;
+    tryNextCandidate();
+  });
 }
+
+sharedAudioEl.addEventListener('error', () => {
+  audioCandidateIdx++;
+  tryNextCandidate();
+});
+sharedAudioEl.addEventListener('ended', () => {
+  resetBtn();
+});
+
 function playIcon() { return '<svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>'; }
 
 // ── MODE TABS ──
