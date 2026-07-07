@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Dialogue Transcript — Lesson 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red:        #D20014;
+    --red-dark:   #A8000F;
+    --red-tint:   #FAE6E6;
+    --black:      #0A0A0A;
+    --cream:      #FAF8F4;
+    --green:      #008228;
+    --green-tint: #E8F5ED;
+    --grey-mid:   #666666;
+    --grey-light: #EBEBEB;
+    --white:      #FFFFFF;
+  }
+  body {
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--black);
+    line-height: 1.65;
+    padding: 0 0 48px;
+  }
+
+  /* HEADER */
+  .lesson-header {
+    background: var(--cream);
+    border-bottom: 1px solid var(--grey-light);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .lesson-header .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--grey-mid);
+  }
+  .lesson-header .divider { width: 1px; height: 22px; background: var(--grey-light); }
+  .lesson-header .title { font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 15px; color: var(--black); }
+  .lesson-header .activity-badge {
+    margin-left: auto; background: var(--red); color: var(--white);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 2px;
+  }
+
+  .container { max-width: 740px; margin: 0 auto; padding: 0 24px; }
+
+  /* INTRO */
+  .intro { padding: 32px 0 24px; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+  .intro h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 26px; line-height: 1.25; margin-bottom: 14px; }
+  .intro p { font-size: 15px; color: #444; margin-bottom: 10px; }
+
+  /* AUDIO PLAYER */
+  .audio-block {
+    background: var(--black); border-radius: 8px; padding: 18px 22px;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+  }
+  .play-btn {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--red);
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s;
+  }
+  .play-btn:hover { background: var(--red-dark); }
+  .play-btn svg { fill: white; margin-left: 3px; }
+  .play-btn.playing svg.play-icon { display: none; }
+  .play-btn.playing svg.pause-icon { display: block !important; }
+  .audio-info { flex: 1; }
+  .audio-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .audio-sub { font-size: 12px; color: #888; }
+  .progress-wrap { flex: 2; display: flex; flex-direction: column; gap: 6px; }
+  .progress-bar-track {
+    height: 4px; background: #333; border-radius: 2px; cursor: pointer; position: relative;
+  }
+  .progress-bar-fill { height: 100%; background: var(--red); border-radius: 2px; width: 0%; transition: width 0.1s linear; pointer-events: none; }
+  .time-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; }
+
+  /* LANGUAGE TABS */
+  .lang-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid var(--grey-light); }
+  .lang-tab {
+    padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; background: none; color: var(--grey-mid);
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .lang-tab.active { color: var(--red); border-bottom-color: var(--red); }
+  .lang-tab:hover:not(.active) { color: var(--black); }
+
+  /* TRANSCRIPT PANELS */
+  .transcript-panel { display: none; }
+  .transcript-panel.active { display: block; }
+
+  /* LINE BLOCKS */
+  .line-block {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 0 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--grey-light);
+    align-items: start;
+  }
+  .line-block:last-child { border-bottom: none; }
+  .line-num {
+    font-size: 11px; color: var(--grey-light); font-weight: 600;
+    padding-top: 3px; text-align: right;
+  }
+  .line-content {}
+  .line-arabic {
+    font-size: 20px; direction: rtl; text-align: right;
+    color: var(--black); line-height: 1.6; margin-bottom: 4px;
+  }
+  .line-arabizi {
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    font-size: 17px; color: var(--red); margin-bottom: 3px;
+  }
+  .line-translation { font-size: 14px; color: var(--grey-mid); }
+  .line-french { font-size: 14px; color: #555; font-style: italic; }
+
+  /* VOCAB NOTES */
+  .section-divider {
+    display: flex; align-items: center; gap: 14px; margin: 28px 0 20px;
+  }
+  .section-divider span {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--grey-mid); white-space: nowrap;
+  }
+  .section-divider::before, .section-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--grey-light);
+  }
+  .vocab-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .vocab-card {
+    background: var(--white); border: 1px solid var(--grey-light);
+    border-left: 4px solid var(--red); border-radius: 6px;
+    padding: 12px 16px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 8px 16px; align-items: center;
+  }
+  @media (max-width: 560px) { .vocab-card { grid-template-columns: 1fr 1fr; } }
+  .vc-arabizi { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; color: var(--red); }
+  .vc-arabic { font-size: 18px; direction: rtl; text-align: right; color: var(--black); }
+  .vc-english { font-size: 14px; color: var(--black); }
+  .vc-french { font-size: 13px; color: var(--grey-mid); font-style: italic; }
+
+  /* DRAFT NOTE */
+  .draft-note {
+    background: var(--red-tint); border: 1px solid var(--red);
+    border-radius: 6px; padding: 12px 16px; font-size: 13px;
+    color: var(--red-dark); margin-bottom: 24px;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--grey-light);
+    text-align: center; font-size: 12px; color: var(--grey-mid); letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<div class="lesson-header">
+  <div><div class="eyebrow">A1 — Beginner Survival · Lesson 2</div></div>
+  <div class="divider"></div>
+  <div class="title">Numbers &amp; Personal Info</div>
+  <div class="activity-badge">Activity 6</div>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    <div class="section-label">Dialogue Transcript</div>
+    <h2>Checking In at the Hotel</h2>
+    <p>A hotel receptionist checks a guest in at the front desk. She confirms her name, age, nationality, job, mobile number, and room preference. Listen first, then read along below.</p>
+    <p>This is real Lebanese. Every word is exactly how someone from Lebanon would say it.</p>
+  </div>
+
+  <div class="draft-note">
+    <strong>Arabic script is a draft.</strong> Claude wrote a first pass of the Arabic script for this dialogue — Nidale, please correct before this goes live, same as always.
+  </div>
+
+  <!-- AUDIO PLAYER -->
+  <div class="audio-block">
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">
+      <svg class="play-icon" width="18" height="18" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg class="pause-icon" width="18" height="18" viewBox="0 0 24 24" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+    </button>
+    <div class="audio-info">
+      <div class="audio-title">Checking In at the Hotel</div>
+      <div class="audio-sub">A1 · Lesson 2 · Listening</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-track" id="progressTrack" onclick="seekAudio(event)">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <div class="time-row">
+        <span id="timeElapsed">0:00</span>
+        <span id="timeDuration">—</span>
+      </div>
+    </div>
+  </div>
+  <audio id="audioPlayer" src="https://speakinglebanesestudio.github.io/speaking-lebanese/A1_L2_listening.m4a.mp3"></audio>
+
+  <!-- LANGUAGE TABS -->
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="showLang('tri')">Lebanese + English + French</button>
+    <button class="lang-tab" onclick="showLang('leb')">Lebanese only</button>
+    <button class="lang-tab" onclick="showLang('en')">English only</button>
+    <button class="lang-tab" onclick="showLang('fr')">Français</button>
+  </div>
+
+  <!-- TRILINGUAL TRANSCRIPT -->
+  <div class="transcript-panel active" id="panel-tri">
+    <div class="line-block">
+      <div class="line-num">1</div>
+      <div class="line-content">
+        <div class="line-arabic">مسا الخير!</div>
+        <div class="line-arabizi">masa el 5eyr!</div>
+        <div class="line-translation">Good evening!</div>
+        <div class="line-french">Bonsoir !</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">2</div>
+      <div class="line-content">
+        <div class="line-arabic">أهلا مدام</div>
+        <div class="line-arabizi">ahlan Madame</div>
+        <div class="line-translation">Welcome, Madame.</div>
+        <div class="line-french">Bienvenue, Madame.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">3</div>
+      <div class="line-content">
+        <div class="line-arabic">أنا منيحة، الحمدلله، كيفك انتي؟</div>
+        <div class="line-arabizi">ana mnee7a, el7amdellah, keefik enti?</div>
+        <div class="line-translation">I'm fine, thank God, how are you?</div>
+        <div class="line-french">Je vais bien, Dieu merci, et vous, comment allez-vous ?</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">4</div>
+      <div class="line-content">
+        <div class="line-arabic">فإذن، قلتيلي:</div>
+        <div class="line-arabizi">fa izan, 2ilteeli:</div>
+        <div class="line-translation">So then, you told me:</div>
+        <div class="line-french">Alors donc, vous m'avez dit :</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">5</div>
+      <div class="line-content">
+        <div class="line-arabic">اسمك: سلمى حلو</div>
+        <div class="line-arabizi">ismik: Salma Helo</div>
+        <div class="line-translation">Your name: Salma Helo</div>
+        <div class="line-french">Votre nom : Salma Helo</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">6</div>
+      <div class="line-content">
+        <div class="line-arabic">أدّي عمرِك، لو سمحتي؟ آه أوكي، أنا آسفة، نعم قلتيلي عمرك: خمسة وأربعين / ٤٥ سنة</div>
+        <div class="line-arabizi">addey 3omrik, law sama7ti? Ah ok, ana aasfet, na3am ilteeli 3omrik: 5amsé w arb3een / 45 séné</div>
+        <div class="line-translation">Your age: forty-five / 45 years old</div>
+        <div class="line-french">Votre âge : quarante-cinq / 45 ans</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">7</div>
+      <div class="line-content">
+        <div class="line-arabic">جنسيتك: لبنانية</div>
+        <div class="line-arabizi">jinsiyytik: lebnéniyyet</div>
+        <div class="line-translation">Your nationality: Lebanese</div>
+        <div class="line-french">Votre nationalité : libanaise</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">8</div>
+      <div class="line-content">
+        <div class="line-arabic">وانتي محامية.</div>
+        <div class="line-arabizi">w inti mou7émiyyet.</div>
+        <div class="line-translation">And you are a lawyer.</div>
+        <div class="line-french">Et vous êtes avocate.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">9</div>
+      <div class="line-content">
+        <div class="line-arabic">انتي حبيتي غرفة لشخص واحد</div>
+        <div class="line-arabizi">inti 7aabbet 2oudat la cha5s wa7ad</div>
+        <div class="line-translation">You would like a single room.</div>
+        <div class="line-french">Vous souhaitez une chambre simple.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">10</div>
+      <div class="line-content">
+        <div class="line-arabic">نمرة موبايلك: تسعة ستة واحد، سبعين، واحد تلاتة أربعة ستة تلاتة واحد.</div>
+        <div class="line-arabizi">nomret mowbaylik: tes3a setté wa7ad, sab3een, wa7ad tleté arb3a setté tlété wa7ad.</div>
+        <div class="line-translation">Your mobile number: nine six one, seventy, one three four six three one.</div>
+        <div class="line-french">Votre numéro de portable : neuf six un, soixante-dix, un trois quatre six trois un.</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">11</div>
+      <div class="line-content">
+        <div class="line-arabic">تشرفنا مدام أو ميتر سلمى،</div>
+        <div class="line-arabizi">Tsharrafna Madame aw maitre Salma,</div>
+        <div class="line-translation">Pleased to meet you, Madame or Maître Salma,</div>
+        <div class="line-french">Enchantée, Madame ou Maître Salma,</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">12</div>
+      <div class="line-content">
+        <div class="line-arabic">وهيدا رقم غرفتك: ٣٠٥ (تلات مية وخمسة)</div>
+        <div class="line-arabizi">w heyda ra2m 2oudtik: 305 (tlét miyyé w 5amsé)</div>
+        <div class="line-translation">and here is your room number: 305 (three hundred and five).</div>
+        <div class="line-french">et voici le numéro de votre chambre : 305 (trois cent cinq).</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">13</div>
+      <div class="line-content">
+        <div class="line-arabic">شكراً كتير، وأهلا وسهلا فيكي عنا!</div>
+        <div class="line-arabizi">shoukran kteer, w ahla w sahla feeki 3inna!</div>
+        <div class="line-translation">Thank you very much, and welcome to our hotel!</div>
+        <div class="line-french">Merci beaucoup, et bienvenue chez nous !</div>
+      </div>
+    </div>
+
+    <div class="line-block">
+      <div class="line-num">14</div>
+      <div class="line-content">
+        <div class="line-arabic">الى اللقاء!</div>
+        <div class="line-arabizi">ila l'likaa2!</div>
+        <div class="line-translation">See you at check-in!</div>
+        <div class="line-french">au revoir !</div>
+      </div>
+    </div>
+  </div><!-- end panel-tri -->
+
+  <!-- LEBANESE ONLY -->
+  <div class="transcript-panel" id="panel-leb">
+    <div class="line-block"><div class="line-num">1</div><div class="line-content"><div class="line-arabic">مسا الخير!</div><div class="line-arabizi">masa el 5eyr!</div></div></div>
+    <div class="line-block"><div class="line-num">2</div><div class="line-content"><div class="line-arabic">أهلا مدام</div><div class="line-arabizi">ahlan Madame</div></div></div>
+    <div class="line-block"><div class="line-num">3</div><div class="line-content"><div class="line-arabic">أنا منيحة، الحمدلله، كيفك انتي؟</div><div class="line-arabizi">ana mnee7a, el7amdellah, keefik enti?</div></div></div>
+    <div class="line-block"><div class="line-num">4</div><div class="line-content"><div class="line-arabic">فإذن، قلتيلي:</div><div class="line-arabizi">fa izan, 2ilteeli:</div></div></div>
+    <div class="line-block"><div class="line-num">5</div><div class="line-content"><div class="line-arabic">اسمك: سلمى حلو</div><div class="line-arabizi">ismik: Salma Helo</div></div></div>
+    <div class="line-block"><div class="line-num">6</div><div class="line-content"><div class="line-arabic">أدّي عمرِك، لو سمحتي؟ آه أوكي، أنا آسفة، نعم قلتيلي عمرك: خمسة وأربعين / ٤٥ سنة</div><div class="line-arabizi">addey 3omrik, law sama7ti? Ah ok, ana aasfet, na3am ilteeli 3omrik: 5amsé w arb3een / 45 séné</div></div></div>
+    <div class="line-block"><div class="line-num">7</div><div class="line-content"><div class="line-arabic">جنسيتك: لبنانية</div><div class="line-arabizi">jinsiyytik: lebnéniyyet</div></div></div>
+    <div class="line-block"><div class="line-num">8</div><div class="line-content"><div class="line-arabic">وانتي محامية.</div><div class="line-arabizi">w inti mou7émiyyet.</div></div></div>
+    <div class="line-block"><div class="line-num">9</div><div class="line-content"><div class="line-arabic">انتي حبيتي غرفة لشخص واحد</div><div class="line-arabizi">inti 7aabbet 2oudat la cha5s wa7ad</div></div></div>
+    <div class="line-block"><div class="line-num">10</div><div class="line-content"><div class="line-arabic">نمرة موبايلك: تسعة ستة واحد، سبعين، واحد تلاتة أربعة ستة تلاتة واحد.</div><div class="line-arabizi">nomret mowbaylik: tes3a setté wa7ad, sab3een, wa7ad tleté arb3a setté tlété wa7ad.</div></div></div>
+    <div class="line-block"><div class="line-num">11</div><div class="line-content"><div class="line-arabic">تشرفنا مدام أو ميتر سلمى،</div><div class="line-arabizi">Tsharrafna Madame aw maitre Salma,</div></div></div>
+    <div class="line-block"><div class="line-num">12</div><div class="line-content"><div class="line-arabic">وهيدا رقم غرفتك: ٣٠٥ (تلات مية وخمسة)</div><div class="line-arabizi">w heyda ra2m 2oudtik: 305 (tlét miyyé w 5amsé)</div></div></div>
+    <div class="line-block"><div class="line-num">13</div><div class="line-content"><div class="line-arabic">شكراً كتير، وأهلا وسهلا فيكي عنا!</div><div class="line-arabizi">shoukran kteer, w ahla w sahla feeki 3inna!</div></div></div>
+    <div class="line-block"><div class="line-num">14</div><div class="line-content"><div class="line-arabic">الى اللقاء!</div><div class="line-arabizi">ila l'likaa2!</div></div></div>
+  </div>
+
+  <!-- ENGLISH ONLY -->
+  <div class="transcript-panel" id="panel-en">
+    <div class="line-block"><div class="line-num">1</div><div class="line-content"><div class="line-translation" style="font-size:16px">Good evening!</div></div></div>
+    <div class="line-block"><div class="line-num">2</div><div class="line-content"><div class="line-translation" style="font-size:16px">Welcome, Madame.</div></div></div>
+    <div class="line-block"><div class="line-num">3</div><div class="line-content"><div class="line-translation" style="font-size:16px">I'm fine, thank God, how are you?</div></div></div>
+    <div class="line-block"><div class="line-num">4</div><div class="line-content"><div class="line-translation" style="font-size:16px">So then, you told me:</div></div></div>
+    <div class="line-block"><div class="line-num">5</div><div class="line-content"><div class="line-translation" style="font-size:16px">Your name: Salma Helo</div></div></div>
+    <div class="line-block"><div class="line-num">6</div><div class="line-content"><div class="line-translation" style="font-size:16px">Your age: forty-five / 45 years old</div></div></div>
+    <div class="line-block"><div class="line-num">7</div><div class="line-content"><div class="line-translation" style="font-size:16px">Your nationality: Lebanese</div></div></div>
+    <div class="line-block"><div class="line-num">8</div><div class="line-content"><div class="line-translation" style="font-size:16px">And you are a lawyer.</div></div></div>
+    <div class="line-block"><div class="line-num">9</div><div class="line-content"><div class="line-translation" style="font-size:16px">You would like a single room.</div></div></div>
+    <div class="line-block"><div class="line-num">10</div><div class="line-content"><div class="line-translation" style="font-size:16px">Your mobile number: nine six one, seventy, one three four six three one.</div></div></div>
+    <div class="line-block"><div class="line-num">11</div><div class="line-content"><div class="line-translation" style="font-size:16px">Pleased to meet you, Madame or Maître Salma,</div></div></div>
+    <div class="line-block"><div class="line-num">12</div><div class="line-content"><div class="line-translation" style="font-size:16px">and here is your room number: 305 (three hundred and five).</div></div></div>
+    <div class="line-block"><div class="line-num">13</div><div class="line-content"><div class="line-translation" style="font-size:16px">Thank you very much, and welcome to our hotel!</div></div></div>
+    <div class="line-block"><div class="line-num">14</div><div class="line-content"><div class="line-translation" style="font-size:16px">See you at check-in!</div></div></div>
+  </div>
+
+  <!-- FRENCH ONLY -->
+  <div class="transcript-panel" id="panel-fr">
+    <div class="line-block"><div class="line-num">1</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Bonsoir !</div></div></div>
+    <div class="line-block"><div class="line-num">2</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Bienvenue, Madame.</div></div></div>
+    <div class="line-block"><div class="line-num">3</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Je vais bien, Dieu merci, et vous, comment allez-vous ?</div></div></div>
+    <div class="line-block"><div class="line-num">4</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Alors donc, vous m'avez dit :</div></div></div>
+    <div class="line-block"><div class="line-num">5</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Votre nom : Salma Helo</div></div></div>
+    <div class="line-block"><div class="line-num">6</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Votre âge : quarante-cinq / 45 ans</div></div></div>
+    <div class="line-block"><div class="line-num">7</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Votre nationalité : libanaise</div></div></div>
+    <div class="line-block"><div class="line-num">8</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Et vous êtes avocate.</div></div></div>
+    <div class="line-block"><div class="line-num">9</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Vous souhaitez une chambre simple.</div></div></div>
+    <div class="line-block"><div class="line-num">10</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Votre numéro de portable : neuf six un, soixante-dix, un trois quatre six trois un.</div></div></div>
+    <div class="line-block"><div class="line-num">11</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Enchantée, Madame ou Maître Salma,</div></div></div>
+    <div class="line-block"><div class="line-num">12</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">et voici le numéro de votre chambre : 305 (trois cent cinq).</div></div></div>
+    <div class="line-block"><div class="line-num">13</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">Merci beaucoup, et bienvenue chez nous !</div></div></div>
+    <div class="line-block"><div class="line-num">14</div><div class="line-content"><div class="line-french" style="font-size:16px; font-style:normal">au revoir !</div></div></div>
+  </div>
+
+  <!-- VOCAB NOTES -->
+  <div class="section-divider"><span>Vocab in this dialogue</span></div>
+  <div class="vocab-grid">
+    <div class="vocab-card"><div class="vc-arabizi">5amsé</div><div class="vc-arabic">خمسة</div><div class="vc-english">five</div><div class="vc-french">cinq</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">arb3een</div><div class="vc-arabic">أربعين</div><div class="vc-english">forty</div><div class="vc-french">quarante</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">séné</div><div class="vc-arabic">سنة</div><div class="vc-english">year</div><div class="vc-french">an</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">addey 3omrik?</div><div class="vc-arabic">أدّي عمرِك؟</div><div class="vc-english">how old are you (f)</div><div class="vc-french">quel âge as-tu ?</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">lebnéniyyet</div><div class="vc-arabic">لبنانية</div><div class="vc-english">Lebanese (f)</div><div class="vc-french">libanaise</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">mou7émiyyet</div><div class="vc-arabic">محامية</div><div class="vc-english">lawyer (f)</div><div class="vc-french">avocate</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">nomrat</div><div class="vc-arabic">نمرة</div><div class="vc-english">number</div><div class="vc-french">numéro</div></div>
+    <div class="vocab-card"><div class="vc-arabizi">mowbayl</div><div class="vc-arabic">موبايل</div><div class="vc-english">mobile</div><div class="vc-french">portable</div></div>
+  </div>
+
+  <div class="page-footer">
+    Speaking Lebanese · A1 Beginner Survival · Lesson 2 — Numbers &amp; Personal Info<br>
+    speakinglebanese.com
+  </div>
+
+</div><!-- end container -->
+
+<script>
+  const audio = document.getElementById('audioPlayer');
+  const playBtn = document.getElementById('playBtn');
+  const progressFill = document.getElementById('progressFill');
+  const timeElapsed = document.getElementById('timeElapsed');
+  const timeDuration = document.getElementById('timeDuration');
+
+  function fmt(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  audio.addEventListener('loadedmetadata', () => {
+    timeDuration.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = pct + '%';
+    timeElapsed.textContent = fmt(audio.currentTime);
+  });
+
+  audio.addEventListener('ended', () => {
+    playBtn.classList.remove('playing');
+    progressFill.style.width = '0%';
+    timeElapsed.textContent = '0:00';
+  });
+
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play();
+      playBtn.classList.add('playing');
+    } else {
+      audio.pause();
+      playBtn.classList.remove('playing');
+    }
+  }
+
+  function seekAudio(e) {
+    const track = document.getElementById('progressTrack');
+    const rect = track.getBoundingClientRect();
+    const pct = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pct * audio.duration;
+  }
+
+  function showLang(lang) {
+    document.querySelectorAll('.transcript-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + lang).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
