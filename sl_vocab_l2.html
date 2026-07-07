@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Vocabulary — Lesson 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:        #D20014;
+  --red-dark:   #A8000F;
+  --red-tint:   #FAE6E6;
+  --black:      #0A0A0A;
+  --cream:      #FAF8F4;
+  --green:      #008228;
+  --green-tint: #E8F5ED;
+  --grey-mid:   #666666;
+  --grey-light: #EBEBEB;
+  --white:      #FFFFFF;
+}
+body {
+  background: var(--cream);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  color: var(--black);
+  line-height: 1.6;
+  padding: 0 0 60px;
+}
+
+/* ── HEADER ── */
+.lesson-header {
+  background: var(--cream);
+  border-bottom: 1px solid var(--grey-light);
+  padding: 16px 28px;
+  display: flex; align-items: center; gap: 14px;
+}
+.lesson-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-mid); }
+.lesson-header .divider { width: 1px; height: 22px; background: var(--grey-light); }
+.lesson-header .title { font-weight: 700; font-size: 15px; color: var(--black); }
+.lesson-header .badge { margin-left: auto; background: var(--red); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 2px; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+/* ── PAGE INTRO ── */
+.page-intro { padding: 28px 0 20px; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
+.page-intro h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 26px; line-height: 1.25; margin-bottom: 10px; }
+.page-intro p { font-size: 15px; color: #444; }
+
+/* ── MODE TABS ── */
+.mode-tabs {
+  display: flex; gap: 0; border-bottom: 2px solid var(--grey-light); margin: 20px 0 0;
+}
+.mode-tab {
+  padding: 10px 22px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; background: none; color: var(--grey-mid);
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.mode-tab.active { color: var(--red); border-bottom-color: var(--red); }
+.mode-tab:hover:not(.active) { color: var(--black); }
+
+/* ── PANEL VISIBILITY ── */
+.panel { display: none; padding-top: 24px; }
+.panel.active { display: block; }
+
+/* ══════════════════════════════
+   VOCAB TABLE
+══════════════════════════════ */
+.filter-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center;
+}
+.filter-btn {
+  padding: 6px 14px; border: 1.5px solid var(--grey-light); border-radius: 20px;
+  background: var(--white); font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; color: var(--grey-mid); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn.active { border-color: var(--black); background: var(--black); color: var(--white); }
+.filter-btn:hover:not(.active) { border-color: var(--grey-mid); color: var(--black); }
+
+.vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.vocab-table thead tr { background: var(--black); }
+.vocab-table th {
+  padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--white);
+}
+.vocab-table th.ar-col { text-align: right; }
+.vocab-table tbody tr { border-bottom: 1px solid var(--grey-light); transition: background 0.1s; }
+.vocab-table tbody tr:hover { background: var(--white); }
+.vocab-table td { padding: 10px 12px; vertical-align: middle; }
+.td-num { color: var(--grey-light); font-size: 12px; width: 32px; }
+.td-arabizi { font-weight: 700; color: var(--red); font-size: 15px; }
+.td-arabic { direction: rtl; text-align: right; font-size: 19px; color: var(--black); }
+.td-en { color: var(--black); }
+.td-fr { color: var(--grey-mid); font-style: italic; font-size: 13px; }
+.td-type { font-size: 11px; color: var(--grey-mid); }
+.td-sound { font-size: 11px; }
+.sound-pill {
+  display: inline-block; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+}
+.sound-pill.s5 { background: var(--red-tint); color: var(--red-dark); }
+.sound-pill.s6 { background: var(--green-tint); color: var(--green); }
+.td-audio { width: 150px; }
+.play-word-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; background: var(--black); color: var(--white);
+  border: none; border-radius: 4px; font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s; white-space: nowrap;
+  margin: 2px 4px 2px 0;
+}
+.play-word-btn:hover { background: #333; }
+.play-word-btn.playing { background: var(--red); }
+.play-word-btn.no-audio { background: var(--grey-light); color: var(--grey-mid); cursor: default; }
+.play-word-btn svg { fill: currentColor; flex-shrink: 0; }
+.section-header-row td {
+  background: var(--cream); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid);
+  padding: 8px 12px; border-top: 1px solid var(--grey-light);
+}
+
+/* ══════════════════════════════
+   FLASHCARDS
+══════════════════════════════ */
+.fc-controls {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.fc-counter { font-size: 13px; color: var(--grey-mid); }
+.fc-nav-btn {
+  padding: 8px 18px; border: 1.5px solid var(--grey-light); border-radius: 4px;
+  background: var(--white); font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer; color: var(--black);
+  transition: all 0.15s;
+}
+.fc-nav-btn:hover { border-color: var(--black); }
+.fc-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.fc-shuffle-btn {
+  margin-left: auto; padding: 8px 16px; border: 1.5px solid var(--grey-light);
+  border-radius: 4px; background: var(--white); font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer; color: var(--grey-mid);
+  transition: all 0.15s;
+}
+.fc-shuffle-btn:hover { border-color: var(--grey-mid); color: var(--black); }
+.fc-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+
+/* CARD */
+.card-scene { perspective: 1000px; width: 100%; max-width: 560px; margin: 0 auto 20px; height: 300px; cursor: pointer; }
+.card-inner {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d; transition: transform 0.45s ease;
+}
+.card-scene.flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 10px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 28px 24px;
+  text-align: center;
+}
+.card-front {
+  background: var(--white); border: 1px solid var(--grey-light);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.card-back {
+  background: var(--black);
+  transform: rotateY(180deg);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.card-hint { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 16px; }
+.card-back .card-hint { color: #555; }
+.card-arabizi { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 28px; color: var(--red); margin-bottom: 8px; line-height: 1.2; }
+.card-arabic { font-size: 26px; direction: rtl; color: #333; margin-bottom: 6px; }
+.card-type-tag {
+  font-size: 11px; color: var(--grey-mid); background: var(--cream);
+  padding: 3px 10px; border-radius: 10px; border: 1px solid var(--grey-light);
+}
+.card-english { font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+.card-french { font-size: 15px; color: #888; font-style: italic; margin-bottom: 14px; }
+.card-audio-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.card-audio-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; background: var(--red); color: var(--white);
+  border: none; border-radius: 4px; font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 4px;
+  transition: background 0.15s;
+}
+.card-audio-btn:hover { background: var(--red-dark); }
+.card-audio-btn.no-audio { background: #333; cursor: default; opacity: 0.5; }
+.card-audio-btn svg { fill: white; }
+
+.card-flip-hint { text-align: center; font-size: 13px; color: var(--grey-mid); margin-bottom: 16px; }
+
+/* Progress dots */
+.fc-progress { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+.fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--grey-light); transition: background 0.2s; flex-shrink: 0; }
+.fc-dot.seen { background: var(--grey-mid); }
+.fc-dot.current { background: var(--red); }
+
+/* Self-assess buttons */
+.self-assess { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+.sa-btn {
+  padding: 9px 20px; border: 1.5px solid var(--grey-light); border-radius: 4px;
+  font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; background: var(--white); transition: all 0.15s;
+}
+.sa-btn.knew-it { color: var(--green); border-color: var(--green); }
+.sa-btn.knew-it:hover { background: var(--green-tint); }
+.sa-btn.missed-it { color: var(--red); border-color: var(--red); }
+.sa-btn.missed-it:hover { background: var(--red-tint); }
+
+/* FC session stats */
+.fc-stats {
+  display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;
+  font-size: 13px;
+}
+.fc-stat { text-align: center; }
+.fc-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1; }
+.fc-stat-num.green { color: var(--green); }
+.fc-stat-num.red   { color: var(--red); }
+.fc-stat-label { color: var(--grey-mid); font-size: 12px; margin-top: 2px; }
+
+.page-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--grey-light); text-align: center; font-size: 12px; color: var(--grey-mid); }
+</style>
+</head>
+<body>
+
+<div class="lesson-header">
+  <div><div class="eyebrow">A1 — Beginner Survival · Lesson 2</div></div>
+  <div class="divider"></div>
+  <div class="title">Numbers &amp; Personal Info</div>
+  <div class="badge">Activity 2</div>
+</div>
+
+<div class="container">
+  <div class="page-intro">
+    <div class="section-label">Vocabulary Bank</div>
+    <h2>59 words &amp; expressions</h2>
+    <p>Browse the full list, listen to every word, then test yourself with the flashcards.</p>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="showPanel('vocab')">Vocabulary list</button>
+    <button class="mode-tab" onclick="showPanel('flash')">Flashcards</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       VOCAB LIST PANEL
+  ══════════════════════════════ -->
+  <div class="panel active" id="panel-vocab">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterType('all',this)">All (59)</button>
+      <button class="filter-btn" onclick="filterType('numbers',this)">Numbers</button>
+      <button class="filter-btn" onclick="filterType('personal_info',this)">Personal Info</button>
+      <button class="filter-btn" onclick="filterType('jobs',this)">Jobs</button>
+      <button class="filter-btn" onclick="filterType('nationalities',this)">Nationalities</button>
+      <button class="filter-btn" onclick="filterType('phrases',this)">Phrases</button>
+    </div>
+    <table class="vocab-table" id="vocabTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Arabizi</th>
+          <th class="ar-col">Arabic</th>
+          <th>English</th>
+          <th>Français</th>
+          <th>Sound</th>
+          <th>Listen</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════
+       FLASHCARD PANEL
+  ══════════════════════════════ -->
+  <div class="panel" id="panel-flash">
+    <div class="fc-filter-row">
+      <button class="filter-btn active" onclick="fcFilterType('all',this)">All (59)</button>
+      <button class="filter-btn" onclick="fcFilterType('numbers',this)">Numbers</button>
+      <button class="filter-btn" onclick="fcFilterType('personal_info',this)">Personal Info</button>
+      <button class="filter-btn" onclick="fcFilterType('jobs',this)">Jobs</button>
+      <button class="filter-btn" onclick="fcFilterType('nationalities',this)">Nationalities</button>
+      <button class="filter-btn" onclick="fcFilterType('phrases',this)">Phrases</button>
+    </div>
+    <div class="fc-stats">
+      <div class="fc-stat"><div class="fc-stat-num green" id="fcKnew">0</div><div class="fc-stat-label">knew it</div></div>
+      <div class="fc-stat"><div class="fc-stat-num" style="color:var(--grey-mid)" id="fcTotal">0</div><div class="fc-stat-label">total</div></div>
+      <div class="fc-stat"><div class="fc-stat-num red" id="fcMissed">0</div><div class="fc-stat-label">missed</div></div>
+    </div>
+    <div class="fc-progress" id="fcProgress"></div>
+    <div class="fc-controls">
+      <button class="fc-nav-btn" id="fcPrev" onclick="fcNav(-1)" disabled>← Prev</button>
+      <span class="fc-counter" id="fcCounter">1 / 59</span>
+      <button class="fc-nav-btn" id="fcNext" onclick="fcNav(1)">Next →</button>
+      <button class="fc-shuffle-btn" onclick="fcShuffle()">Shuffle</button>
+    </div>
+    <p class="card-flip-hint">Tap the card to reveal the translation</p>
+    <div class="card-scene" id="cardScene" onclick="flipCard()">
+      <div class="card-inner" id="cardInner">
+        <div class="card-face card-front" id="cardFront"></div>
+        <div class="card-face card-back" id="cardBack"></div>
+      </div>
+    </div>
+    <div class="self-assess" id="selfAssess" style="display:none">
+      <button class="sa-btn knew-it" onclick="fcAssess(true)">✓ Knew it</button>
+      <button class="sa-btn missed-it" onclick="fcAssess(false)">✗ Missed it</button>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    Speaking Lebanese · A1 Beginner Survival · Lesson 2 — Numbers &amp; Personal Info<br>
+    speakinglebanese.com
+  </div>
+</div>
+
+<audio id="sharedAudioPlayer" preload="none" style="display:none"></audio>
+
+<script>
+// ── AUDIO BASE URL ──
+const BASE = 'https://speakinglebanesestudio.github.io/speaking-lebanese/';
+
+// ── WORD DATA ── 59 words
+// [n, arabizi, arabic, english, french, type, sound, audioFiles]
+// audioFiles: array of 1 or 2 filenames (two when the row records two distinct forms)
+const WORDS = [
+[
+    1,
+    "9ifr",
+    "صِفر",
+    "zero",
+    "zéro",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_01_9ifr.m4a"
+    ]
+  ],
+  [
+    2,
+    "wa7ad",
+    "واحد",
+    "one",
+    "un",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_02_wa7ad.m4a"
+    ]
+  ],
+  [
+    3,
+    "tnén",
+    "تنين",
+    "two",
+    "deux",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_03_tnen.m4a"
+    ]
+  ],
+  [
+    4,
+    "tleté",
+    "تلاتة",
+    "three",
+    "trois",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_04_tlete.m4a"
+    ]
+  ],
+  [
+    5,
+    "arb3a",
+    "أربعة",
+    "four",
+    "quatre",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_05_arb3a.m4a"
+    ]
+  ],
+  [
+    6,
+    "5amsé",
+    "خمسة",
+    "five",
+    "cinq",
+    "numbers",
+    "5",
+    [
+      "A1_L2_vocab_06_5amse.m4a"
+    ]
+  ],
+  [
+    7,
+    "setté",
+    "ستة",
+    "six",
+    "six",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_07_sette.m4a"
+    ]
+  ],
+  [
+    8,
+    "sab3a",
+    "سبعة",
+    "seven",
+    "sept",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_08_sab3a.m4a"
+    ]
+  ],
+  [
+    9,
+    "tmené",
+    "تمانية",
+    "eight",
+    "huit",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_09_tmene.m4a"
+    ]
+  ],
+  [
+    10,
+    "tis3a",
+    "تسعة",
+    "nine",
+    "neuf",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_10_tis3a.m4a"
+    ]
+  ],
+  [
+    11,
+    "3ashra",
+    "عشرة",
+    "ten",
+    "dix",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_11_3ashra.m4a"
+    ]
+  ],
+  [
+    12,
+    "7da3sh",
+    "حداعش",
+    "eleven",
+    "onze",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_12_7da3sh.m4a"
+    ]
+  ],
+  [
+    13,
+    "tna3sh",
+    "تناعش",
+    "twelve",
+    "douze",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_13_tna3sh.m4a"
+    ]
+  ],
+  [
+    14,
+    "tlatta3sh",
+    "تلاتعش",
+    "thirteen",
+    "treize",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_14_tlatta3sh.m4a"
+    ]
+  ],
+  [
+    15,
+    "arba3ta3sh",
+    "أربعتعش",
+    "fourteen",
+    "quatorze",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_15_arba3ta3sh.m4a"
+    ]
+  ],
+  [
+    16,
+    "5amsta3sh",
+    "خمستعش",
+    "fifteen",
+    "quinze",
+    "numbers",
+    "5",
+    [
+      "A1_L2_vocab_16_5amsta3sh.m4a"
+    ]
+  ],
+  [
+    17,
+    "sitta3sh",
+    "ستعش",
+    "sixteen",
+    "seize",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_17_sitta3sh.m4a"
+    ]
+  ],
+  [
+    18,
+    "sab3ata3sh",
+    "سبعتعش",
+    "seventeen",
+    "dix-sept",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_18_sab3ata3sh.m4a"
+    ]
+  ],
+  [
+    19,
+    "tmanta3sh",
+    "تمنتعش",
+    "eighteen",
+    "dix-huit",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_19_tmanta3sh.m4a"
+    ]
+  ],
+  [
+    20,
+    "tis3ta3sh",
+    "تسعتعش",
+    "nineteen",
+    "dix-neuf",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_20_tis3ta3sh.m4a"
+    ]
+  ],
+  [
+    21,
+    "3eshreen",
+    "عشرين",
+    "twenty",
+    "vingt",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_21_3eshreen.m4a"
+    ]
+  ],
+  [
+    22,
+    "tléteen",
+    "تلاتين",
+    "thirty",
+    "trente",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_22_tleteen.m4a"
+    ]
+  ],
+  [
+    23,
+    "arb3een",
+    "أربعين",
+    "forty",
+    "quarante",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_23_arb3een.m4a"
+    ]
+  ],
+  [
+    24,
+    "5amseen",
+    "خمسين",
+    "fifty",
+    "cinquante",
+    "numbers",
+    "5",
+    [
+      "A1_L2_vocab_24_5amseen.m4a"
+    ]
+  ],
+  [
+    25,
+    "sitteen",
+    "ستين",
+    "sixty",
+    "soixante",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_25_sitteen.m4a"
+    ]
+  ],
+  [
+    26,
+    "sab3een",
+    "سبعين",
+    "seventy",
+    "soixante-dix",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_26_sab3een.m4a"
+    ]
+  ],
+  [
+    27,
+    "tméneen",
+    "تمانين",
+    "eighty",
+    "quatre-vingts",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_27_tmeneen.m4a"
+    ]
+  ],
+  [
+    28,
+    "tis3een",
+    "تسعين",
+    "ninety",
+    "quatre-vingt-dix",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_28_tis3een.m4a"
+    ]
+  ],
+  [
+    29,
+    "miyyé",
+    "مية",
+    "one hundred",
+    "cent",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_29_miyye.m4a"
+    ]
+  ],
+  [
+    30,
+    "Addey 3omrak / 3omrik?",
+    "ادّي عمرَك/ ادّي عمرِك",
+    "how old are you? (m/f)",
+    "quel âge as-tu ?",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_30_addey_3omrak_3omrik.m4a"
+    ]
+  ],
+  [
+    31,
+    "3omri...",
+    "عمري",
+    "my age is… / I am… years old",
+    "j'ai… ans",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_31_3omri.m4a"
+    ]
+  ],
+  [
+    32,
+    "séné / sneen",
+    "سنة/سنين",
+    "year / years",
+    "an / ans",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_32_sene_sneen.m4a"
+    ]
+  ],
+  [
+    33,
+    "shu btishti8il / btishti8li?",
+    "شو بتشتغل؟",
+    "what do you do for work? (m/f)",
+    "qu'est-ce que tu fais ?",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_33_shu_btishti8il_btishti8li.m4a"
+    ]
+  ],
+  [
+    34,
+    "shi8'l",
+    "شغل",
+    "work / job",
+    "travail",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_34_shi8l.m4a"
+    ]
+  ],
+  [
+    35,
+    "mjawwaz / mjawazet",
+    "مجوز/مجوزة",
+    "married (m/f)",
+    "marié(e)",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_35_mjawwaz_mjawazet.m4a"
+    ]
+  ],
+  [
+    36,
+    "a3zab / 3azbet",
+    "اعزب/عزبة",
+    "single (m/f)",
+    "célibataire",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_36_a3zab_3azbet.m4a"
+    ]
+  ],
+  [
+    37,
+    "6aaleb / 6aalbet",
+    "طالب/طالبة",
+    "student (m/f)",
+    "étudiant(e)",
+    "jobs",
+    "6",
+    [
+      "A1_L2_vocab_37_6aaleb_6aalbet.m4a"
+    ]
+  ],
+  [
+    38,
+    "mhandess / mhandset",
+    "مهندس/مهندسة",
+    "engineer (m/f)",
+    "ingénieur(e)",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_38_mhandess_mhandset.m4a"
+    ]
+  ],
+  [
+    39,
+    "doctōr / doctōrat",
+    "دكتور/دكتورة",
+    "doctor (m/f)",
+    "médecin / docteur",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_39_doctor_doctorat.m4a"
+    ]
+  ],
+  [
+    40,
+    "m3allem / m3allmet",
+    "معلم/معلمة",
+    "teacher (m/f)",
+    "professeur(e)",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_40_m3allem_m3allmet.m4a"
+    ]
+  ],
+  [
+    41,
+    "mwazzaf / mwazzafet",
+    "موظف/موظفة",
+    "employee / office worker (m/f)",
+    "employé(e)",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_41_mwazzaf_mwazzafet.m4a"
+    ]
+  ],
+  [
+    42,
+    "mareed / mareedat",
+    "ممرض/ممرضة",
+    "nurse (m/f)",
+    "infirmier(ère)",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_42_mareed_mareedat.m4a"
+    ]
+  ],
+  [
+    43,
+    "mou7émi / mou7émiyyet",
+    "محامي/محامية",
+    "lawyer (m/f)",
+    "avocat(e)",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_43_mou7emi_mou7emiyyet.m4a"
+    ]
+  ],
+  [
+    44,
+    "Rajol a3mél / sayyidet a3mél",
+    "رَجُل اعمال/سيّدة اعمال",
+    "businessman / businesswoman",
+    "homme / femme d'affaires",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_44_rajol_a3mel_sayyidet_a3mel.m4a"
+    ]
+  ],
+  [
+    45,
+    "6obbaa5 / 6obbaa5at",
+    "طباخ /طباخة",
+    "cook (m/f)",
+    "cuisinier(ère)",
+    "jobs",
+    "6",
+    [
+      "A1_L2_vocab_45_6obbaa5_6obbaa5at.m4a"
+    ]
+  ],
+  [
+    46,
+    "Sitt beyt / ma bechteghel",
+    "ستّ بيت/ ما بشتغل",
+    "homemaker / unemployed",
+    "femme au foyer / sans emploi",
+    "jobs",
+    "",
+    [
+      "A1_L2_vocab_46_sitt_beyt_ma_bechteghel.m4a"
+    ]
+  ],
+  [
+    47,
+    "lebnéni / lebnéniyyet",
+    "لبناني/لبنانية",
+    "Lebanese (m/f)",
+    "libanais(e)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_47_lebneni_lebneniyyet.m4a"
+    ]
+  ],
+  [
+    48,
+    "amerkéni / amerkéniyyet",
+    "امركاني/امركانية",
+    "American (m/f)",
+    "américain(e)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_48_amerkeni_amerkeniyyet.m4a"
+    ]
+  ],
+  [
+    49,
+    "franséwi / franséwiyyet",
+    "فرنساوي/فرنساوية",
+    "French (m/f)",
+    "français(e)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_49_fransewi_fransewiyyet.m4a"
+    ]
+  ],
+  [
+    50,
+    "ingleezi / ingliziyyet",
+    "انجليزي/انجليزية",
+    "British/English (m/f)",
+    "anglais(e)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_50_ingleezi_ingliziyyet.m4a"
+    ]
+  ],
+  [
+    51,
+    "austraali / australiyyet",
+    "استرالي/استرالية",
+    "Australian (m/f)",
+    "australien(ne)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_51_austraali_australiyyet.m4a"
+    ]
+  ],
+  [
+    52,
+    "canadi / canadiyyet",
+    "كندي/كندية",
+    "Canadian (m/f)",
+    "canadien(ne)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_52_canadi_canadiyyet.m4a"
+    ]
+  ],
+  [
+    53,
+    "brazeeli / braziliyyet",
+    "برازيلي/ برازيلية",
+    "Brazilian (m/f)",
+    "brésilien(ne)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_53_brazeeli_braziliyyet.m4a"
+    ]
+  ],
+  [
+    54,
+    "almaani / almaaniyyet",
+    "الماني/المانية",
+    "German (m/f)",
+    "allemand(e)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_54_almaani_almaaniyyet.m4a"
+    ]
+  ],
+  [
+    55,
+    "mekseeki / mekseekiyyet",
+    "مكسيكي/مكسيكية",
+    "Mexican (m/f)",
+    "mexicain(e)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_55_mekseeki_mekseekiyyet.m4a"
+    ]
+  ],
+  [
+    56,
+    "qatari / qatariyyet",
+    "قطري/قطريّة",
+    "Qatari (m/f)",
+    "qatarien(ne)",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_56_qatari_qatariyyet.m4a"
+    ]
+  ],
+  [
+    57,
+    "ana sékin bi... / ana sékni bi...",
+    "أنا ساكن بِ…/أنا ساكنة بِ…",
+    "I live in… (m/f)",
+    "j'habite à…",
+    "phrases",
+    "",
+    [
+      "A1_L2_vocab_57_ana_sekin_bi_ana_sekni_bi.m4a"
+    ]
+  ],
+  [
+    58,
+    "nomrat",
+    "نمرة",
+    "number",
+    "numéro",
+    "phrases",
+    "",
+    [
+      "A1_L2_vocab_58_nomrat.m4a"
+    ]
+  ],
+  [
+    59,
+    "Téléfone / mowbayl",
+    "تيليفون / موبايل",
+    "phone / mobile",
+    "téléphone / portable",
+    "phrases",
+    "",
+    [
+      "A1_L2_vocab_59_telefone_mowbayl.m4a"
+    ]
+  ]
+];
+
+const SECTIONS = [
+  { label: 'Numbers',        type: 'numbers' },
+  { label: 'Personal Info',  type: 'personal_info' },
+  { label: 'Jobs',           type: 'jobs' },
+  { label: 'Nationalities',  type: 'nationalities' },
+  { label: 'Phrases',        type: 'phrases' },
+];
+
+// ── AUDIO ──
+// Files may be uploaded with different suffix patterns depending on how GitHub/Voice Memos
+// exported them. We try each candidate in order and use the first one that actually loads.
+// Uses a single persistent <audio> element in the DOM (not new Audio()) to avoid
+// browser codec/decode issues that can cause distortion with dynamically created audio objects.
+let audioCandidateQueue = [];
+let audioCandidateIdx = 0;
+let currentBtn = null;
+const sharedAudioEl = document.getElementById('sharedAudioPlayer');
+
+function buildAudioCandidates(file) {
+  // file = 'A1_L2_vocab_01_9ifr.m4a' (base form stored in WORDS)
+  const base = file.replace(/\.m4a$/, ''); // 'A1_L2_vocab_01_9ifr'
+  return [
+    base + '_m4a.mp4',    // confirmed actual upload pattern
+    base + '_m4a.mp3',
+    base + '.m4a',         // clean form, in case some are uploaded this way
+    base + '.m4a.mp4',     // legacy double-dot form (older pronunciation files)
+    base + '.m4a.mp3',
+  ];
+}
+
+function resetBtn() {
+  if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.dataset.playing = '0'; renderBtnLabel(currentBtn); }
+  currentBtn = null;
+}
+
+function renderBtnLabel(btn) {
+  const label = btn.dataset.label || 'Play';
+  btn.innerHTML = playIcon() + ' ' + label;
+}
+
+function playAudio(file, btn) {
+  sharedAudioEl.pause();
+  sharedAudioEl.currentTime = 0;
+  resetBtn();
+  if (!file) return;
+
+  audioCandidateQueue = buildAudioCandidates(file);
+  audioCandidateIdx = 0;
+  currentBtn = btn;
+  if (btn) { btn.classList.add('playing'); btn.innerHTML = playIcon() + ' Playing…'; }
+  tryNextCandidate();
+}
+
+function tryNextCandidate() {
+  if (audioCandidateIdx >= audioCandidateQueue.length) {
+    resetBtn();
+    return;
+  }
+  const url = BASE + audioCandidateQueue[audioCandidateIdx];
+  sharedAudioEl.src = url;
+
+  const onCanPlay = () => {
+    cleanup();
+    sharedAudioEl.play().catch(() => {
+      audioCandidateIdx++;
+      tryNextCandidate();
+    });
+  };
+  const onError = () => {
+    cleanup();
+    audioCandidateIdx++;
+    tryNextCandidate();
+  };
+  function cleanup() {
+    sharedAudioEl.removeEventListener('canplay', onCanPlay);
+    sharedAudioEl.removeEventListener('error', onError);
+  }
+
+  sharedAudioEl.addEventListener('canplay', onCanPlay, { once: true });
+  sharedAudioEl.addEventListener('error', onError, { once: true });
+  sharedAudioEl.load();
+}
+
+sharedAudioEl.addEventListener('ended', () => {
+  resetBtn();
+});
+
+function playIcon() { return '<svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>'; }
+
+// splits "word_a / word_b" into short labels for dual-audio rows
+function formLabels(arabizi, fileCount) {
+  if (fileCount === 1) return ['Play'];
+  const parts = arabizi.split(' / ').map(s => s.replace(/[?.]/g, '').trim());
+  return parts.map(p => p.length > 14 ? p.slice(0, 13) + '…' : p);
+}
+
+// ── MODE TABS ──
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function soundPillHtml(sound) {
+  if (!sound) return '';
+  return `<span class="sound-pill s${sound}">${sound}</span>`;
+}
+
+// ── VOCAB TABLE ──
+let activeType = 'all';
+function buildVocabTable(type) {
+  activeType = type;
+  const body = document.getElementById('vocabBody');
+  body.innerHTML = '';
+  SECTIONS.forEach(sec => {
+    const sectionWords = WORDS.filter(w => w[5] === sec.type && (type === 'all' || w[5] === type));
+    if (!sectionWords.length) return;
+    const hdr = document.createElement('tr');
+    hdr.className = 'section-header-row';
+    hdr.innerHTML = `<td colspan="7">${sec.label}</td>`;
+    body.appendChild(hdr);
+    sectionWords.forEach(w => {
+      const [num, arabizi, arabic, eng, fr, wtype, sound, files] = w;
+      const tr = document.createElement('tr');
+      tr.dataset.type = wtype;
+      const labels = formLabels(arabizi, files.length);
+      const buttons = files.map((f, i) =>
+        `<button class="play-word-btn" data-label="${labels[i]}" onclick="playAudio('${f}',this)">${playIcon()} ${labels[i]}</button>`
+      ).join('');
+      tr.innerHTML = `
+        <td class="td-num">${num}</td>
+        <td class="td-arabizi">${arabizi}</td>
+        <td class="td-arabic">${arabic}</td>
+        <td class="td-en">${eng}</td>
+        <td class="td-fr">${fr}</td>
+        <td class="td-sound">${soundPillHtml(sound)}</td>
+        <td class="td-audio">${buttons}</td>`;
+      body.appendChild(tr);
+    });
+  });
+}
+function filterType(type, btn) {
+  document.querySelectorAll('#panel-vocab .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildVocabTable(type);
+}
+
+// ── FLASHCARDS ──
+let fcWords = [...WORDS];
+let fcIndex = 0;
+let fcSeen = new Set();
+let fcKnewCount = 0;
+let fcMissedCount = 0;
+let fcFlipped = false;
+let fcTypeFilter = 'all';
+
+function fcFilterType(type, btn) {
+  document.querySelectorAll('#panel-flash .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  fcTypeFilter = type;
+  fcWords = type === 'all' ? [...WORDS] : WORDS.filter(w => w[5] === type);
+  fcIndex = 0; fcSeen = new Set(); fcKnewCount = 0; fcMissedCount = 0; fcFlipped = false;
+  document.getElementById('cardScene').classList.remove('flipped');
+  document.getElementById('selfAssess').style.display = 'none';
+  renderCard();
+  updateFCProgress();
+  updateFCStats();
+}
+
+function renderCard() {
+  if (!fcWords.length) return;
+  const w = fcWords[fcIndex];
+  const [num, arabizi, arabic, eng, fr, wtype, sound, files] = w;
+  const front = document.getElementById('cardFront');
+  const back  = document.getElementById('cardBack');
+  front.innerHTML = `
+    <div class="card-hint">Tap to reveal</div>
+    <div class="card-arabizi">${arabizi}</div>
+    <div class="card-arabic">${arabic}</div>
+    <div class="card-type-tag">${wtype.replace('_',' ')}</div>`;
+  const labels = formLabels(arabizi, files.length);
+  const audioButtons = files.map((f, i) =>
+    `<button class="card-audio-btn" onclick="event.stopPropagation();playAudio('${f}',this)">${playIcon()} ${labels[i]}</button>`
+  ).join('');
+  back.innerHTML = `
+    <div class="card-hint">Word ${num} of 59</div>
+    <div class="card-english">${eng}</div>
+    <div class="card-french">${fr}</div>
+    <div class="card-audio-row">${audioButtons}</div>`;
+  document.getElementById('fcCounter').textContent = (fcIndex + 1) + ' / ' + fcWords.length;
+  document.getElementById('fcPrev').disabled = fcIndex === 0;
+  document.getElementById('fcNext').disabled = fcIndex === fcWords.length - 1;
+  fcFlipped = false;
+  document.getElementById('cardScene').classList.remove('flipped');
+  document.getElementById('selfAssess').style.display = 'none';
+}
+
+function flipCard() {
+  if (!fcFlipped) {
+    document.getElementById('cardScene').classList.add('flipped');
+    fcFlipped = true;
+    fcSeen.add(fcIndex);
+    document.getElementById('selfAssess').style.display = 'flex';
+    updateFCProgress();
+  }
+}
+
+function fcNav(dir) {
+  sharedAudioEl.pause();
+  resetBtn();
+  fcIndex = Math.max(0, Math.min(fcWords.length - 1, fcIndex + dir));
+  fcSeen.add(fcIndex);
+  renderCard();
+  updateFCProgress();
+}
+
+function fcShuffle() {
+  sharedAudioEl.pause();
+  resetBtn();
+  for (let i = fcWords.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcWords[i], fcWords[j]] = [fcWords[j], fcWords[i]];
+  }
+  fcIndex = 0; fcSeen = new Set([0]); fcFlipped = false; fcKnewCount = 0; fcMissedCount = 0;
+  document.getElementById('cardScene').classList.remove('flipped');
+  document.getElementById('selfAssess').style.display = 'none';
+  renderCard(); updateFCProgress(); updateFCStats();
+}
+
+function fcAssess(knew) {
+  if (knew) fcKnewCount++; else fcMissedCount++;
+  updateFCStats();
+  if (fcIndex < fcWords.length - 1) {
+    fcNav(1);
+  } else {
+    document.getElementById('selfAssess').style.display = 'none';
+  }
+}
+
+function updateFCProgress() {
+  const prog = document.getElementById('fcProgress');
+  prog.innerHTML = '';
+  fcWords.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'fc-dot' + (i === fcIndex ? ' current' : fcSeen.has(i) ? ' seen' : '');
+    prog.appendChild(dot);
+  });
+}
+
+function updateFCStats() {
+  document.getElementById('fcKnew').textContent   = fcKnewCount;
+  document.getElementById('fcMissed').textContent = fcMissedCount;
+  document.getElementById('fcTotal').textContent  = fcWords.length;
+}
+
+// ── INIT ──
+buildVocabTable('all');
+renderCard();
+updateFCProgress();
+updateFCStats();
+</script>
+</body>
+</html>
