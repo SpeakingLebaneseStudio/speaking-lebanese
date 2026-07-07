@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pronunciation Training — A1 Lesson 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red: #D20014;
+    --black: #0A0A0A;
+    --cream: #FAF8F4;
+    --off-white: #F2EDE6;
+    --grey: #666666;
+    --grey-light: #E0DAD3;
+    --red-tint: #FAF0F1;
+    --shadow-bg: #F0EAE3;
+    --shadow-border: #D5CCC3;
+  }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--cream); color: var(--black); font-size: 16px; line-height: 1.5; }
+
+  .page-header { background: var(--cream); padding: 22px 28px 16px; border-bottom: 2px solid var(--off-white); }
+  .page-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--grey); margin-bottom: 5px; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 24px; color: var(--black); line-height: 1.2; }
+  .page-header h1 span { color: var(--red); }
+
+  .intro-strip { background: var(--off-white); border-bottom: 1px solid var(--grey-light); padding: 13px 28px; }
+  .intro-strip p { font-size: 14px; color: var(--grey); line-height: 1.6; }
+
+  .content { padding: 28px 20px 48px; max-width: 700px; margin: 0 auto; }
+
+  .sound-section { margin-bottom: 44px; }
+  .sound-header { display: flex; align-items: center; gap: 14px; margin-bottom: 5px; }
+  .sound-badge { width: 44px; height: 44px; border-radius: 50%; background: var(--red); color: #fff; font-family: 'Playfair Display', serif; font-weight: 900; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sound-title-block h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; color: var(--black); line-height: 1.2; }
+  .sound-title-block .arabic { font-size: 20px; color: var(--red); line-height: 1; }
+  .sound-description { font-size: 13px; color: var(--grey); font-style: italic; padding-left: 58px; margin-bottom: 16px; line-height: 1.55; }
+  .section-divider { height: 1px; background: var(--grey-light); margin-bottom: 16px; }
+
+  /* ── Desktop table ── */
+  .word-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; background: #fff; border: 1px solid var(--grey-light); overflow: hidden; }
+  .word-table thead tr { background: var(--black); }
+  .word-table thead th { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; padding: 8px 10px; text-align: left; }
+  .word-table tbody tr { border-bottom: 1px solid var(--grey-light); transition: background 0.12s; }
+  .word-table tbody tr:last-child { border-bottom: none; }
+  .word-table tbody tr:hover { background: var(--red-tint); }
+  .word-table td { padding: 10px 10px; vertical-align: middle; font-size: 13px; }
+  .word-arabizi { font-weight: 700; font-size: 14px; color: var(--red); }
+  .word-arabic { font-size: 16px; color: var(--black); direction: rtl; text-align: right; }
+  .word-english { font-size: 13px; color: var(--black); }
+  .word-french { font-size: 13px; color: var(--grey); font-style: italic; }
+
+  /* ── Mobile cards (hidden on desktop) ── */
+  .word-cards { display: none; margin-bottom: 16px; }
+  .word-card { background: #fff; border: 1px solid var(--grey-light); border-radius: 4px; margin-bottom: 10px; overflow: hidden; }
+  .word-card-header { background: var(--red-tint); border-bottom: 1px solid var(--grey-light); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+  .word-card-arabizi { font-weight: 700; font-size: 16px; color: var(--red); }
+  .word-card-arabic { font-size: 18px; color: var(--black); direction: rtl; }
+  .word-card-translations { padding: 8px 14px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .word-card-en { font-size: 13px; color: var(--black); }
+  .word-card-fr { font-size: 13px; color: var(--grey); font-style: italic; }
+  .word-card-btns { padding: 10px 14px; border-top: 1px solid var(--grey-light); display: flex; gap: 8px; }
+
+  /* ── Buttons ── */
+  .audio-btns { display: flex; gap: 6px; white-space: nowrap; }
+  .btn-audio { display: inline-flex; align-items: center; gap: 5px; font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; border: none; border-radius: 3px; padding: 6px 10px; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+  .btn-audio:active { transform: scale(0.96); }
+  .btn-slow { background: var(--black); color: #fff; }
+  .btn-slow:hover { opacity: 0.78; }
+  .btn-natural { background: var(--red); color: #fff; }
+  .btn-natural:hover { opacity: 0.85; }
+  .btn-audio.playing { opacity: 0.6; }
+
+  /* ── Shadow card ── */
+  .shadow-card { background: var(--shadow-bg); border: 1px solid var(--shadow-border); border-left: 4px solid var(--black); border-radius: 4px; padding: 16px 18px; margin-bottom: 12px; }
+  .shadow-card .shadow-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--black); margin-bottom: 8px; }
+  .shadow-card .shadow-phrase { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 18px; color: var(--black); margin-bottom: 4px; }
+  .shadow-card .shadow-phrase .highlight { color: var(--red); }
+  .shadow-card .shadow-instruction { font-size: 12px; color: var(--grey); margin-bottom: 12px; line-height: 1.5; }
+  .btn-shadow { background: var(--black); color: #fff; font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border: none; border-radius: 3px; padding: 8px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
+  .btn-shadow:hover { opacity: 0.78; }
+  .btn-shadow.playing { opacity: 0.5; }
+
+  .encourage-box { border-left: 3px solid var(--red); background: #fff; padding: 11px 14px; margin-bottom: 4px; }
+  .encourage-box p { font-size: 13px; color: var(--grey); line-height: 1.6; font-style: italic; }
+  .section-end-rule { height: 1px; background: var(--grey-light); margin-top: 28px; }
+
+  .bottom-bar { background: var(--off-white); border-top: 1px solid var(--grey-light); padding: 11px 28px; display: flex; align-items: center; justify-content: space-between; }
+  .bottom-bar span { font-size: 12px; color: var(--grey); }
+
+  /* ── Responsive ── */
+  @media (max-width: 540px) {
+    .word-table { display: none; }
+    .word-cards { display: block; }
+    .sound-description { padding-left: 0; margin-top: 6px; }
+    .page-header, .intro-strip { padding-left: 16px; padding-right: 16px; }
+    .content { padding: 20px 14px 36px; }
+    .shadow-card .shadow-phrase { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">A1 Beginner Survival — Lesson 2 — Activity 3</div>
+  <h1>Pronunciation <span>Training</span></h1>
+</div>
+<div class="intro-strip">
+  <p>Two new sounds this lesson. Both appear constantly in numbers and job titles — master them here, and the rest of the lesson gets easier.</p>
+</div>
+
+<div class="content">
+
+  <!-- ══════════════ SOUND 5 ══════════════ -->
+  <div class="sound-section">
+    <div class="sound-header">
+      <div class="sound-badge">5</div>
+      <div class="sound-title-block"><h2>The 5 sound</h2><div class="arabic">خ</div></div>
+    </div>
+    <p class="sound-description">A raspy, scraping sound made at the very back of the throat — like gently clearing your throat, or gargling without water. Similar to the "ch" in the Scottish "loch" or German "Bach." No true English equivalent.</p>
+    <div class="section-divider"></div>
+
+    <!-- Desktop table -->
+    <table class="word-table">
+      <thead><tr><th>Arabizi</th><th>Arabic</th><th>English</th><th>Français</th><th>Listen</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="word-arabizi">5amsé</td>
+          <td class="word-arabic">خمسة</td>
+          <td class="word-english">five</td>
+          <td class="word-french">cinq</td>
+          <td><div class="audio-btns">
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_5_5amse_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_5_5amse_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="word-arabizi">5amsta3ch</td>
+          <td class="word-arabic">خمستعش</td>
+          <td class="word-english">fifteen</td>
+          <td class="word-french">quinze</td>
+          <td><div class="audio-btns">
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_5_5amstaach_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_5_5amstaach_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="word-arabizi">5amseen</td>
+          <td class="word-arabic">خمسين</td>
+          <td class="word-english">fifty</td>
+          <td class="word-french">cinquante</td>
+          <td><div class="audio-btns">
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_5_5amseen_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_5_5amseen_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+          </div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Mobile cards -->
+    <div class="word-cards">
+      <div class="word-card">
+        <div class="word-card-header"><span class="word-card-arabizi">5amsé</span><span class="word-card-arabic">خمسة</span></div>
+        <div class="word-card-translations"><span class="word-card-en">five</span><span class="word-card-fr">cinq</span></div>
+        <div class="word-card-btns">
+          <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_5_5amse_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+          <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_5_5amse_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+        </div>
+      </div>
+      <div class="word-card">
+        <div class="word-card-header"><span class="word-card-arabizi">5amsta3ch</span><span class="word-card-arabic">خمستعش</span></div>
+        <div class="word-card-translations"><span class="word-card-en">fifteen</span><span class="word-card-fr">quinze</span></div>
+        <div class="word-card-btns">
+          <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_5_5amstaach_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+          <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_5_5amstaach_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+        </div>
+      </div>
+      <div class="word-card">
+        <div class="word-card-header"><span class="word-card-arabizi">5amseen</span><span class="word-card-arabic">خمسين</span></div>
+        <div class="word-card-translations"><span class="word-card-en">fifty</span><span class="word-card-fr">cinquante</span></div>
+        <div class="word-card-btns">
+          <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_5_5amseen_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+          <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_5_5amseen_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shadow-card">
+      <div class="shadow-label">Shadow Prompt — Sound 5</div>
+      <div class="shadow-phrase">Bi heyda el hotel, fee <span class="highlight">5</span>amseen 2oudat mech <span class="highlight">5</span>amsta3ch.</div>
+      <p class="shadow-instruction">In this hotel there are fifty rooms, not fifteen. Listen. Repeat during the silence. Listen again and compare. You will hear the phrase twice with a 3-second gap.</p>
+      <button class="btn-shadow" onclick="playAudio('A1_L2_pron_shadow_5.m4a.mp4', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
+    </div>
+    <div class="encourage-box"><p>The 5 sound lives at the back of the throat, not the front of the mouth — that's the whole trick. A few tries and it stops feeling strange.</p></div>
+    <div class="section-end-rule"></div>
+  </div>
+
+  <!-- ══════════════ SOUND 6 ══════════════ -->
+  <div class="sound-section" style="margin-top: 36px;">
+    <div class="sound-header">
+      <div class="sound-badge">6</div>
+      <div class="sound-title-block"><h2>The 6 sound</h2><div class="arabic">ط</div></div>
+    </div>
+    <p class="sound-description">A heavier, rounder T. Flatten the back of the tongue, press it firmly against the roof of the mouth, and tighten the throat slightly as you release it — thicker and more resonant than an English T.</p>
+    <div class="section-divider"></div>
+
+    <!-- Desktop table -->
+    <table class="word-table">
+      <thead><tr><th>Arabizi</th><th>Arabic</th><th>English</th><th>Français</th><th>Listen</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="word-arabizi">6aaleb / 6aalbet</td>
+          <td class="word-arabic">طالب/طالبة</td>
+          <td class="word-english">student (m/f)</td>
+          <td class="word-french">étudiant(e)</td>
+          <td><div class="audio-btns">
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_6_6aaleb_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_6_6aaleb_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="word-arabizi">6obbaa5 / 6obbaa5at</td>
+          <td class="word-arabic">طباخ / طباخة</td>
+          <td class="word-english">cook (m/f)</td>
+          <td class="word-french">cuisinier(ère)</td>
+          <td><div class="audio-btns">
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_6_6obbaa5_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_6_6obbaa5_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="word-arabizi">6ayyeb / 6ayybet</td>
+          <td class="word-arabic">طيب / طيبة</td>
+          <td class="word-english">well-cooked / good (m/f)</td>
+          <td class="word-french">bien cuit / bon</td>
+          <td><div class="audio-btns">
+            <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_6_6ayyeb_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+            <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_6_6ayyeb_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+          </div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Mobile cards -->
+    <div class="word-cards">
+      <div class="word-card">
+        <div class="word-card-header"><span class="word-card-arabizi">6aaleb / 6aalbet</span><span class="word-card-arabic">طالب/طالبة</span></div>
+        <div class="word-card-translations"><span class="word-card-en">student (m/f)</span><span class="word-card-fr">étudiant(e)</span></div>
+        <div class="word-card-btns">
+          <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_6_6aaleb_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+          <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_6_6aaleb_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+        </div>
+      </div>
+      <div class="word-card">
+        <div class="word-card-header"><span class="word-card-arabizi">6obbaa5 / 6obbaa5at</span><span class="word-card-arabic">طباخ / طباخة</span></div>
+        <div class="word-card-translations"><span class="word-card-en">cook (m/f)</span><span class="word-card-fr">cuisinier(ère)</span></div>
+        <div class="word-card-btns">
+          <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_6_6obbaa5_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+          <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_6_6obbaa5_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+        </div>
+      </div>
+      <div class="word-card">
+        <div class="word-card-header"><span class="word-card-arabizi">6ayyeb / 6ayybet</span><span class="word-card-arabic">طيب / طيبة</span></div>
+        <div class="word-card-translations"><span class="word-card-en">well-cooked / good (m/f)</span><span class="word-card-fr">bien cuit / bon</span></div>
+        <div class="word-card-btns">
+          <button class="btn-audio btn-slow" onclick="playAudio('A1_L2_pron_6_6ayyeb_slow.m4a.mp4', this)"><span class="icon">▶</span> Slow</button>
+          <button class="btn-audio btn-natural" onclick="playAudio('A1_L2_pron_6_6ayyeb_natural.m4a.mp4', this)"><span class="icon">▶</span> Natural</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shadow-card">
+      <div class="shadow-label">Shadow Prompt — Sound 6</div>
+      <div class="shadow-phrase">El <span class="highlight">6</span>obbaa5 bya3mol 2akl <span class="highlight">6</span>ayyeb.</div>
+      <p class="shadow-instruction">The cook makes good food. Listen. Repeat during the silence. Listen again and compare. You will hear the phrase twice with a 3-second gap.</p>
+      <button class="btn-shadow" onclick="playAudio('A1_L2_pron_shadow_6.m4a.mp4', this)"><span class="icon">▶</span> Play Shadow Prompt</button>
+    </div>
+    <div class="encourage-box"><p>The 6 sound is just a heavier T — you already make every part of this sound in English. You're only turning up the weight.</p></div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <span>Speaking Lebanese — A1 Lesson 2 — Pronunciation Training</span>
+  <span>speakinglebanese.com</span>
+</div>
+
+<script>
+  let currentAudio = null;
+  let currentBtn = null;
+  function playAudio(filename, btn) {
+    if (currentAudio) {
+      currentAudio.pause(); currentAudio.currentTime = 0;
+      if (currentBtn) { currentBtn.classList.remove('playing'); const ic = currentBtn.querySelector('.icon'); if (ic) ic.textContent = '▶'; }
+    }
+    if (currentBtn === btn) { currentAudio = null; currentBtn = null; return; }
+    const audio = new Audio(filename);
+    currentAudio = audio; currentBtn = btn;
+    btn.classList.add('playing');
+    const icon = btn.querySelector('.icon');
+    if (icon) icon.textContent = '■';
+    audio.play().catch(() => { btn.classList.remove('playing'); if (icon) icon.textContent = '▶'; currentAudio = null; currentBtn = null; });
+    audio.addEventListener('ended', () => { btn.classList.remove('playing'); if (icon) icon.textContent = '▶'; currentAudio = null; currentBtn = null; });
+  }
+</script>
+</body>
+</html>

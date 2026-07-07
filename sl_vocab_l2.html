@@ -235,7 +235,7 @@ body {
 <div class="container">
   <div class="page-intro">
     <div class="section-label">Vocabulary Bank</div>
-    <h2>59 words &amp; expressions</h2>
+    <h2>63 words &amp; expressions</h2>
     <p>Browse the full list, listen to every word, then test yourself with the flashcards.</p>
   </div>
 
@@ -249,7 +249,7 @@ body {
   ══════════════════════════════ -->
   <div class="panel active" id="panel-vocab">
     <div class="filter-row">
-      <button class="filter-btn active" onclick="filterType('all',this)">All (59)</button>
+      <button class="filter-btn active" onclick="filterType('all',this)">All (63)</button>
       <button class="filter-btn" onclick="filterType('numbers',this)">Numbers</button>
       <button class="filter-btn" onclick="filterType('personal_info',this)">Personal Info</button>
       <button class="filter-btn" onclick="filterType('jobs',this)">Jobs</button>
@@ -277,7 +277,7 @@ body {
   ══════════════════════════════ -->
   <div class="panel" id="panel-flash">
     <div class="fc-filter-row">
-      <button class="filter-btn active" onclick="fcFilterType('all',this)">All (59)</button>
+      <button class="filter-btn active" onclick="fcFilterType('all',this)">All (63)</button>
       <button class="filter-btn" onclick="fcFilterType('numbers',this)">Numbers</button>
       <button class="filter-btn" onclick="fcFilterType('personal_info',this)">Personal Info</button>
       <button class="filter-btn" onclick="fcFilterType('jobs',this)">Jobs</button>
@@ -292,7 +292,7 @@ body {
     <div class="fc-progress" id="fcProgress"></div>
     <div class="fc-controls">
       <button class="fc-nav-btn" id="fcPrev" onclick="fcNav(-1)" disabled>← Prev</button>
-      <span class="fc-counter" id="fcCounter">1 / 59</span>
+      <span class="fc-counter" id="fcCounter">1 / 63</span>
       <button class="fc-nav-btn" id="fcNext" onclick="fcNav(1)">Next →</button>
       <button class="fc-shuffle-btn" onclick="fcShuffle()">Shuffle</button>
     </div>
@@ -321,11 +321,23 @@ body {
 // ── AUDIO BASE URL ──
 const BASE = 'https://speakinglebanesestudio.github.io/speaking-lebanese/';
 
-// ── WORD DATA ── 59 words
+// ── WORD DATA ── 63 words (stable IDs: original 1–59 untouched except 39 [doctōr, now merged w/ 7akeem] and 58 [nomrat, now merged w/ ra2m]; new words use 60, 61, 63, 64)
 // [n, arabizi, arabic, english, french, type, sound, audioFiles]
 // audioFiles: array of 1 or 2 filenames (two when the row records two distinct forms)
 const WORDS = [
-[
+  [
+    58,
+    "nomrat / ra2m",
+    "نمرة / رَ2م",
+    "number",
+    "numéro",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_58_nomrat_ra2m.m4a"
+    ]
+  ],
+  [
     1,
     "9ifr",
     "صِفر",
@@ -674,6 +686,18 @@ const WORDS = [
     ]
   ],
   [
+    60,
+    "2alf",
+    "أَلْف",
+    "one thousand",
+    "mille",
+    "numbers",
+    "",
+    [
+      "A1_L2_vocab_60_2alf.m4a"
+    ]
+  ],
+  [
     30,
     "Addey 3omrak / 3omrik?",
     "ادّي عمرَك/ ادّي عمرِك",
@@ -758,6 +782,18 @@ const WORDS = [
     ]
   ],
   [
+    61,
+    "5aateb / 5aatbet",
+    "خاطِب/خاطْبة",
+    "engaged (m/f)",
+    "fiancé(e)",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_61_5aateb_5aatbet.m4a"
+    ]
+  ],
+  [
     37,
     "6aaleb / 6aalbet",
     "طالب/طالبة",
@@ -783,14 +819,14 @@ const WORDS = [
   ],
   [
     39,
-    "doctōr / doctōrat",
-    "دكتور/دكتورة",
-    "doctor (m/f)",
-    "médecin / docteur",
+    "doctōr / doctōrat / 7akeem / 7akeemet",
+    "دكتور / دكتورة / حَكيم / حَكيمة",
+    "doctor / physician (m/f)",
+    "médecin / docteur (m/f)",
     "jobs",
     "",
     [
-      "A1_L2_vocab_39_doctor_doctorat.m4a"
+      "A1_L2_vocab_39_doctor_doctorat_hakeem_hakeemet.m4a"
     ]
   ],
   [
@@ -866,6 +902,18 @@ const WORDS = [
     ]
   ],
   [
+    63,
+    "6ayyeb / 6ayybet",
+    "طَيِّب/طَيِّبة",
+    "well-cooked / good (m/f)",
+    "bien cuit / bon",
+    "jobs",
+    "6",
+    [
+      "A1_L2_vocab_63_6ayyeb_6ayybet.m4a"
+    ]
+  ],
+  [
     46,
     "Sitt beyt / ma bechteghel",
     "ستّ بيت/ ما بشتغل",
@@ -875,6 +923,18 @@ const WORDS = [
     "",
     [
       "A1_L2_vocab_46_sitt_beyt_ma_bechteghel.m4a"
+    ]
+  ],
+  [
+    64,
+    "jinsiyyet",
+    "جِنسِيِّة",
+    "nationality",
+    "nationalité",
+    "nationalities",
+    "",
+    [
+      "A1_L2_vocab_64_jinsiyyet.m4a"
     ]
   ],
   [
@@ -1010,18 +1070,6 @@ const WORDS = [
     ]
   ],
   [
-    58,
-    "nomrat",
-    "نمرة",
-    "number",
-    "numéro",
-    "phrases",
-    "",
-    [
-      "A1_L2_vocab_58_nomrat.m4a"
-    ]
-  ],
-  [
     59,
     "Téléfone / mowbayl",
     "تيليفون / موبايل",
@@ -1150,6 +1198,9 @@ function buildVocabTable(type) {
   activeType = type;
   const body = document.getElementById('vocabBody');
   body.innerHTML = '';
+  // Display numbering is a live counter, independent of each word's stable audio-file ID —
+  // this lets us insert/reorder vocab without ever renaming existing audio files.
+  let displayNum = 0;
   SECTIONS.forEach(sec => {
     const sectionWords = WORDS.filter(w => w[5] === sec.type && (type === 'all' || w[5] === type));
     if (!sectionWords.length) return;
@@ -1158,6 +1209,7 @@ function buildVocabTable(type) {
     hdr.innerHTML = `<td colspan="7">${sec.label}</td>`;
     body.appendChild(hdr);
     sectionWords.forEach(w => {
+      displayNum++;
       const [num, arabizi, arabic, eng, fr, wtype, sound, files] = w;
       const tr = document.createElement('tr');
       tr.dataset.type = wtype;
@@ -1166,7 +1218,7 @@ function buildVocabTable(type) {
         `<button class="play-word-btn" data-label="${labels[i]}" onclick="playAudio('${f}',this)">${playIcon()} ${labels[i]}</button>`
       ).join('');
       tr.innerHTML = `
-        <td class="td-num">${num}</td>
+        <td class="td-num">${displayNum}</td>
         <td class="td-arabizi">${arabizi}</td>
         <td class="td-arabic">${arabic}</td>
         <td class="td-en">${eng}</td>
@@ -1221,7 +1273,7 @@ function renderCard() {
     `<button class="card-audio-btn" onclick="event.stopPropagation();playAudio('${f}',this)">${playIcon()} ${labels[i]}</button>`
   ).join('');
   back.innerHTML = `
-    <div class="card-hint">Word ${num} of 59</div>
+    <div class="card-hint">Word ${fcIndex + 1} of ${fcWords.length}</div>
     <div class="card-english">${eng}</div>
     <div class="card-french">${fr}</div>
     <div class="card-audio-row">${audioButtons}</div>`;
