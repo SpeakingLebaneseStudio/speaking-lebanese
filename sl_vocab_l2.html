@@ -255,6 +255,7 @@ body {
       <button class="filter-btn" onclick="filterType('jobs',this)">Jobs</button>
       <button class="filter-btn" onclick="filterType('nationalities',this)">Nationalities</button>
       <button class="filter-btn" onclick="filterType('phrases',this)">Phrases</button>
+      <button class="filter-btn" onclick="filterType('adjectives',this)">Adjectives</button>
     </div>
     <table class="vocab-table" id="vocabTable">
       <thead>
@@ -283,6 +284,7 @@ body {
       <button class="filter-btn" onclick="fcFilterType('jobs',this)">Jobs</button>
       <button class="filter-btn" onclick="fcFilterType('nationalities',this)">Nationalities</button>
       <button class="filter-btn" onclick="fcFilterType('phrases',this)">Phrases</button>
+      <button class="filter-btn" onclick="fcFilterType('adjectives',this)">Adjectives</button>
     </div>
     <div class="fc-stats">
       <div class="fc-stat"><div class="fc-stat-num green" id="fcKnew">0</div><div class="fc-stat-label">knew it</div></div>
@@ -907,7 +909,7 @@ const WORDS = [
     "طَيِّب/طَيِّبة",
     "well-cooked / good (m/f)",
     "bien cuit / bon",
-    "jobs",
+    "adjectives",
     "6",
     [
       "A1_L2_vocab_63_6ayyeb_6ayybet.m4a"
@@ -1089,6 +1091,7 @@ const SECTIONS = [
   { label: 'Jobs',           type: 'jobs' },
   { label: 'Nationalities',  type: 'nationalities' },
   { label: 'Phrases',        type: 'phrases' },
+  { label: 'Adjectives',     type: 'adjectives' },
 ];
 
 // ── AUDIO ──
