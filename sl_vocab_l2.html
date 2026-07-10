@@ -235,7 +235,7 @@ body {
 <div class="container">
   <div class="page-intro">
     <div class="section-label">Vocabulary Bank</div>
-    <h2>63 words &amp; expressions</h2>
+    <h2>66 words &amp; expressions</h2>
     <p>Browse the full list, listen to every word, then test yourself with the flashcards.</p>
   </div>
 
@@ -249,13 +249,12 @@ body {
   ══════════════════════════════ -->
   <div class="panel active" id="panel-vocab">
     <div class="filter-row">
-      <button class="filter-btn active" onclick="filterType('all',this)">All (63)</button>
+      <button class="filter-btn active" onclick="filterType('all',this)">All (66)</button>
       <button class="filter-btn" onclick="filterType('numbers',this)">Numbers</button>
       <button class="filter-btn" onclick="filterType('personal_info',this)">Personal Info</button>
       <button class="filter-btn" onclick="filterType('jobs',this)">Jobs</button>
       <button class="filter-btn" onclick="filterType('nationalities',this)">Nationalities</button>
-      <button class="filter-btn" onclick="filterType('phrases',this)">Phrases</button>
-      <button class="filter-btn" onclick="filterType('adjectives',this)">Adjectives</button>
+
     </div>
     <table class="vocab-table" id="vocabTable">
       <thead>
@@ -278,13 +277,12 @@ body {
   ══════════════════════════════ -->
   <div class="panel" id="panel-flash">
     <div class="fc-filter-row">
-      <button class="filter-btn active" onclick="fcFilterType('all',this)">All (63)</button>
+      <button class="filter-btn active" onclick="fcFilterType('all',this)">All (66)</button>
       <button class="filter-btn" onclick="fcFilterType('numbers',this)">Numbers</button>
       <button class="filter-btn" onclick="fcFilterType('personal_info',this)">Personal Info</button>
       <button class="filter-btn" onclick="fcFilterType('jobs',this)">Jobs</button>
       <button class="filter-btn" onclick="fcFilterType('nationalities',this)">Nationalities</button>
-      <button class="filter-btn" onclick="fcFilterType('phrases',this)">Phrases</button>
-      <button class="filter-btn" onclick="fcFilterType('adjectives',this)">Adjectives</button>
+
     </div>
     <div class="fc-stats">
       <div class="fc-stat"><div class="fc-stat-num green" id="fcKnew">0</div><div class="fc-stat-label">knew it</div></div>
@@ -294,7 +292,7 @@ body {
     <div class="fc-progress" id="fcProgress"></div>
     <div class="fc-controls">
       <button class="fc-nav-btn" id="fcPrev" onclick="fcNav(-1)" disabled>← Prev</button>
-      <span class="fc-counter" id="fcCounter">1 / 63</span>
+      <span class="fc-counter" id="fcCounter">1 / 66</span>
       <button class="fc-nav-btn" id="fcNext" onclick="fcNav(1)">Next →</button>
       <button class="fc-shuffle-btn" onclick="fcShuffle()">Shuffle</button>
     </div>
@@ -700,6 +698,18 @@ const WORDS = [
     ]
   ],
   [
+    57,
+    "ana sékin bi... / ana sékni bi...",
+    "أنا ساكن بِ…/أنا ساكنة بِ…",
+    "I live in… (m/f)",
+    "j'habite à…",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_57_ana_sekin_bi_ana_sekni_bi.m4a"
+    ]
+  ],
+  [
     30,
     "Addey 3omrak / 3omrik?",
     "ادّي عمرَك/ ادّي عمرِك",
@@ -760,39 +770,99 @@ const WORDS = [
     ]
   ],
   [
-    35,
-    "mjawwaz / mjawazet",
-    "مجوز/مجوزة",
-    "married (m/f)",
-    "marié(e)",
+    59,
+    "Téléfone / mowbayl",
+    "تيليفون / موبايل",
+    "phone / mobile",
+    "téléphone / portable",
     "personal_info",
     "",
     [
-      "A1_L2_vocab_35_mjawwaz_mjawazet.m4a"
+      "A1_L2_vocab_59_telefone_mowbayl.m4a"
     ]
   ],
   [
-    36,
-    "a3zab / 3azbet",
-    "اعزب/عزبة",
-    "single (m/f)",
-    "célibataire",
+    63,
+    "6ayyeb / 6ayybet",
+    "طَيِّب/طَيِّبة",
+    "well-cooked / good (m/f)",
+    "bien cuit / bon",
     "personal_info",
-    "",
+    "6",
     [
-      "A1_L2_vocab_36_a3zab_3azbet.m4a"
+      "A1_L2_vocab_63_6ayyeb_6ayybet.m4a"
     ]
   ],
   [
-    61,
-    "5aateb / 5aatbet",
-    "خاطِب/خاطْبة",
-    "engaged (m/f)",
-    "fiancé(e)",
+    65,
+    "sa77",
+    "صَحّ",
+    "correct",
+    "correct",
     "personal_info",
     "",
     [
-      "A1_L2_vocab_61_5aateb_5aatbet.m4a"
+      "A1_L2_vocab_65_sa77.m4a"
+    ]
+  ],
+  [
+    66,
+    "8alatt",
+    "غَلَط",
+    "wrong",
+    "faux",
+    "personal_info",
+    "8",
+    [
+      "A1_L2_vocab_66_8alatt.m4a"
+    ]
+  ],
+  [
+    67,
+    "mazbout",
+    "مَظبوط",
+    "exact",
+    "exact",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_67_mazbout.m4a"
+    ]
+  ],
+  [
+    68,
+    "mech mazbout",
+    "مش مَظبوط",
+    "incorrect",
+    "incorrect",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_68_mech_mazbout.m4a"
+    ]
+  ],
+  [
+    69,
+    "ma3ley",
+    "مَعْلي",
+    "it's fine",
+    "ce n'est pas grave",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_69_ma3ley.m4a"
+    ]
+  ],
+  [
+    70,
+    "3ayb",
+    "عَيْب",
+    "not proper",
+    "ce n'est pas convenable",
+    "personal_info",
+    "",
+    [
+      "A1_L2_vocab_70_3ayb.m4a"
     ]
   ],
   [
@@ -857,14 +927,14 @@ const WORDS = [
   ],
   [
     42,
-    "mareed / mareedat",
+    "moumarred / moumarridat",
     "ممرض/ممرضة",
     "nurse (m/f)",
     "infirmier(ère)",
     "jobs",
     "",
     [
-      "A1_L2_vocab_42_mareed_mareedat.m4a"
+      "A1_L2_vocab_42_moumarred_moumarridat.m4a"
     ]
   ],
   [
@@ -901,18 +971,6 @@ const WORDS = [
     "6",
     [
       "A1_L2_vocab_45_6obbaa5_6obbaa5at.m4a"
-    ]
-  ],
-  [
-    63,
-    "6ayyeb / 6ayybet",
-    "طَيِّب/طَيِّبة",
-    "well-cooked / good (m/f)",
-    "bien cuit / bon",
-    "adjectives",
-    "6",
-    [
-      "A1_L2_vocab_63_6ayyeb_6ayybet.m4a"
     ]
   ],
   [
@@ -1058,30 +1116,6 @@ const WORDS = [
     [
       "A1_L2_vocab_56_qatari_qatariyyet.m4a"
     ]
-  ],
-  [
-    57,
-    "ana sékin bi... / ana sékni bi...",
-    "أنا ساكن بِ…/أنا ساكنة بِ…",
-    "I live in… (m/f)",
-    "j'habite à…",
-    "phrases",
-    "",
-    [
-      "A1_L2_vocab_57_ana_sekin_bi_ana_sekni_bi.m4a"
-    ]
-  ],
-  [
-    59,
-    "Téléfone / mowbayl",
-    "تيليفون / موبايل",
-    "phone / mobile",
-    "téléphone / portable",
-    "phrases",
-    "",
-    [
-      "A1_L2_vocab_59_telefone_mowbayl.m4a"
-    ]
   ]
 ];
 
@@ -1090,8 +1124,6 @@ const SECTIONS = [
   { label: 'Personal Info',  type: 'personal_info' },
   { label: 'Jobs',           type: 'jobs' },
   { label: 'Nationalities',  type: 'nationalities' },
-  { label: 'Phrases',        type: 'phrases' },
-  { label: 'Adjectives',     type: 'adjectives' },
 ];
 
 // ── AUDIO ──
