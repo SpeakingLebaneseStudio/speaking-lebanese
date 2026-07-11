@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Vocabulary — Lesson 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:        #D20014;
+  --red-dark:   #A8000F;
+  --red-tint:   #FAE6E6;
+  --black:      #0A0A0A;
+  --cream:      #FAF8F4;
+  --green:      #008228;
+  --green-tint: #E8F5ED;
+  --grey-mid:   #666666;
+  --grey-light: #EBEBEB;
+  --white:      #FFFFFF;
+}
+body {
+  background: var(--cream);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 16px;
+  color: var(--black);
+  line-height: 1.6;
+  padding: 0 0 60px;
+}
+
+/* ── HEADER ── */
+.lesson-header {
+  background: var(--cream);
+  border-bottom: 1px solid var(--grey-light);
+  padding: 16px 28px;
+  display: flex; align-items: center; gap: 14px;
+}
+.lesson-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-mid); }
+.lesson-header .divider { width: 1px; height: 22px; background: var(--grey-light); }
+.lesson-header .title { font-weight: 700; font-size: 15px; color: var(--black); }
+.lesson-header .badge { margin-left: auto; background: var(--red); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 2px; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+/* ── PAGE INTRO ── */
+.page-intro { padding: 28px 0 20px; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
+.page-intro h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 26px; line-height: 1.25; margin-bottom: 10px; }
+.page-intro p { font-size: 15px; color: #444; }
+
+/* ── MODE TABS ── */
+.mode-tabs {
+  display: flex; gap: 0; border-bottom: 2px solid var(--grey-light); margin: 20px 0 0;
+}
+.mode-tab {
+  padding: 10px 22px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; background: none; color: var(--grey-mid);
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.mode-tab.active { color: var(--red); border-bottom-color: var(--red); }
+.mode-tab:hover:not(.active) { color: var(--black); }
+
+/* ── PANEL VISIBILITY ── */
+.panel { display: none; padding-top: 24px; }
+.panel.active { display: block; }
+
+/* ══════════════════════════════
+   VOCAB TABLE
+══════════════════════════════ */
+.filter-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center;
+}
+.filter-btn {
+  padding: 6px 14px; border: 1.5px solid var(--grey-light); border-radius: 20px;
+  background: var(--white); font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; color: var(--grey-mid); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn.active { border-color: var(--black); background: var(--black); color: var(--white); }
+.filter-btn:hover:not(.active) { border-color: var(--grey-mid); color: var(--black); }
+
+.vocab-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.vocab-table thead tr { background: var(--black); }
+.vocab-table th {
+  padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--white);
+}
+.vocab-table th.ar-col { text-align: right; }
+.vocab-table tbody tr { border-bottom: 1px solid var(--grey-light); transition: background 0.1s; }
+.vocab-table tbody tr:hover { background: var(--white); }
+.vocab-table td { padding: 10px 12px; vertical-align: middle; }
+.td-num { color: var(--grey-light); font-size: 12px; width: 32px; }
+.td-arabizi { font-weight: 700; color: var(--red); font-size: 15px; }
+.td-arabic { direction: rtl; text-align: right; font-size: 19px; color: var(--black); }
+.td-en { color: var(--black); }
+.td-fr { color: var(--grey-mid); font-style: italic; font-size: 13px; }
+.td-type { font-size: 11px; color: var(--grey-mid); }
+.td-sound { font-size: 11px; }
+.sound-pill {
+  display: inline-block; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+}
+.sound-pill.s5 { background: var(--red-tint); color: var(--red-dark); }
+.sound-pill.s6 { background: var(--green-tint); color: var(--green); }
+.td-audio { width: 150px; }
+.play-word-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; background: var(--black); color: var(--white);
+  border: none; border-radius: 4px; font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s; white-space: nowrap;
+  margin: 2px 4px 2px 0;
+}
+.play-word-btn:hover { background: #333; }
+.play-word-btn.playing { background: var(--red); }
+.play-word-btn.no-audio { background: var(--grey-light); color: var(--grey-mid); cursor: default; }
+.play-word-btn svg { fill: currentColor; flex-shrink: 0; }
+.section-header-row td {
+  background: var(--cream); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid);
+  padding: 8px 12px; border-top: 1px solid var(--grey-light);
+}
+
+/* ══════════════════════════════
+   FLASHCARDS
+══════════════════════════════ */
+.fc-controls {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.fc-counter { font-size: 13px; color: var(--grey-mid); }
+.fc-nav-btn {
+  padding: 8px 18px; border: 1.5px solid var(--grey-light); border-radius: 4px;
+  background: var(--white); font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer; color: var(--black);
+  transition: all 0.15s;
+}
+.fc-nav-btn:hover { border-color: var(--black); }
+.fc-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.fc-shuffle-btn {
+  margin-left: auto; padding: 8px 16px; border: 1.5px solid var(--grey-light);
+  border-radius: 4px; background: var(--white); font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer; color: var(--grey-mid);
+  transition: all 0.15s;
+}
+.fc-shuffle-btn:hover { border-color: var(--grey-mid); color: var(--black); }
+.fc-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+
+/* CARD */
+.card-scene { perspective: 1000px; width: 100%; max-width: 560px; margin: 0 auto 20px; height: 300px; cursor: pointer; }
+.card-inner {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d; transition: transform 0.45s ease;
+}
+.card-scene.flipped .card-inner { transform: rotateY(180deg); }
+.card-face {
+  position: absolute; width: 100%; height: 100%;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 10px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 28px 24px;
+  text-align: center;
+}
+.card-front {
+  background: var(--white); border: 1px solid var(--grey-light);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.card-back {
+  background: var(--black);
+  transform: rotateY(180deg);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.card-hint { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 16px; }
+.card-back .card-hint { color: #555; }
+.card-arabizi { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 28px; color: var(--red); margin-bottom: 8px; line-height: 1.2; }
+.card-arabic { font-size: 26px; direction: rtl; color: #333; margin-bottom: 6px; }
+.card-type-tag {
+  font-size: 11px; color: var(--grey-mid); background: var(--cream);
+  padding: 3px 10px; border-radius: 10px; border: 1px solid var(--grey-light);
+}
+.card-english { font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+.card-french { font-size: 15px; color: #888; font-style: italic; margin-bottom: 14px; }
+.card-audio-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.card-audio-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 16px; background: var(--red); color: var(--white);
+  border: none; border-radius: 4px; font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 4px;
+  transition: background 0.15s;
+}
+.card-audio-btn:hover { background: var(--red-dark); }
+.card-audio-btn.no-audio { background: #333; cursor: default; opacity: 0.5; }
+.card-audio-btn svg { fill: white; }
+
+.card-flip-hint { text-align: center; font-size: 13px; color: var(--grey-mid); margin-bottom: 16px; }
+
+/* Progress dots */
+.fc-progress { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+.fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--grey-light); transition: background 0.2s; flex-shrink: 0; }
+.fc-dot.seen { background: var(--grey-mid); }
+.fc-dot.current { background: var(--red); }
+
+/* Self-assess buttons */
+.self-assess { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+.sa-btn {
+  padding: 9px 20px; border: 1.5px solid var(--grey-light); border-radius: 4px;
+  font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; background: var(--white); transition: all 0.15s;
+}
+.sa-btn.knew-it { color: var(--green); border-color: var(--green); }
+.sa-btn.knew-it:hover { background: var(--green-tint); }
+.sa-btn.missed-it { color: var(--red); border-color: var(--red); }
+.sa-btn.missed-it:hover { background: var(--red-tint); }
+
+/* FC session stats */
+.fc-stats {
+  display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;
+  font-size: 13px;
+}
+.fc-stat { text-align: center; }
+.fc-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1; }
+.fc-stat-num.green { color: var(--green); }
+.fc-stat-num.red   { color: var(--red); }
+.fc-stat-label { color: var(--grey-mid); font-size: 12px; margin-top: 2px; }
+
+.page-footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--grey-light); text-align: center; font-size: 12px; color: var(--grey-mid); }
+</style>
+</head>
+<body>
+
+<div class="lesson-header">
+  <div><div class="eyebrow">A1 — Beginner Survival · Lesson 3</div></div>
+  <div class="divider"></div>
+  <div class="title">Family &amp; Relationships</div>
+  <div class="badge">Activity 2</div>
+</div>
+
+<div class="container">
+  <div class="page-intro">
+    <div class="section-label">Vocabulary Bank</div>
+    <h2>67 words &amp; expressions</h2>
+    <p>Browse the full list, listen to every word, then test yourself with the flashcards.</p>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="showPanel('vocab')">Vocabulary list</button>
+    <button class="mode-tab" onclick="showPanel('flash')">Flashcards</button>
+  </div>
+
+  <!-- ══════════════════════════════
+       VOCAB LIST PANEL
+  ══════════════════════════════ -->
+  <div class="panel active" id="panel-vocab">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterType('all',this)">All (67)</button>
+      <button class="filter-btn" onclick="filterType('immediate_family',this)">Immediate Family</button>
+      <button class="filter-btn" onclick="filterType('extended_family',this)">Extended Family</button>
+      <button class="filter-btn" onclick="filterType('family_home',this)">Family & Home</button>
+      <button class="filter-btn" onclick="filterType('descriptions',this)">Descriptions</button>
+      <button class="filter-btn" onclick="filterType('status',this)">Status</button>
+      <button class="filter-btn" onclick="filterType('questions',this)">Questions</button>
+      <button class="filter-btn" onclick="filterType('phrases',this)">Phrases</button>
+      <button class="filter-btn" onclick="filterType('connectors',this)">Connectors</button>
+
+    </div>
+    <table class="vocab-table" id="vocabTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Arabizi</th>
+          <th class="ar-col">Arabic</th>
+          <th>English</th>
+          <th>Français</th>
+          <th>Sound</th>
+          <th>Listen</th>
+        </tr>
+      </thead>
+      <tbody id="vocabBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════
+       FLASHCARD PANEL
+  ══════════════════════════════ -->
+  <div class="panel" id="panel-flash">
+    <div class="fc-filter-row">
+      <button class="filter-btn active" onclick="fcFilterType('all',this)">All (67)</button>
+      <button class="filter-btn" onclick="fcFilterType('immediate_family',this)">Immediate Family</button>
+      <button class="filter-btn" onclick="fcFilterType('extended_family',this)">Extended Family</button>
+      <button class="filter-btn" onclick="fcFilterType('family_home',this)">Family & Home</button>
+      <button class="filter-btn" onclick="fcFilterType('descriptions',this)">Descriptions</button>
+      <button class="filter-btn" onclick="fcFilterType('status',this)">Status</button>
+      <button class="filter-btn" onclick="fcFilterType('questions',this)">Questions</button>
+      <button class="filter-btn" onclick="fcFilterType('phrases',this)">Phrases</button>
+      <button class="filter-btn" onclick="fcFilterType('connectors',this)">Connectors</button>
+
+    </div>
+    <div class="fc-stats">
+      <div class="fc-stat"><div class="fc-stat-num green" id="fcKnew">0</div><div class="fc-stat-label">knew it</div></div>
+      <div class="fc-stat"><div class="fc-stat-num" style="color:var(--grey-mid)" id="fcTotal">0</div><div class="fc-stat-label">total</div></div>
+      <div class="fc-stat"><div class="fc-stat-num red" id="fcMissed">0</div><div class="fc-stat-label">missed</div></div>
+    </div>
+    <div class="fc-progress" id="fcProgress"></div>
+    <div class="fc-controls">
+      <button class="fc-nav-btn" id="fcPrev" onclick="fcNav(-1)" disabled>← Prev</button>
+      <span class="fc-counter" id="fcCounter">1 / 67</span>
+      <button class="fc-nav-btn" id="fcNext" onclick="fcNav(1)">Next →</button>
+      <button class="fc-shuffle-btn" onclick="fcShuffle()">Shuffle</button>
+    </div>
+    <p class="card-flip-hint">Tap the card to reveal the translation</p>
+    <div class="card-scene" id="cardScene" onclick="flipCard()">
+      <div class="card-inner" id="cardInner">
+        <div class="card-face card-front" id="cardFront"></div>
+        <div class="card-face card-back" id="cardBack"></div>
+      </div>
+    </div>
+    <div class="self-assess" id="selfAssess" style="display:none">
+      <button class="sa-btn knew-it" onclick="fcAssess(true)">✓ Knew it</button>
+      <button class="sa-btn missed-it" onclick="fcAssess(false)">✗ Missed it</button>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    Speaking Lebanese · A1 Beginner Survival · Lesson 3 — Family &amp; Relationships<br>
+    speakinglebanese.com
+  </div>
+</div>
+
+<audio id="sharedAudioPlayer" preload="none" style="display:none"></audio>
+
+<script>
+// ── AUDIO BASE URL ──
+const BASE = 'https://speakinglebanesestudio.github.io/speaking-lebanese/';
+
+// ── WORD DATA ── 67 words. Stable IDs 1–67 = final production order agreed after Nidale's recording pass (2026-07-10).
+// [n, arabizi, arabic, english, french, type, sound, audioFiles]
+// audioFiles: array of 1 filename per word — every multi-form row (m/f, sing/plural) was recorded as ONE combined take, same convention as L1/L2.
+// A few entries are still pending Nidale's final confirmation (in-law terms #36-38, #40, a couple of spelling variants) — see SL_L3_AudioFilenameMap.csv for the full flag list before this goes live.
+const WORDS = [
+  [
+    1,
+    "bayy",
+    "بَيّ",
+    "father",
+    "père",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_01_bayy.m4a"
+    ]
+  ],
+  [
+    2,
+    "emm",
+    "أُم",
+    "mother",
+    "mère",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_02_emm.m4a"
+    ]
+  ],
+  [
+    3,
+    "5ayy / e5wé",
+    "خَيّ",
+    "brother / brothers",
+    "frère / frères",
+    "immediate_family",
+    "5",
+    [
+      "A1_L3_vocab_03_5ayy.m4a"
+    ]
+  ],
+  [
+    4,
+    "e5t / 5ayyét",
+    "أخت",
+    "sister / sisters",
+    "sœur / sœurs",
+    "immediate_family",
+    "5",
+    [
+      "A1_L3_vocab_04_e5t.m4a"
+    ]
+  ],
+  [
+    5,
+    "ibn",
+    "إبن",
+    "son",
+    "fils",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_05_ibn.m4a"
+    ]
+  ],
+  [
+    6,
+    "jowz",
+    "جوز",
+    "husband",
+    "mari",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_06_jowz.m4a"
+    ]
+  ],
+  [
+    7,
+    "rijjél / zalamé",
+    "رجّال / زلمة",
+    "man",
+    "homme",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_07_rijjel.m4a"
+    ]
+  ],
+  [
+    8,
+    "marat / sett",
+    "مرا",
+    "wife / woman",
+    "épouse / femme",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_08_marat.m4a"
+    ]
+  ],
+  [
+    9,
+    "9abé",
+    "صبي",
+    "boy",
+    "garçon",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_09_9abe.m4a"
+    ]
+  ],
+  [
+    10,
+    "bint",
+    "بنت",
+    "daughter / girl",
+    "fille",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_10_bint.m4a"
+    ]
+  ],
+  [
+    11,
+    "jidd / jiddo",
+    "جد / جدّو",
+    "grandfather / grandpa",
+    "grand-père / papi",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_11_jidd.m4a"
+    ]
+  ],
+  [
+    12,
+    "sett / téta",
+    "ست / تيتا",
+    "grandmother / grandma",
+    "grand-mère / mamie",
+    "immediate_family",
+    "",
+    [
+      "A1_L3_vocab_12_sett.m4a"
+    ]
+  ],
+  [
+    13,
+    "3amm / 3ammo",
+    "عم / عمّو",
+    "uncle (paternal)",
+    "oncle (paternel)",
+    "extended_family",
+    "3",
+    [
+      "A1_L3_vocab_13_3amm.m4a"
+    ]
+  ],
+  [
+    14,
+    "3ammet / 3amto",
+    "عمة / عمتو",
+    "aunt (paternal)",
+    "tante (paternelle)",
+    "extended_family",
+    "3",
+    [
+      "A1_L3_vocab_14_3ammet.m4a"
+    ]
+  ],
+  [
+    15,
+    "5aal / 5aalo",
+    "خال / خالو",
+    "uncle (maternal)",
+    "oncle (maternel)",
+    "extended_family",
+    "5",
+    [
+      "A1_L3_vocab_15_5aal.m4a"
+    ]
+  ],
+  [
+    16,
+    "5aalet / 5aalto",
+    "خالة / خالتو",
+    "aunt (maternal)",
+    "tante (maternelle)",
+    "extended_family",
+    "5",
+    [
+      "A1_L3_vocab_16_5aalet.m4a"
+    ]
+  ],
+  [
+    17,
+    "ibn/bint 3amm, ibn/bint 3ammet",
+    "إبن/بنت عم، إبن/بنت عمة",
+    "cousin — paternal side, via uncle or aunt (m/f)",
+    "cousin/cousine (paternel)",
+    "extended_family",
+    "3",
+    [
+      "A1_L3_vocab_17_ibn_3amm.m4a"
+    ]
+  ],
+  [
+    18,
+    "ibn/bint 5aal, ibn/bint 5aalet",
+    "إبن/بنت خال، إبن/بنت خالة",
+    "cousin — maternal side, via uncle or aunt (m/f)",
+    "cousin/cousine (maternel)",
+    "extended_family",
+    "5",
+    [
+      "A1_L3_vocab_18_ibn_5aal.m4a"
+    ]
+  ],
+  [
+    19,
+    "ibn/bint 5ayy, ibn/bint e5t",
+    "إبن/بنت خيّ، إبن/بنت أخت",
+    "nephew / niece — via brother or sister (m/f)",
+    "neveu / nièce",
+    "extended_family",
+    "5",
+    [
+      "A1_L3_vocab_19_ibn_5ayy.m4a"
+    ]
+  ],
+  [
+    20,
+    "tōwm",
+    "توأم",
+    "twin(s)",
+    "jumeau / jumelle",
+    "extended_family",
+    "",
+    [
+      "A1_L3_vocab_20_towm.m4a"
+    ]
+  ],
+  [
+    21,
+    "7afeed / 7afeedet",
+    "حفيد / حفيدة",
+    "grandson / granddaughter",
+    "petit-fils / petite-fille",
+    "extended_family",
+    "7",
+    [
+      "A1_L3_vocab_21_7afeed.m4a"
+    ]
+  ],
+  [
+    36,
+    "9ohr",
+    "صهر",
+    "son-in-law",
+    "beau-fils / gendre",
+    "extended_family",
+    "9",
+    [
+      "A1_L3_vocab_36_9ohr.m4a"
+    ]
+  ],
+  [
+    37,
+    "kinnet",
+    "كنة",
+    "daughter-in-law",
+    "belle-fille",
+    "extended_family",
+    "",
+    [
+      "A1_L3_vocab_37_kinnet.m4a"
+    ]
+  ],
+  [
+    38,
+    "7ama / 7amat",
+    "حَما / حَماة",
+    "father-in-law / mother-in-law",
+    "beau-père / belle-mère",
+    "extended_family",
+    "",
+    [
+      "A1_L3_vocab_38_7ama.m4a"
+    ]
+  ],
+  [
+    22,
+    "3aylet",
+    "عيلة",
+    "family",
+    "famille",
+    "family_home",
+    "3",
+    [
+      "A1_L3_vocab_22_3aylet.m4a"
+    ]
+  ],
+  [
+    23,
+    "2araayeb",
+    "أقارب",
+    "relatives",
+    "proches / famille élargie",
+    "family_home",
+    "2",
+    [
+      "A1_L3_vocab_23_2araayeb.m4a"
+    ]
+  ],
+  [
+    24,
+    "walad / wléd",
+    "ولد / ولاد",
+    "child / children",
+    "enfant / enfants",
+    "family_home",
+    "",
+    [
+      "A1_L3_vocab_24_walad.m4a"
+    ]
+  ],
+  [
+    25,
+    "ahl",
+    "أهل",
+    "parents / family (elders)",
+    "parents / famille",
+    "family_home",
+    "",
+    [
+      "A1_L3_vocab_25_ahl.m4a"
+    ]
+  ],
+  [
+    26,
+    "beyt",
+    "بيت",
+    "house / home",
+    "maison",
+    "family_home",
+    "",
+    [
+      "A1_L3_vocab_26_beyt.m4a"
+    ]
+  ],
+  [
+    27,
+    "day3a",
+    "ضيعة",
+    "village",
+    "village",
+    "family_home",
+    "3",
+    [
+      "A1_L3_vocab_27_day3a.m4a"
+    ]
+  ],
+  [
+    28,
+    "7ayy",
+    "حي",
+    "neighborhood",
+    "quartier",
+    "family_home",
+    "7",
+    [
+      "A1_L3_vocab_28_7ayy.m4a"
+    ]
+  ],
+  [
+    29,
+    "jaar / jeeraan",
+    "جار / جيران",
+    "neighbor / neighbors",
+    "voisin / voisins",
+    "family_home",
+    "",
+    [
+      "A1_L3_vocab_29_jaar.m4a"
+    ]
+  ],
+  [
+    30,
+    "7abeeb / 7abeebet",
+    "حبيب / حبيبة",
+    "darling / sweetheart",
+    "chéri / chérie",
+    "descriptions",
+    "7",
+    [
+      "A1_L3_vocab_30_7abeeb.m4a"
+    ]
+  ],
+  [
+    31,
+    "kbeer / kbeeret",
+    "كبير / كبيرة",
+    "older, big (m/f)",
+    "plus âgé(e), grand(e)",
+    "descriptions",
+    "",
+    [
+      "A1_L3_vocab_31_kbeer.m4a"
+    ]
+  ],
+  [
+    32,
+    "z8eer / z8eeret",
+    "زغير / زغيرة",
+    "young, small (m/f)",
+    "jeune, petit(e)",
+    "descriptions",
+    "8",
+    [
+      "A1_L3_vocab_32_z8eer.m4a"
+    ]
+  ],
+  [
+    33,
+    "wasatt",
+    "وسط",
+    "middle",
+    "du milieu",
+    "descriptions",
+    "",
+    [
+      "A1_L3_vocab_33_wasat.m4a"
+    ]
+  ],
+  [
+    34,
+    "8aali / 8aalyet",
+    "غالي / غالية",
+    "dear, precious (m/f)",
+    "cher/chère, précieux(se)",
+    "descriptions",
+    "8",
+    [
+      "A1_L3_vocab_34_8aali.m4a"
+    ]
+  ],
+  [
+    35,
+    "6efl / 6eflet",
+    "طفل / طفلة",
+    "baby, young child (m/f)",
+    "bébé, jeune enfant",
+    "descriptions",
+    "6",
+    [
+      "A1_L3_vocab_35_6efl.m4a"
+    ]
+  ],
+  [
+    64,
+    "mashee",
+    "ماشي",
+    "okay / it's going (response)",
+    "ça marche / ça va",
+    "descriptions",
+    "",
+    [
+      "A1_L3_vocab_64_mashee.m4a"
+    ]
+  ],
+  [
+    39,
+    "3arees / 3arous",
+    "عريس / عروس",
+    "groom / bride",
+    "marié / mariée",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_39_3arees.m4a"
+    ]
+  ],
+  [
+    40,
+    "ma8roum / ma8roumet",
+    "مغروم / مغرومة",
+    "smitten, in love (m/f)",
+    "amoureux / amoureuse",
+    "status",
+    "8",
+    [
+      "A1_L3_vocab_40_ma8roum.m4a"
+    ]
+  ],
+  [
+    41,
+    "mjawwaz / mjawwazet",
+    "مجوز / مجوزة",
+    "married (m/f)",
+    "marié(e)",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_41_mjawwaz.m4a"
+    ]
+  ],
+  [
+    42,
+    "a3zab / 3azbet",
+    "اعزب / عزبة",
+    "single (m/f)",
+    "célibataire",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_42_a3zab.m4a"
+    ]
+  ],
+  [
+    43,
+    "5aa6eb / 5aa6bet",
+    "خاطب / خاطبة",
+    "engaged (m/f)",
+    "fiancé(e)",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_43_5aa6eb.m4a"
+    ]
+  ],
+  [
+    44,
+    "m6alla2 / m6all2a",
+    "مطلق / مطلقة",
+    "divorced (m/f)",
+    "divorcé(e)",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_44_m6alla2.m4a"
+    ]
+  ],
+  [
+    45,
+    "2armal / 2armalet",
+    "أرمل / أرملة",
+    "widower / widow (m/f)",
+    "veuf / veuve",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_45_2armal.m4a"
+    ]
+  ],
+  [
+    66,
+    "sawa",
+    "سوا",
+    "together",
+    "ensemble",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_66_sawa.m4a"
+    ]
+  ],
+  [
+    67,
+    "3ers / fara7",
+    "عرس / فرح",
+    "wedding celebration",
+    "mariage (célébration)",
+    "status",
+    "",
+    [
+      "A1_L3_vocab_67_3ers.m4a"
+    ]
+  ],
+  [
+    46,
+    "shou",
+    "شو",
+    "what",
+    "quoi / qu'est-ce que",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_46_shou.m4a"
+    ]
+  ],
+  [
+    47,
+    "meen",
+    "مين",
+    "who",
+    "qui",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_47_meen.m4a"
+    ]
+  ],
+  [
+    48,
+    "wein",
+    "وين",
+    "where",
+    "où",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_48_wein.m4a"
+    ]
+  ],
+  [
+    49,
+    "leish / ley",
+    "ليش / ليه",
+    "why",
+    "pourquoi",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_49_leish.m4a"
+    ]
+  ],
+  [
+    50,
+    "eimta / amteen",
+    "أيمَتى / أمتين",
+    "when",
+    "quand",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_50_eimta.m4a"
+    ]
+  ],
+  [
+    51,
+    "keef",
+    "كيف",
+    "how",
+    "comment",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_51_keef.m4a"
+    ]
+  ],
+  [
+    52,
+    "2addey",
+    "أديّ",
+    "how much",
+    "combien",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_52_2addey.m4a"
+    ]
+  ],
+  [
+    53,
+    "kimm",
+    "كم",
+    "how many",
+    "combien",
+    "questions",
+    "",
+    [
+      "A1_L3_vocab_53_kimm.m4a"
+    ]
+  ],
+  [
+    54,
+    "keef el 3aylet? / keef el ahl?",
+    "كيف العيلة؟ / كيف الأهل؟",
+    "How is the family? / How are your parents?",
+    "Comment va la famille ? / Comment vont tes parents ?",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_54_keef_el_3aylet.m4a"
+    ]
+  ],
+  [
+    55,
+    "keef el 9o77at?",
+    "كيف الصحة؟",
+    "How's your health?",
+    "Comment va la santé ?",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_55_keef_el_9o77at.m4a"
+    ]
+  ],
+  [
+    56,
+    "kimm 5ayy 3indak? / kimm e5t 3indik?",
+    "كم خيّ عندك؟ / كم إخت عندك؟",
+    "How many brothers do you have? (asked to m) / How many sisters do you have? (asked to f)",
+    "Combien de frères as-tu ? / Combien de sœurs as-tu ?",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_56_kimm_5ayy_3indak.m4a"
+    ]
+  ],
+  [
+    57,
+    "3indi tlét e5wét / 3indi 5ams 5ayyét",
+    "عندي تلات إخوة / عندي خمس خيّات",
+    "I have three siblings / I have five sisters",
+    "J'ai trois frères et sœurs / J'ai cinq sœurs",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_57_3indi_e5wet.m4a"
+    ]
+  ],
+  [
+    58,
+    "ma 3indi",
+    "ما عندي",
+    "I don't have",
+    "je n'ai pas",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_58_ma_3indi.m4a"
+    ]
+  ],
+  [
+    59,
+    "3indo / 3inda",
+    "عندو / عندا",
+    "he has / she has",
+    "il a / elle a",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_59_3indo.m4a"
+    ]
+  ],
+  [
+    65,
+    "b7ebbak / b7ebbik",
+    "بحبك",
+    "I love you (said to m/f)",
+    "Je t'aime",
+    "phrases",
+    "",
+    [
+      "A1_L3_vocab_65_b7ebbak.m4a"
+    ]
+  ],
+  [
+    62,
+    "w",
+    "و",
+    "and",
+    "et",
+    "connectors",
+    "",
+    [
+      "A1_L3_vocab_62_w.m4a"
+    ]
+  ],
+  [
+    63,
+    "aww",
+    "أو",
+    "or",
+    "ou",
+    "connectors",
+    "",
+    [
+      "A1_L3_vocab_63_aww.m4a"
+    ]
+  ],
+  [
+    61,
+    "bass",
+    "بس",
+    "but / only",
+    "mais / seulement",
+    "connectors",
+    "",
+    [
+      "A1_L3_vocab_61_bass.m4a"
+    ]
+  ],
+  [
+    60,
+    "kamén",
+    "كمان",
+    "also / too",
+    "aussi",
+    "connectors",
+    "",
+    [
+      "A1_L3_vocab_60_kamen.m4a"
+    ]
+  ]
+];
+
+const SECTIONS = [
+  { label: 'Immediate Family', type: 'immediate_family' },
+  { label: 'Extended Family', type: 'extended_family' },
+  { label: 'Family & Home', type: 'family_home' },
+  { label: 'Descriptions', type: 'descriptions' },
+  { label: 'Status', type: 'status' },
+  { label: 'Questions', type: 'questions' },
+  { label: 'Phrases', type: 'phrases' },
+  { label: 'Connectors', type: 'connectors' },
+];
+
+// ── AUDIO ──
+// Files may be uploaded with different suffix patterns depending on how GitHub/Voice Memos
+// exported them. We try each candidate in order and use the first one that actually loads.
+// Uses a single persistent <audio> element in the DOM (not new Audio()) to avoid
+// browser codec/decode issues that can cause distortion with dynamically created audio objects.
+let audioCandidateQueue = [];
+let audioCandidateIdx = 0;
+let currentBtn = null;
+const sharedAudioEl = document.getElementById('sharedAudioPlayer');
+
+function buildAudioCandidates(file) {
+  // file = 'A1_L2_vocab_01_9ifr.m4a' (base form stored in WORDS)
+  const base = file.replace(/\.m4a$/, ''); // 'A1_L2_vocab_01_9ifr'
+  return [
+    base + '_m4a.mp4',    // confirmed actual upload pattern
+    base + '_m4a.mp3',
+    base + '.m4a',         // clean form, in case some are uploaded this way
+    base + '.m4a.mp4',     // legacy double-dot form (older pronunciation files)
+    base + '.m4a.mp3',
+  ];
+}
+
+function resetBtn() {
+  if (currentBtn) { currentBtn.classList.remove('playing'); currentBtn.dataset.playing = '0'; renderBtnLabel(currentBtn); }
+  currentBtn = null;
+}
+
+function renderBtnLabel(btn) {
+  const label = btn.dataset.label || 'Play';
+  btn.innerHTML = playIcon() + ' ' + label;
+}
+
+function playAudio(file, btn) {
+  sharedAudioEl.pause();
+  sharedAudioEl.currentTime = 0;
+  resetBtn();
+  if (!file) return;
+
+  audioCandidateQueue = buildAudioCandidates(file);
+  audioCandidateIdx = 0;
+  currentBtn = btn;
+  if (btn) { btn.classList.add('playing'); btn.innerHTML = playIcon() + ' Playing…'; }
+  tryNextCandidate();
+}
+
+function tryNextCandidate() {
+  if (audioCandidateIdx >= audioCandidateQueue.length) {
+    resetBtn();
+    return;
+  }
+  const url = BASE + audioCandidateQueue[audioCandidateIdx];
+  sharedAudioEl.src = url;
+
+  const onCanPlay = () => {
+    cleanup();
+    sharedAudioEl.play().catch(() => {
+      audioCandidateIdx++;
+      tryNextCandidate();
+    });
+  };
+  const onError = () => {
+    cleanup();
+    audioCandidateIdx++;
+    tryNextCandidate();
+  };
+  function cleanup() {
+    sharedAudioEl.removeEventListener('canplay', onCanPlay);
+    sharedAudioEl.removeEventListener('error', onError);
+  }
+
+  sharedAudioEl.addEventListener('canplay', onCanPlay, { once: true });
+  sharedAudioEl.addEventListener('error', onError, { once: true });
+  sharedAudioEl.load();
+}
+
+sharedAudioEl.addEventListener('ended', () => {
+  resetBtn();
+});
+
+function playIcon() { return '<svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>'; }
+
+// splits "word_a / word_b" into short labels for dual-audio rows
+function formLabels(arabizi, fileCount) {
+  if (fileCount === 1) return ['Play'];
+  const parts = arabizi.split(' / ').map(s => s.replace(/[?.]/g, '').trim());
+  return parts.map(p => p.length > 14 ? p.slice(0, 13) + '…' : p);
+}
+
+// ── MODE TABS ──
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function soundPillHtml(sound) {
+  if (!sound) return '';
+  return `<span class="sound-pill s${sound}">${sound}</span>`;
+}
+
+// ── VOCAB TABLE ──
+let activeType = 'all';
+function buildVocabTable(type) {
+  activeType = type;
+  const body = document.getElementById('vocabBody');
+  body.innerHTML = '';
+  // Display numbering is a live counter, independent of each word's stable audio-file ID —
+  // this lets us insert/reorder vocab without ever renaming existing audio files.
+  let displayNum = 0;
+  SECTIONS.forEach(sec => {
+    const sectionWords = WORDS.filter(w => w[5] === sec.type && (type === 'all' || w[5] === type));
+    if (!sectionWords.length) return;
+    const hdr = document.createElement('tr');
+    hdr.className = 'section-header-row';
+    hdr.innerHTML = `<td colspan="7">${sec.label}</td>`;
+    body.appendChild(hdr);
+    sectionWords.forEach(w => {
+      displayNum++;
+      const [num, arabizi, arabic, eng, fr, wtype, sound, files] = w;
+      const tr = document.createElement('tr');
+      tr.dataset.type = wtype;
+      const labels = formLabels(arabizi, files.length);
+      const buttons = files.map((f, i) =>
+        `<button class="play-word-btn" data-label="${labels[i]}" onclick="playAudio('${f}',this)">${playIcon()} ${labels[i]}</button>`
+      ).join('');
+      tr.innerHTML = `
+        <td class="td-num">${displayNum}</td>
+        <td class="td-arabizi">${arabizi}</td>
+        <td class="td-arabic">${arabic}</td>
+        <td class="td-en">${eng}</td>
+        <td class="td-fr">${fr}</td>
+        <td class="td-sound">${soundPillHtml(sound)}</td>
+        <td class="td-audio">${buttons}</td>`;
+      body.appendChild(tr);
+    });
+  });
+}
+function filterType(type, btn) {
+  document.querySelectorAll('#panel-vocab .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildVocabTable(type);
+}
+
+// ── FLASHCARDS ──
+let fcWords = [...WORDS];
+let fcIndex = 0;
+let fcSeen = new Set();
+let fcKnewCount = 0;
+let fcMissedCount = 0;
+let fcFlipped = false;
+let fcTypeFilter = 'all';
+
+function fcFilterType(type, btn) {
+  document.querySelectorAll('#panel-flash .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  fcTypeFilter = type;
+  fcWords = type === 'all' ? [...WORDS] : WORDS.filter(w => w[5] === type);
+  fcIndex = 0; fcSeen = new Set(); fcKnewCount = 0; fcMissedCount = 0; fcFlipped = false;
+  document.getElementById('cardScene').classList.remove('flipped');
+  document.getElementById('selfAssess').style.display = 'none';
+  renderCard();
+  updateFCProgress();
+  updateFCStats();
+}
+
+function renderCard() {
+  if (!fcWords.length) return;
+  const w = fcWords[fcIndex];
+  const [num, arabizi, arabic, eng, fr, wtype, sound, files] = w;
+  const front = document.getElementById('cardFront');
+  const back  = document.getElementById('cardBack');
+  front.innerHTML = `
+    <div class="card-hint">Tap to reveal</div>
+    <div class="card-arabizi">${arabizi}</div>
+    <div class="card-arabic">${arabic}</div>
+    <div class="card-type-tag">${wtype.replace('_',' ')}</div>`;
+  const labels = formLabels(arabizi, files.length);
+  const audioButtons = files.map((f, i) =>
+    `<button class="card-audio-btn" onclick="event.stopPropagation();playAudio('${f}',this)">${playIcon()} ${labels[i]}</button>`
+  ).join('');
+  back.innerHTML = `
+    <div class="card-hint">Word ${fcIndex + 1} of ${fcWords.length}</div>
+    <div class="card-english">${eng}</div>
+    <div class="card-french">${fr}</div>
+    <div class="card-audio-row">${audioButtons}</div>`;
+  document.getElementById('fcCounter').textContent = (fcIndex + 1) + ' / ' + fcWords.length;
+  document.getElementById('fcPrev').disabled = fcIndex === 0;
+  document.getElementById('fcNext').disabled = fcIndex === fcWords.length - 1;
+  fcFlipped = false;
+  document.getElementById('cardScene').classList.remove('flipped');
+  document.getElementById('selfAssess').style.display = 'none';
+}
+
+function flipCard() {
+  if (!fcFlipped) {
+    document.getElementById('cardScene').classList.add('flipped');
+    fcFlipped = true;
+    fcSeen.add(fcIndex);
+    document.getElementById('selfAssess').style.display = 'flex';
+    updateFCProgress();
+  }
+}
+
+function fcNav(dir) {
+  sharedAudioEl.pause();
+  resetBtn();
+  fcIndex = Math.max(0, Math.min(fcWords.length - 1, fcIndex + dir));
+  fcSeen.add(fcIndex);
+  renderCard();
+  updateFCProgress();
+}
+
+function fcShuffle() {
+  sharedAudioEl.pause();
+  resetBtn();
+  for (let i = fcWords.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcWords[i], fcWords[j]] = [fcWords[j], fcWords[i]];
+  }
+  fcIndex = 0; fcSeen = new Set([0]); fcFlipped = false; fcKnewCount = 0; fcMissedCount = 0;
+  document.getElementById('cardScene').classList.remove('flipped');
+  document.getElementById('selfAssess').style.display = 'none';
+  renderCard(); updateFCProgress(); updateFCStats();
+}
+
+function fcAssess(knew) {
+  if (knew) fcKnewCount++; else fcMissedCount++;
+  updateFCStats();
+  if (fcIndex < fcWords.length - 1) {
+    fcNav(1);
+  } else {
+    document.getElementById('selfAssess').style.display = 'none';
+  }
+}
+
+function updateFCProgress() {
+  const prog = document.getElementById('fcProgress');
+  prog.innerHTML = '';
+  fcWords.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'fc-dot' + (i === fcIndex ? ' current' : fcSeen.has(i) ? ' seen' : '');
+    prog.appendChild(dot);
+  });
+}
+
+function updateFCStats() {
+  document.getElementById('fcKnew').textContent   = fcKnewCount;
+  document.getElementById('fcMissed').textContent = fcMissedCount;
+  document.getElementById('fcTotal').textContent  = fcWords.length;
+}
+
+// ── INIT ──
+buildVocabTable('all');
+renderCard();
+updateFCProgress();
+updateFCStats();
+</script>
+</body>
+</html>
