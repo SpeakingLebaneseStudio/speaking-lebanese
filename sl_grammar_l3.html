@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Lebanese — Grammar in Context — Lesson 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red:        #D20014;
+    --red-dark:   #A8000F;
+    --red-tint:   #FAE6E6;
+    --black:      #0A0A0A;
+    --cream:      #FAF8F4;
+    --green:      #008228;
+    --green-tint: #E8F5ED;
+    --grey-mid:   #666666;
+    --grey-light: #EBEBEB;
+    --white:      #FFFFFF;
+  }
+
+  body {
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--black);
+    line-height: 1.65;
+    padding: 0 0 48px;
+  }
+
+  /* ── HEADER BAND ── */
+  .lesson-header {
+    background: var(--cream);
+    border-bottom: 1px solid var(--grey-light);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .lesson-header .eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+  }
+  .lesson-header .divider {
+    width: 1px;
+    height: 22px;
+    background: var(--grey-light);
+  }
+  .lesson-header .title {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--black);
+  }
+  .lesson-header .activity-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── GRAMMAR INTRO ── */
+  .grammar-intro {
+    padding: 36px 0 8px;
+  }
+  .grammar-intro .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .grammar-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.25;
+    color: var(--black);
+    margin-bottom: 18px;
+  }
+  .grammar-intro .lead {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--black);
+    border-left: 3px solid var(--red);
+    padding-left: 18px;
+    margin-bottom: 20px;
+  }
+  .grammar-intro p {
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 14px;
+  }
+
+  /* ── RULE CARD ── */
+  .rule-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    padding: 24px 24px 20px;
+    margin: 28px 0;
+  }
+  .rule-card .rule-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+    margin-bottom: 12px;
+  }
+  .rule-card .rule-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+  .rule-card .rule-example {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    background: var(--cream);
+    border-radius: 4px;
+    padding: 12px 16px;
+  }
+  .rule-card .lebanese {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .rule-card .equals {
+    font-size: 16px;
+    color: var(--grey-mid);
+  }
+  .rule-card .english {
+    font-size: 16px;
+    color: var(--black);
+  }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 32px 0 24px;
+  }
+  .section-divider span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-mid);
+    white-space: nowrap;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--grey-light);
+  }
+
+  /* ── EXAMPLES TABLE ── */
+  .examples-intro {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 16px;
+  }
+
+  .example-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .example-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    border-left: 4px solid var(--red);
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 12px;
+  }
+  .example-card .arabic-script {
+    font-size: 24px;
+    direction: rtl;
+    color: var(--black);
+    line-height: 1.4;
+    grid-column: 1 / -1;
+    text-align: right;
+  }
+  .example-card .arabizi {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .example-card .translation {
+    font-size: 15px;
+    color: var(--grey-mid);
+    text-align: right;
+    align-self: center;
+  }
+  .example-card .breakdown {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .word-chip {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: var(--cream);
+    border: 1px solid var(--grey-light);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  .word-chip .w-lebanese {
+    font-weight: 700;
+    color: var(--black);
+  }
+  .word-chip .w-english {
+    font-size: 11px;
+    color: var(--grey-mid);
+  }
+  .word-chip.no-verb {
+    border-color: var(--red);
+    background: var(--red-tint);
+  }
+  .word-chip.no-verb .w-english {
+    color: var(--red-dark);
+    font-weight: 700;
+  }
+
+  /* ── PRONOUNS GRID ── */
+  .pronouns-section {
+    margin-bottom: 32px;
+  }
+  .pronouns-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--black);
+  }
+  .pronouns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 500px) {
+    .pronouns-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .pronoun-card {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 6px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .pronoun-card .p-arabic {
+    font-size: 22px;
+    direction: rtl;
+    line-height: 1.4;
+    color: var(--black);
+  }
+  .pronoun-card .p-arabizi {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--red);
+    margin: 2px 0;
+  }
+  .pronoun-card .p-english {
+    font-size: 13px;
+    color: var(--grey-mid);
+  }
+
+  /* ── WARNING BOX ── */
+  .warning-box {
+    background: #FFF8E1;
+    border: 1px solid #FFD54F;
+    border-left: 4px solid #F9A825;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin: 28px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .warning-box .warn-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .warning-box .warn-content {}
+  .warning-box .warn-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7B5800;
+    margin-bottom: 6px;
+  }
+  .warning-box p {
+    font-size: 15px;
+    color: #4A3800;
+    line-height: 1.6;
+  }
+  .warning-box .compare {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .compare-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .compare-row .mark {
+    font-size: 16px;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .compare-row .phrase {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--black);
+  }
+  .compare-row .label {
+    font-size: 12px;
+    color: var(--grey-mid);
+  }
+  .compare-row.wrong .phrase { color: #B71C1C; text-decoration: line-through; }
+  .compare-row.right .phrase { color: var(--green); }
+
+  /* ── QUIZ ── */
+  .quiz-section {
+    margin-top: 8px;
+  }
+  .quiz-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--black);
+  }
+  .quiz-section .quiz-intro {
+    font-size: 15px;
+    color: var(--grey-mid);
+    margin-bottom: 24px;
+  }
+
+  .question-block {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s;
+  }
+  .question-block.answered { box-shadow: 0 0 0 2px var(--green); }
+  .question-block.answered-wrong { box-shadow: 0 0 0 2px var(--red); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .q-number {
+    background: var(--black);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+    line-height: 1.45;
+  }
+  .q-arabic {
+    font-size: 20px;
+    direction: rtl;
+    color: var(--black);
+    text-align: right;
+    margin: -8px 0 8px;
+    padding: 8px 12px;
+    background: var(--cream);
+    border-radius: 4px;
+  }
+
+  /* MCQ */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .option-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border: 1.5px solid var(--grey-light);
+    border-radius: 6px;
+    background: var(--cream);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: var(--black);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--black);
+    background: var(--white);
+  }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-tint);
+    color: #004d15;
+  }
+  .option-btn.incorrect {
+    border-color: var(--red);
+    background: var(--red-tint);
+    color: var(--red-dark);
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-letter {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--grey-mid);
+    width: 18px;
+    flex-shrink: 0;
+  }
+  .option-btn.correct .option-letter { color: var(--green); }
+  .option-btn.incorrect .option-letter { color: var(--red); }
+
+  /* Fill in blank */
+  .fill-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .fill-prefix, .fill-suffix {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--black);
+  }
+  .fill-input {
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
+    border: 2px solid var(--grey-light);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    background: var(--cream);
+    color: var(--black);
+    transition: border-color 0.15s;
+    text-align: center;
+  }
+  .fill-input:focus {
+    outline: none;
+    border-color: var(--black);
+  }
+  .fill-input.correct-input {
+    border-color: var(--green);
+    background: var(--green-tint);
+    color: #004d15;
+  }
+  .fill-input.incorrect-input {
+    border-color: var(--red);
+    background: var(--red-tint);
+    color: var(--red-dark);
+  }
+  .fill-input:disabled { cursor: default; }
+
+  /* Check button */
+  .check-btn {
+    margin-top: 14px;
+    padding: 10px 22px;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .check-btn:hover { background: #333; }
+  .check-btn:disabled { background: var(--grey-light); color: var(--grey-mid); cursor: default; }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.fb-correct {
+    background: var(--green-tint);
+    color: #004d15;
+    border: 1px solid #a8d5b5;
+  }
+  .feedback.fb-incorrect {
+    background: var(--red-tint);
+    color: var(--red-dark);
+    border: 1px solid #f5b8b8;
+  }
+  .feedback .correct-answer {
+    margin-top: 4px;
+    font-weight: 400;
+    color: #333;
+  }
+
+  /* ── SCORE PANEL ── */
+  .score-panel {
+    background: var(--white);
+    border: 1px solid var(--grey-light);
+    border-radius: 8px;
+    padding: 28px 24px;
+    margin-top: 24px;
+    text-align: center;
+    display: none;
+  }
+  .score-panel.show { display: block; }
+  .score-panel .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+  }
+  .score-panel .score-label {
+    font-size: 14px;
+    color: var(--grey-mid);
+    margin-top: 4px;
+    margin-bottom: 14px;
+  }
+  .score-panel .score-message {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 16px;
+  }
+  .score-panel .score-sub {
+    font-size: 14px;
+    color: var(--grey-mid);
+    margin-bottom: 18px;
+  }
+  .retry-btn {
+    padding: 10px 26px;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .retry-btn:hover { background: var(--red-dark); }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--grey-light);
+    text-align: center;
+    font-size: 12px;
+    color: var(--grey-mid);
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="lesson-header">
+  <div>
+    <div class="eyebrow">A1 — Beginner Survival · Lesson 3</div>
+  </div>
+  <div class="divider"></div>
+  <div class="title">Family &amp; Relationships</div>
+  <div class="activity-badge">Activity 4</div>
+</div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="grammar-intro">
+    <div class="section-label">Grammar in Context</div>
+    <h2>One ending turns "a house" into "my house"</h2>
+    <p class="lead">Lebanese doesn't use separate words for "my," "your," "his," "her," "our," or "their" — it adds a small ending directly onto the noun itself.</p>
+    <p>Six endings cover every possessive form you'll use constantly with family words. Singular: <strong>-i</strong> for "my," <strong>-ak</strong> / <strong>-ik</strong> for "your" (said to a man or a woman), and <strong>-o</strong> / <strong>-a</strong> for "his" and "her." Plural: <strong>-na</strong> for "our," <strong>-kon</strong> for "your" (to a group), and <strong>-on</strong> for "their." Learn these six, and every family word from this lesson's vocabulary bank becomes personal — bayy (father) becomes bayyi (my father) or bayyna (our father) with nothing else in the sentence changing.</p>
+  </div>
+
+  <!-- RULE 1 -->
+  <div class="rule-card">
+    <div class="rule-label">Rule 1 — "My"</div>
+    <div class="rule-text">Add -i</div>
+    <div class="rule-example">
+      <span class="lebanese">beyt</span>
+      <span class="equals">→</span>
+      <span class="english">beyti</span>
+    </div>
+    <div style="font-size:13px; color:var(--grey-mid); margin-top:8px;">house → my house</div>
+  </div>
+
+  <p class="examples-intro">Try it with words from this lesson's vocabulary bank:</p>
+
+  <div class="example-cards">
+    <div class="example-card">
+      <div class="arabic-script">جوزي</div>
+      <div class="arabizi">jowzi</div>
+      <div class="translation">my husband</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">إبني</div>
+      <div class="arabizi">ibni</div>
+      <div class="translation">my son</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">بنتي</div>
+      <div class="arabizi">binti</div>
+      <div class="translation">my daughter</div>
+    </div>
+  </div>
+
+  <!-- RULE 2 -->
+  <div class="rule-card">
+    <div class="rule-label">Rule 2 — "Your"</div>
+    <div class="rule-text">Add -ak (to a man) or -ik (to a woman)</div>
+    <div class="rule-example">
+      <span class="lebanese">beyt</span>
+      <span class="equals">→</span>
+      <span class="english">beytak / beytik</span>
+    </div>
+    <div style="font-size:13px; color:var(--grey-mid); margin-top:8px;">house → your house (m) / your house (f)</div>
+  </div>
+
+  <p class="examples-intro">The same split you already know from Lesson 2's gendered -e — here it's about who you're <em>talking to</em>, not the noun itself:</p>
+
+  <div class="example-cards">
+    <div class="example-card">
+      <div class="arabic-script">عمَك / عمِك</div>
+      <div class="arabizi">3ammak / 3ammik</div>
+      <div class="translation">your uncle (to m/f)</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">عيلتَك / عيلتِك</div>
+      <div class="arabizi">3ayletak / 3ayletik</div>
+      <div class="translation">your family (to m/f)</div>
+    </div>
+  </div>
+
+  <!-- RULE 3 -->
+  <div class="rule-card">
+    <div class="rule-label">Rule 3 — "His" and "Her"</div>
+    <div class="rule-text">Add -o for "his," -a for "her"</div>
+    <div class="rule-example">
+      <span class="lebanese">beyt</span>
+      <span class="equals">→</span>
+      <span class="english">beyto / beyta</span>
+    </div>
+    <div style="font-size:13px; color:var(--grey-mid); margin-top:8px;">house → his house / her house</div>
+  </div>
+
+  <p class="examples-intro">These two show up everywhere once you start talking about someone else's family:</p>
+
+  <div class="example-cards">
+    <div class="example-card">
+      <div class="arabic-script">جدو</div>
+      <div class="arabizi">jiddo</div>
+      <div class="translation">his grandfather</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">جوزا</div>
+      <div class="arabizi">jowza</div>
+      <div class="translation">her husband</div>
+    </div>
+  </div>
+
+  <!-- RULE 4 -->
+  <div class="rule-card">
+    <div class="rule-label">Rule 4 — "Our"</div>
+    <div class="rule-text">Add -na</div>
+    <div class="rule-example">
+      <span class="lebanese">beyt</span>
+      <span class="equals">→</span>
+      <span class="english">beytna</span>
+    </div>
+    <div style="font-size:13px; color:var(--grey-mid); margin-top:8px;">house → our house</div>
+  </div>
+
+  <p class="examples-intro">This is the "ne7na" (we) ending — the same -na you'll hear attached all over the place once you're talking about your own household:</p>
+
+  <div class="example-cards">
+    <div class="example-card">
+      <div class="arabic-script">بيتنا</div>
+      <div class="arabizi">beytna</div>
+      <div class="translation">our house</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">عيلتنا</div>
+      <div class="arabizi">3ayletna</div>
+      <div class="translation">our family</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">بيّنا</div>
+      <div class="arabizi">bayyna</div>
+      <div class="translation">our father</div>
+    </div>
+  </div>
+
+  <!-- RULE 5 -->
+  <div class="rule-card">
+    <div class="rule-label">Rule 5 — "Your" (to a group)</div>
+    <div class="rule-text">Add -kon</div>
+    <div class="rule-example">
+      <span class="lebanese">beyt</span>
+      <span class="equals">→</span>
+      <span class="english">beytkon</span>
+    </div>
+    <div style="font-size:13px; color:var(--grey-mid); margin-top:8px;">house → your house (to more than one person)</div>
+  </div>
+
+  <p class="examples-intro">This is the "you-all" ending — one form covers a whole group, no gender split like the singular "your" had:</p>
+
+  <div class="example-cards">
+    <div class="example-card">
+      <div class="arabic-script">بيتكن</div>
+      <div class="arabizi">beytkon</div>
+      <div class="translation">your house (to a group)</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">عيلتكن</div>
+      <div class="arabizi">3ayletkon</div>
+      <div class="translation">your family (to a group)</div>
+    </div>
+  </div>
+
+  <!-- RULE 6 -->
+  <div class="rule-card">
+    <div class="rule-label">Rule 6 — "Their"</div>
+    <div class="rule-text">Add -on</div>
+    <div class="rule-example">
+      <span class="lebanese">beyt</span>
+      <span class="equals">→</span>
+      <span class="english">beyton</span>
+    </div>
+    <div style="font-size:13px; color:var(--grey-mid); margin-top:8px;">house → their house</div>
+  </div>
+
+  <p class="examples-intro">This is the "hinni" (they) ending — the last of the six, closing out the full set:</p>
+
+  <div class="example-cards">
+    <div class="example-card">
+      <div class="arabic-script">بيتن</div>
+      <div class="arabizi">beyton</div>
+      <div class="translation">their house</div>
+    </div>
+    <div class="example-card">
+      <div class="arabic-script">جدّن</div>
+      <div class="arabizi">jiddon</div>
+      <div class="translation">their grandfather</div>
+    </div>
+  </div>
+
+  <!-- WARNING BOX -->
+  <div class="warning-box">
+    <div class="warn-icon">💡</div>
+    <div class="warn-content">
+      <div class="warn-label">"3ammo" isn't just grammar — it's what you call him</div>
+      <p>Look back at this lesson's vocabulary bank: <strong>jidd/jiddo</strong>, <strong>3amm/3ammo</strong>, <strong>3ammet/3amto</strong>, <strong>5aal/5aalo</strong>, <strong>5aalet/5aalto</strong> are exactly Rule 3 in action. The "-o" / "-to" form of a family word — grammatically "his grandfather," "his uncle" — is also what Lebanese speakers use as a direct, affectionate way to address that family member, even their <em>own</em>. A kid doesn't call out "3amm!" to their uncle — they call out "3ammo!"</p>
+      <div class="compare">
+        <div class="compare-row right">
+          <span class="mark">✓</span>
+          <span class="phrase">jiddo 3am biyeekol</span>
+          <span class="label">— his grandfather is eating (Rule 3)</span>
+        </div>
+        <div class="compare-row right">
+          <span class="mark">✓</span>
+          <span class="phrase">Jiddo, ta3! (calling your own grandpa)</span>
+          <span class="label">— Grandpa, come here! (direct address)</span>
+        </div>
+      </div>
+      <p style="margin-top:12px;">Same word, two jobs. Context tells you which one you're hearing — if there's no other family member being discussed, it's almost always the direct-address sense.</p>
+    </div>
+  </div>
+
+  <!-- ── QUIZ ── -->
+  <div class="section-divider"><span>Practice — 6 questions</span></div>
+
+  <div class="quiz-section">
+    <h3>Try it yourself</h3>
+    <p class="quiz-intro">Ungraded — no right or wrong to worry about. Check your answers instantly. Retake as many times as you like.</p>
+
+    <!-- Q1: MCQ -->
+    <div class="question-block" id="q1-block">
+      <div class="q-header">
+        <div class="q-number">1</div>
+        <div class="q-text">How do you say "my son" in Lebanese?</div>
+      </div>
+      <div class="options" id="q1-options">
+        <button class="option-btn" data-q="1" data-correct="true"><span class="option-letter">A</span>ibni</button>
+        <button class="option-btn" data-q="1" data-correct="false"><span class="option-letter">B</span>ibnak</button>
+        <button class="option-btn" data-q="1" data-correct="false"><span class="option-letter">C</span>ibno</button>
+        <button class="option-btn" data-q="1" data-correct="false"><span class="option-letter">D</span>ibna</button>
+      </div>
+      <div class="feedback" id="q1-feedback"></div>
+    </div>
+
+    <!-- Q2: MCQ -->
+    <div class="question-block" id="q2-block">
+      <div class="q-header">
+        <div class="q-number">2</div>
+        <div class="q-text">"This is your house" (said to a woman) — Haida ____.</div>
+      </div>
+      <div class="options" id="q2-options">
+        <button class="option-btn" data-q="2" data-correct="true"><span class="option-letter">A</span>beytik</button>
+        <button class="option-btn" data-q="2" data-correct="false"><span class="option-letter">B</span>beytak</button>
+        <button class="option-btn" data-q="2" data-correct="false"><span class="option-letter">C</span>beyti</button>
+        <button class="option-btn" data-q="2" data-correct="false"><span class="option-letter">D</span>beyto</button>
+      </div>
+      <div class="feedback" id="q2-feedback"></div>
+    </div>
+
+    <!-- Q3: MCQ -->
+    <div class="question-block" id="q3-block">
+      <div class="q-header">
+        <div class="q-number">3</div>
+        <div class="q-text">Which one means "her husband"?</div>
+      </div>
+      <div class="options" id="q3-options">
+        <button class="option-btn" data-q="3" data-correct="true"><span class="option-letter">A</span>jowza</button>
+        <button class="option-btn" data-q="3" data-correct="false"><span class="option-letter">B</span>jowzo</button>
+        <button class="option-btn" data-q="3" data-correct="false"><span class="option-letter">C</span>jowzi</button>
+        <button class="option-btn" data-q="3" data-correct="false"><span class="option-letter">D</span>jowzak</button>
+      </div>
+      <div class="feedback" id="q3-feedback"></div>
+    </div>
+
+    <!-- Q4: MCQ -->
+    <div class="question-block" id="q4-block">
+      <div class="q-header">
+        <div class="q-number">4</div>
+        <div class="q-text">"3ammo" breaks down as 3amm + ___</div>
+      </div>
+      <div class="options" id="q4-options">
+        <button class="option-btn" data-q="4" data-correct="true"><span class="option-letter">A</span>-o, "his"</button>
+        <button class="option-btn" data-q="4" data-correct="false"><span class="option-letter">B</span>-a, "her"</button>
+        <button class="option-btn" data-q="4" data-correct="false"><span class="option-letter">C</span>-ak, "your" (m)</button>
+        <button class="option-btn" data-q="4" data-correct="false"><span class="option-letter">D</span>-i, "my"</button>
+      </div>
+      <div class="feedback" id="q4-feedback"></div>
+    </div>
+
+    <!-- Q5: True/False -->
+    <div class="question-block" id="q5-block">
+      <div class="q-header">
+        <div class="q-number">5</div>
+        <div class="q-text">True or false: words like "jiddo" and "3ammo" are only ever grammar — never used to directly address that person.</div>
+      </div>
+      <div class="options" id="q5-options">
+        <button class="option-btn" data-q="5" data-correct="false"><span class="option-letter">A</span>True</button>
+        <button class="option-btn" data-q="5" data-correct="true"><span class="option-letter">B</span>False</button>
+      </div>
+      <div class="feedback" id="q5-feedback"></div>
+    </div>
+
+    <!-- Q6: MCQ -->
+    <div class="question-block" id="q6-block">
+      <div class="q-header">
+        <div class="q-number">6</div>
+        <div class="q-text">"This is our house" — Haida ____.</div>
+      </div>
+      <div class="options" id="q6-options">
+        <button class="option-btn" data-q="6" data-correct="true"><span class="option-letter">A</span>beytna</button>
+        <button class="option-btn" data-q="6" data-correct="false"><span class="option-letter">B</span>beytkon</button>
+        <button class="option-btn" data-q="6" data-correct="false"><span class="option-letter">C</span>beyton</button>
+        <button class="option-btn" data-q="6" data-correct="false"><span class="option-letter">D</span>beyti</button>
+      </div>
+      <div class="feedback" id="q6-feedback"></div>
+    </div>
+
+    <!-- SCORE PANEL -->
+    <div class="score-panel" id="score-panel">
+      <div class="score-num" id="score-num">0/6</div>
+      <div class="score-label">questions correct</div>
+      <div class="score-message" id="score-message"></div>
+      <div class="score-sub" id="score-sub"></div>
+      <button class="retry-btn" onclick="retryQuiz()">Try again</button>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="page-footer">
+    Speaking Lebanese · A1 Beginner Survival · Lesson 3 — Family &amp; Relationships<br>
+    speakinglebanese.com
+  </div>
+
+</div>
+
+<script>
+  // ── STATE ──
+  const answers = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+  const correct = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false };
+
+  // ── MCQ HANDLER ──
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const q = this.dataset.q;
+      const isCorrect = this.dataset.correct === 'true';
+      const block = document.getElementById('q' + q + '-block');
+      const feedback = document.getElementById('q' + q + '-feedback');
+      const allOpts = document.querySelectorAll('[data-q="' + q + '"]');
+
+      allOpts.forEach(opt => {
+        opt.disabled = true;
+        if (opt.dataset.correct === 'true') opt.classList.add('correct');
+      });
+
+      if (!isCorrect) {
+        this.classList.add('incorrect');
+        block.classList.add('answered-wrong');
+        feedback.className = 'feedback fb-incorrect show';
+        feedback.innerHTML = '❌ Not quite — the correct answer is highlighted in green above.';
+        correct[q] = false;
+      } else {
+        block.classList.add('answered');
+        feedback.className = 'feedback fb-correct show';
+        if (q == '1') feedback.innerHTML = '✓ Correct. Ibni — "my" is always -i, no matter the word.';
+        if (q == '2') feedback.innerHTML = '✓ Correct. Beytik — "your" to a woman is -ik, matching the gendered -e pattern from Lesson 2.';
+        if (q == '3') feedback.innerHTML = '✓ Correct. Jowza — "her" is -a, not -o. Easy to mix up with Rule 3\'s "his."';
+        if (q == '4') feedback.innerHTML = '✓ Correct. 3amm + -o = "his uncle" — and also how you\'d call out to your own uncle.';
+        if (q == '5') feedback.innerHTML = '✓ Correct — false. These forms double as direct address, which is why you\'ll hear "Jiddo!" shouted across a room with no "his" in sight.';
+        if (q == '6') feedback.innerHTML = '✓ Correct. Beytna — "our" is -na, the same ending as ne7na (we).';
+        correct[q] = true;
+      }
+
+      answers[q] = true;
+      checkAllDone();
+    });
+  });
+
+  // ── CHECK ALL DONE ──
+  function checkAllDone() {
+    const done = answers[1] && answers[2] && answers[3] && answers[4] && answers[5] && answers[6];
+    if (!done) return;
+
+    const total = Object.values(correct).filter(Boolean).length;
+    const panel = document.getElementById('score-panel');
+    const scoreNum = document.getElementById('score-num');
+    const scoreMsg = document.getElementById('score-message');
+    const scoreSub = document.getElementById('score-sub');
+
+    scoreNum.textContent = total + '/6';
+    panel.classList.add('show');
+
+    if (total === 6) {
+      scoreMsg.textContent = 'Perfect — you have all six possessive endings.';
+      scoreSub.textContent = 'Singular and plural, all six forms. These will attach to almost every noun you learn from here on. Big win.';
+    } else if (total >= 5) {
+      scoreMsg.textContent = 'Good work — the pattern is forming.';
+      scoreSub.textContent = 'Review the question you missed, then move on. Repetition will make it automatic.';
+    } else if (total >= 4) {
+      scoreMsg.textContent = 'Getting there — try once more.';
+      scoreSub.textContent = 'Six endings, a couple of mix-ups. Another pass will help it stick.';
+    } else {
+      scoreMsg.textContent = 'This one takes a moment — give it another try.';
+      scoreSub.textContent = 'Go back and re-read the six rules, then come back to the questions.';
+    }
+  }
+
+  // ── RETRY ──
+  function retryQuiz() {
+    [1, 2, 3, 4, 5, 6].forEach(q => {
+      answers[q] = null;
+      correct[q] = false;
+      const block = document.getElementById('q' + q + '-block');
+      block.classList.remove('answered', 'answered-wrong');
+      document.getElementById('q' + q + '-feedback').className = 'feedback';
+      document.querySelectorAll('[data-q="' + q + '"]').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('correct', 'incorrect');
+      });
+    });
+
+    document.getElementById('score-panel').classList.remove('show');
+    document.querySelector('.quiz-section').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

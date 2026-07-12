@@ -96,12 +96,6 @@ body {
 .td-en { color: var(--black); }
 .td-fr { color: var(--grey-mid); font-style: italic; font-size: 13px; }
 .td-type { font-size: 11px; color: var(--grey-mid); }
-.td-sound { font-size: 11px; }
-.sound-pill {
-  display: inline-block; padding: 2px 8px; border-radius: 10px; font-weight: 700;
-}
-.sound-pill.s5 { background: var(--red-tint); color: var(--red-dark); }
-.sound-pill.s6 { background: var(--green-tint); color: var(--green); }
 .td-audio { width: 150px; }
 .play-word-btn {
   display: inline-flex; align-items: center; gap: 6px;
@@ -268,7 +262,6 @@ body {
           <th class="ar-col">Arabic</th>
           <th>English</th>
           <th>Français</th>
-          <th>Sound</th>
           <th>Listen</th>
         </tr>
       </thead>
@@ -756,7 +749,7 @@ const WORDS = [
   ],
   [
     33,
-    "wasatt",
+    "was6",
     "وسط",
     "middle",
     "du milieu",
@@ -1247,10 +1240,6 @@ function showPanel(id) {
   event.target.classList.add('active');
 }
 
-function soundPillHtml(sound) {
-  if (!sound) return '';
-  return `<span class="sound-pill s${sound}">${sound}</span>`;
-}
 
 // ── VOCAB TABLE ──
 let activeType = 'all';
@@ -1266,7 +1255,7 @@ function buildVocabTable(type) {
     if (!sectionWords.length) return;
     const hdr = document.createElement('tr');
     hdr.className = 'section-header-row';
-    hdr.innerHTML = `<td colspan="7">${sec.label}</td>`;
+    hdr.innerHTML = `<td colspan="6">${sec.label}</td>`;
     body.appendChild(hdr);
     sectionWords.forEach(w => {
       displayNum++;
@@ -1283,7 +1272,6 @@ function buildVocabTable(type) {
         <td class="td-arabic">${arabic}</td>
         <td class="td-en">${eng}</td>
         <td class="td-fr">${fr}</td>
-        <td class="td-sound">${soundPillHtml(sound)}</td>
         <td class="td-audio">${buttons}</td>`;
       body.appendChild(tr);
     });
