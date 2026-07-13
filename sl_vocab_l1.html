@@ -95,7 +95,6 @@ body {
 .td-arabic { direction: rtl; text-align: right; font-size: 19px; color: var(--black); }
 .td-en { color: var(--black); }
 .td-fr { color: var(--grey-mid); font-style: italic; font-size: 13px; }
-.td-type { font-size: 11px; color: var(--grey-mid); }
 .td-audio { width: 80px; }
 .play-word-btn {
   display: inline-flex; align-items: center; gap: 6px;
@@ -254,7 +253,6 @@ body {
           <th class="ar-col">Arabic</th>
           <th>English</th>
           <th>Français</th>
-          <th>Type</th>
           <th>Listen</th>
         </tr>
       </thead>
@@ -476,7 +474,7 @@ function buildVocabTable(type) {
     if (!sectionWords.length) return;
     const hdr = document.createElement('tr');
     hdr.className = 'section-header-row';
-    hdr.innerHTML = `<td colspan="7">${sec.label}</td>`;
+    hdr.innerHTML = `<td colspan="6">${sec.label}</td>`;
     body.appendChild(hdr);
     sectionWords.forEach(w => {
       n++;
@@ -489,7 +487,6 @@ function buildVocabTable(type) {
         <td class="td-arabic">${w[2]}</td>
         <td class="td-en">${w[3]}</td>
         <td class="td-fr">${w[4]}</td>
-        <td class="td-type">${w[5]}</td>
         <td class="td-audio">
           ${hasAudio
             ? `<button class="play-word-btn" onclick="playAudio('${w[6]}',this)">${playIcon()} Play</button>`
