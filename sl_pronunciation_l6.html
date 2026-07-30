@@ -219,21 +219,64 @@
   // (bfee2, braaje3, mabsoo6) is genuinely Daily Routine & Habits content, matching this lesson.
   // "mabsoo6" here vs "mabsoot" in the vocab bank is the same word, two Arabizi spelling
   // conventions for the emphatic ط (6 vs t) — worth Nidale picking one as the standard.
+  // AUDIO — files can land on GitHub with different suffix patterns depending on how they were
+  // uploaded (see sl_vocab_l*.html for the same pattern). Previously this page only tried the bare
+  // ".m4a" name, which is why nothing here was playing — every file on GitHub actually ends in
+  // ".m4a.mp4". Now tries each candidate in turn and uses the first one that loads, same as the
+  // vocabulary pages. encodeURIComponent guards against special characters (spaces, apostrophes)
+  // that appear in a few filenames elsewhere in this course.
+  const BASE = 'https://speakinglebanesestudio.github.io/speaking-lebanese/';
   let currentAudio = null;
   let currentBtn = null;
+
+  function buildAudioCandidates(file) {
+    const base = file.replace(/\.m4a$/, '');
+    return [
+      base + '_m4a.mp4',
+      base + '_m4a.mp3',
+      base + '.m4a',
+      base + '.m4a.mp4',
+      base + '.m4a.mp3',
+    ];
+  }
+
+  function resetBtn(btn) {
+    if (!btn) return;
+    btn.classList.remove('playing');
+    const ic = btn.querySelector('.icon');
+    if (ic) ic.textContent = '▶';
+  }
+
   function playAudio(filename, btn) {
     if (currentAudio) {
       currentAudio.pause(); currentAudio.currentTime = 0;
-      if (currentBtn) { currentBtn.classList.remove('playing'); const ic = currentBtn.querySelector('.icon'); if (ic) ic.textContent = '▶'; }
+      resetBtn(currentBtn);
     }
     if (currentBtn === btn) { currentAudio = null; currentBtn = null; return; }
-    const audio = new Audio(filename);
-    currentAudio = audio; currentBtn = btn;
+
+    const candidates = buildAudioCandidates(filename);
+    let idx = 0;
+    currentBtn = btn;
     btn.classList.add('playing');
     const icon = btn.querySelector('.icon');
     if (icon) icon.textContent = '■';
-    audio.play().catch(() => { btn.classList.remove('playing'); if (icon) icon.textContent = '▶'; currentAudio = null; currentBtn = null; });
-    audio.addEventListener('ended', () => { btn.classList.remove('playing'); if (icon) icon.textContent = '▶'; currentAudio = null; currentBtn = null; });
+
+    function tryNext() {
+      if (idx >= candidates.length) {
+        resetBtn(btn);
+        currentAudio = null; currentBtn = null;
+        return;
+      }
+      const audio = new Audio(BASE + encodeURIComponent(candidates[idx]));
+      currentAudio = audio;
+      audio.addEventListener('canplay', () => {
+        audio.play().catch(() => { idx++; tryNext(); });
+      }, { once: true });
+      audio.addEventListener('error', () => { idx++; tryNext(); }, { once: true });
+      audio.addEventListener('ended', () => { resetBtn(btn); currentAudio = null; currentBtn = null; });
+      audio.load();
+    }
+    tryNext();
   }
 </script>
 </body>
