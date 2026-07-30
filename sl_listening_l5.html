@@ -201,7 +201,7 @@
       </div>
     </div>
   </div>
-  <audio id="audioPlayer" src="https://speakinglebanesestudio.github.io/speaking-lebanese/A1_L5_listening.m4a"></audio>
+  <audio id="audioPlayer"></audio>
 
   <!-- LANGUAGE TABS -->
   <div class="lang-tabs">
@@ -356,6 +356,53 @@
     return m + ':' + (sec < 10 ? '0' : '') + sec;
   }
 
+  // AUDIO SOURCE RESOLUTION — files can land on GitHub with different suffix patterns
+  // depending on how they were uploaded (same issue found across every audio-bearing page
+  // in this course). This tries the exact stored name first, then a series of known suffix
+  // patterns, until one actually loads.
+  const BASE = 'https://speakinglebanesestudio.github.io/speaking-lebanese/';
+  const AUDIO_FILE = 'A1_L5_listening.m4a';
+
+  function buildAudioCandidates(file) {
+    const base = file.replace(/\.m4a$/, '');
+    return [
+      file,
+      base + '_m4a.mp4',
+      base + '_m4a.mp3',
+      base + '.m4a',
+      base + '.m4a.mp4',
+      base + '.m4a.mp3',
+    ];
+  }
+
+  const audioCandidates = buildAudioCandidates(AUDIO_FILE);
+  let candidateIdx = 0;
+  let pendingPlay = false;
+
+  function tryLoadCandidate() {
+    if (candidateIdx >= audioCandidates.length) {
+      console.warn('No working audio source found for', AUDIO_FILE);
+      return;
+    }
+    audio.src = BASE + encodeURIComponent(audioCandidates[candidateIdx]);
+    audio.load();
+  }
+
+  audio.addEventListener('error', () => {
+    candidateIdx++;
+    tryLoadCandidate();
+  });
+
+  audio.addEventListener('canplay', () => {
+    if (pendingPlay) {
+      audio.play();
+      playBtn.classList.add('playing');
+      pendingPlay = false;
+    }
+  });
+
+  tryLoadCandidate();
+
   audio.addEventListener('loadedmetadata', () => {
     timeDuration.textContent = fmt(audio.duration);
   });
@@ -375,11 +422,16 @@
 
   function togglePlay() {
     if (audio.paused) {
-      audio.play();
-      playBtn.classList.add('playing');
+      if (audio.readyState >= 3) {
+        audio.play();
+        playBtn.classList.add('playing');
+      } else {
+        pendingPlay = true;
+      }
     } else {
       audio.pause();
       playBtn.classList.remove('playing');
+      pendingPlay = false;
     }
   }
 
