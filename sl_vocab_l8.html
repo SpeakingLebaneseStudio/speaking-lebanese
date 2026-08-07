@@ -295,8 +295,17 @@
         <div class="ph-arabic">${p.arabic}</div>
         <div class="ph-english">${p.english}</div>
       </div>
-      <button class="play-word-btn" disabled title="Not recorded yet">Audio pending</button>`;
+      ${p.audio
+        ? '<button class="play-word-btn"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> Play</button>'
+        : '<button class="play-word-btn" disabled title="Not recorded yet">Audio pending</button>'}`;
     phraseList.appendChild(card);
+    // playPracticeAudio is a hoisted function declaration defined later in this script
+    // (shared with the practice widget) — safe to reference here since it's only
+    // invoked later, at click time, not during this initial render pass.
+    if (p.audio) {
+      const btn = card.querySelector('.play-word-btn');
+      btn.onclick = () => playPracticeAudio(p.audio, btn);
+    }
   });
 
   // ══════════════════════════════════════════════
